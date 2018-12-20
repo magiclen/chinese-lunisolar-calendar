@@ -41,6 +41,14 @@ mod solar_month;
 
 pub use self::solar_month::SolarMonth;
 
+mod solar_day;
+
+pub use self::solar_day::SolarDay;
+
+mod solar_date;
+
+pub use self::solar_date::{SolarDate, SolarDateParseError};
+
 mod lunar_year;
 
 pub use self::lunar_year::LunarYear;
@@ -55,7 +63,7 @@ pub use self::lunar_day::LunarDay;
 
 mod lunar_date;
 
-pub use self::lunar_date::LunarDate;
+pub use self::lunar_date::{LunarDate, LunarDateParseError};
 
 mod functions;
 

@@ -52,7 +52,7 @@ impl SolarYear {
         })
     }
 
-    /// 取得 `SolarYear` 實體所代表的中文年份字串。
+    /// 取得 `SolarYear` 實體所代表的中文西曆年份字串。
     pub fn to_chinese_string(&self) -> String {
         let mut year_string = String::new();
 
@@ -61,7 +61,7 @@ impl SolarYear {
         year_string
     }
 
-    /// 取得 `SolarYear` 實體所代表的中文年份字串。
+    /// 取得 `SolarYear` 實體所代表的中文西曆年份字串。
     pub fn write_to_chinese_string(&self, s: &mut String) {
         let mut year = self.year;
 
@@ -77,7 +77,7 @@ impl SolarYear {
         }
     }
 
-    /// 透過農曆日期數值來取得 `SolarYear` 實體。
+    /// 透過西曆日期數值來取得 `SolarYear` 實體。
     pub fn from_u16(year: u16) -> SolarYear {
         SolarYear {
             year
@@ -98,6 +98,6 @@ impl Display for SolarYear {
 
 impl From<u16> for SolarYear {
     fn from(year: u16) -> SolarYear {
-        SolarYear::from(year)
+        SolarYear::from_u16(year)
     }
 }
