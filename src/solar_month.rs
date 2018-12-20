@@ -81,12 +81,17 @@ impl SolarMonth {
     }
 
     /// 透過西曆月份數值來取得 `SolarMonth` 列舉實體。
+    pub unsafe fn from_u8_unsafe(month: u8) -> SolarMonth {
+        transmute(month - 1)
+    }
+
+    /// 透過西曆月份數值來取得 `SolarMonth` 列舉實體。
     pub fn from_u8(month: u8) -> Option<SolarMonth> {
         if month == 0 || month > 12 {
             None
         } else {
             Some(unsafe {
-                transmute(month - 1)
+                Self::from_u8_unsafe(month)
             })
         }
     }

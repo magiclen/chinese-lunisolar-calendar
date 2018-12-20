@@ -6,7 +6,7 @@ use chrono::prelude::*;
 
 use chrono::NaiveDate;
 
-/// 西曆年、月、日。
+/// 西曆年月日。
 #[derive(Debug, PartialEq, Clone, Eq, Hash, Copy)]
 pub struct SolarDate {
     pub(crate) solar_year: SolarYear,
@@ -27,7 +27,7 @@ pub enum SolarDateParseError {
 }
 
 impl SolarDate {
-    /// 將無時區的 `Chrono` 日期實體轉成 `SolarDate` 實體。
+    /// 將無時區的 `Chrono` 年月日實體轉成 `SolarDate` 實體。
     pub fn from_naive_date(naive_date: NaiveDate) -> Result<SolarDate, SolarDateParseError> {
         let year = naive_date.year();
 
@@ -46,26 +46,26 @@ impl SolarDate {
         }
     }
 
-    /// 將有時區的 `Chrono` 日期實體，依UTC時區轉成 `SolarDate` 實體。
+    /// 將有時區的 `Chrono` 年月日實體，依UTC時區轉成 `SolarDate` 實體。
     pub fn from_date<Tz: TimeZone>(date: Date<Tz>) -> Result<SolarDate, SolarDateParseError> {
         let naive_date = date.naive_utc();
 
         Self::from_naive_date(naive_date)
     }
 
-    /// 將 `SolarDate` 實體轉成無時區的 `Chrono` 日期實體。
+    /// 將 `SolarDate` 實體轉成無時區的 `Chrono` 年月日實體。
     pub fn to_naive_date(&self) -> NaiveDate {
         NaiveDate::from_ymd(self.solar_year.to_u16() as i32, self.solar_month.to_u8() as u32, self.solar_day.to_u8() as u32)
     }
 
-    /// 將 `SolarDate` 實體轉成UTC時區的 `Chrono` 日期實體。
+    /// 將 `SolarDate` 實體轉成UTC時區的 `Chrono` 年月日實體。
     pub fn to_date_utc(&self) -> Date<Utc> {
         let naive_date = self.to_naive_date();
 
         Date::from_utc(naive_date, Utc)
     }
 
-    /// 利用西曆的年、月、日來產生 `SolarDate` 實體。
+    /// 利用西曆的年月日來產生 `SolarDate` 實體。
     pub fn from_solar_year_month_day<Y: Into<SolarYear>>(solar_year: Y, solar_month: SolarMonth, solar_day: SolarDay) -> Result<SolarDate, SolarDateParseError> {
         let solar_year = solar_year.into();
 
@@ -84,7 +84,7 @@ impl SolarDate {
         }
     }
 
-    /// 利用西曆的年、月、日來產生 `SolarDate` 實體。
+    /// 利用西曆的年月日來產生 `SolarDate` 實體。
     pub fn from_ymd(year: u16, month: u8, day: u8) -> Result<SolarDate, SolarDateParseError> {
         let solar_year = SolarYear::from_u16(year);
 
@@ -102,7 +102,7 @@ impl SolarDate {
         Self::from_solar_year_month_day(solar_year, solar_month, solar_day)
     }
 
-    /// 以目前的年、月、日來產生 `SolarDate` 實體。
+    /// 以目前的年月日來產生 `SolarDate` 實體。
     pub fn now() -> Result<SolarDate, SolarDateParseError> {
         Self::from_date(Utc::now().date())
     }
@@ -160,7 +160,7 @@ impl SolarDate {
         Self::from_solar_year_month_day(solar_year, solar_month, solar_day)
     }
 
-    /// 取得 `SolarDate` 實體所代表的中文西曆年、月、日字串。
+    /// 取得 `SolarDate` 實體所代表的中文西曆年月日字串。
     pub fn to_chinese_string(&self) -> String {
         let mut s = String::with_capacity(36);
 
@@ -173,7 +173,7 @@ impl SolarDate {
         s
     }
 
-    /// 取得 `SolarDate` 實體所代表的西曆年、月、日字串(格式：yyyy-mm-dd)。
+    /// 取得 `SolarDate` 實體所代表的西曆年月日字串(格式：yyyy-mm-dd)。
     pub fn to_string(&self) -> String {
         format!("{:04}-{:02}-{:02}", self.solar_year.to_u16(), self.solar_month.to_u8(), self.solar_day.to_u8())
     }

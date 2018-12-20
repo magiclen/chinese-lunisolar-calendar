@@ -1,6 +1,6 @@
 extern crate chinese_lunisolar_calendar;
 
-use chinese_lunisolar_calendar::SolarMonth;
+use chinese_lunisolar_calendar::{SolarMonth, SolarDate};
 
 #[test]
 fn is_leap_solar_year() {
@@ -36,4 +36,15 @@ fn days_in_a_solar_month() {
     assert_eq!(30, chinese_lunisolar_calendar::days_in_a_solar_month(2100, SolarMonth::April));
     assert_eq!(30, chinese_lunisolar_calendar::days_in_a_solar_month(2100, SolarMonth::November));
     assert_eq!(31, chinese_lunisolar_calendar::days_in_a_solar_month(2100, SolarMonth::December));
+}
+
+#[test]
+fn the_n_day_in_a_solar_year() {
+    assert_eq!(4, chinese_lunisolar_calendar::the_n_day_in_a_solar_year(SolarDate::from_ymd(2013, 1, 4).unwrap()));
+    assert_eq!(63, chinese_lunisolar_calendar::the_n_day_in_a_solar_year(SolarDate::from_ymd(2013, 3, 4).unwrap()));
+    assert_eq!(94, chinese_lunisolar_calendar::the_n_day_in_a_solar_year(SolarDate::from_ymd(2013, 4, 4).unwrap()));
+    assert_eq!(124, chinese_lunisolar_calendar::the_n_day_in_a_solar_year(SolarDate::from_ymd(2013, 5, 4).unwrap()));
+    assert_eq!(64, chinese_lunisolar_calendar::the_n_day_in_a_solar_year(SolarDate::from_ymd(2020, 3, 4).unwrap()));
+    assert_eq!(95, chinese_lunisolar_calendar::the_n_day_in_a_solar_year(SolarDate::from_ymd(2020, 4, 4).unwrap()));
+    assert_eq!(125, chinese_lunisolar_calendar::the_n_day_in_a_solar_year(SolarDate::from_ymd(2020, 5, 4).unwrap()));
 }

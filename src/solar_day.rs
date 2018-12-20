@@ -157,12 +157,17 @@ impl SolarDay {
     }
 
     /// 透過西曆日期數值來取得 `SolarDay` 列舉實體。
+    pub unsafe fn from_u8_unsafe(day: u8) -> SolarDay {
+        transmute(day - 1)
+    }
+
+    /// 透過西曆日期數值來取得 `SolarDay` 列舉實體。
     pub fn from_u8(day: u8) -> Option<SolarDay> {
         if day == 0 || day > 31 {
             None
         } else {
             Some(unsafe {
-                transmute(day - 1)
+                Self::from_u8_unsafe(day)
             })
         }
     }

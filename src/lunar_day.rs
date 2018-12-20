@@ -153,12 +153,17 @@ impl LunarDay {
     }
 
     /// 透過農曆日期數值來取得 `LunarDay` 列舉實體。
+    pub unsafe fn from_u8_unsafe(day: u8) -> LunarDay {
+        transmute(day - 1)
+    }
+
+    /// 透過農曆日期數值來取得 `LunarDay` 列舉實體。
     pub fn from_u8(day: u8) -> Option<LunarDay> {
         if day == 0 || day > 30 {
             None
         } else {
             Some(unsafe {
-                transmute(day - 1)
+                Self::from_u8_unsafe(day)
             })
         }
     }

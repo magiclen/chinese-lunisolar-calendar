@@ -147,19 +147,22 @@ impl LunarMonth {
     }
 
     /// 透過農曆月份數值和是否閏月來取得 `LunarMonth` 列舉實體。
+    pub unsafe fn from_u8_unsafe(month: u8, leap: bool) -> LunarMonth {
+        if leap {
+            transmute((month - 1) * 2 + 1)
+        } else {
+            transmute((month - 1) * 2)
+        }
+    }
+
+    /// 透過農曆月份數值和是否閏月來取得 `LunarMonth` 列舉實體。
     pub fn from_u8(month: u8, leap: bool) -> Option<LunarMonth> {
         if month == 0 || month > 12 {
             None
         } else {
-            if leap {
-                Some(unsafe {
-                    transmute((month - 1) * 2 + 1)
-                })
-            } else {
-                Some(unsafe {
-                    transmute((month - 1) * 2)
-                })
-            }
+            Some(unsafe {
+                Self::from_u8_unsafe(month, leap)
+            })
         }
     }
 
