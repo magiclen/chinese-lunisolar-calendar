@@ -112,3 +112,9 @@ impl Display for Zodiac {
         f.write_str(self.to_str(ChineseVariant::Traditional))
     }
 }
+
+impl From<EarthlyBranch> for Zodiac {
+    fn from(earthly_branch: EarthlyBranch) -> Zodiac {
+        Zodiac::from_earthly_branch(earthly_branch)
+    }
+}

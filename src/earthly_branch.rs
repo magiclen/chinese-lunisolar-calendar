@@ -96,3 +96,9 @@ impl Display for EarthlyBranch {
         f.write_str(self.to_str())
     }
 }
+
+impl From<Zodiac> for EarthlyBranch {
+    fn from(zodiac: Zodiac) -> EarthlyBranch {
+        EarthlyBranch::from_zodiac(zodiac)
+    }
+}
