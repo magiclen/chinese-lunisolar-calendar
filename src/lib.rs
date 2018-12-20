@@ -21,6 +21,10 @@ lazy_static! {
     pub static ref MIN_LUNAR_DATE_IN_SOLAR_CALENDAR: NaiveDate = Utc.ymd(1901, 2, 19).naive_utc();
 }
 
+mod lunisolar_error;
+
+pub use self::lunisolar_error::LunisolarError;
+
 mod zodiac;
 
 pub use self::zodiac::Zodiac;
@@ -47,7 +51,7 @@ pub use self::solar_day::SolarDay;
 
 mod solar_date;
 
-pub use self::solar_date::{SolarDate, SolarDateParseError};
+pub use self::solar_date::SolarDate;
 
 mod lunar_year;
 
@@ -63,8 +67,8 @@ pub use self::lunar_day::LunarDay;
 
 mod lunar_date;
 
-pub use self::lunar_date::{LunarDate, LunarDateParseError};
+pub use self::lunar_date::LunarDate;
 
-mod functions;
+mod lunisolar_year;
 
-pub use self::functions::*;
+pub use self::lunisolar_year::LunisolarYear;

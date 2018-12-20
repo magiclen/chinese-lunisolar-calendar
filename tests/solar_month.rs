@@ -33,3 +33,19 @@ fn to_u8() {
     assert_eq!(SolarMonth::May.to_u8(), 5);
     assert_eq!(SolarMonth::December.to_u8(), 12);
 }
+
+#[test]
+fn get_total_days() {
+    assert_eq!(31, SolarMonth::January.get_total_days(2000));
+    assert_eq!(29, SolarMonth::February.get_total_days(2000));
+    assert_eq!(31, SolarMonth::March.get_total_days(2000));
+    assert_eq!(30, SolarMonth::April.get_total_days(2000));
+    assert_eq!(30, SolarMonth::November.get_total_days(2000));
+    assert_eq!(31, SolarMonth::December.get_total_days(2000));
+    assert_eq!(31, SolarMonth::January.get_total_days(2100));
+    assert_eq!(28, SolarMonth::February.get_total_days(2100));
+    assert_eq!(31, SolarMonth::March.get_total_days(2100));
+    assert_eq!(30, SolarMonth::April.get_total_days(2100));
+    assert_eq!(30, SolarMonth::November.get_total_days(2100));
+    assert_eq!(31, SolarMonth::December.get_total_days(2100));
+}

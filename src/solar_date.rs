@@ -1,4 +1,4 @@
-use super::{ChineseVariant, SolarYear, SolarMonth, SolarDay, days_in_a_solar_month};
+use super::{LunisolarError, SolarYear, SolarMonth, SolarDay};
 
 use std::fmt::{self, Display, Formatter};
 
@@ -9,30 +9,18 @@ use chrono::NaiveDate;
 /// 西曆年月日。
 #[derive(Debug, PartialEq, Clone, Eq, Hash, Copy)]
 pub struct SolarDate {
-    pub(crate) solar_year: SolarYear,
-    pub(crate) solar_month: SolarMonth,
-    pub(crate) solar_day: SolarDay,
-}
-
-#[derive(Debug, Eq, PartialEq)]
-pub enum SolarDateParseError {
-    /// 超出支援的範圍。
-    OutOfRange,
-    /// 錯誤的西曆年。
-    IncorrectYear,
-    /// 錯誤的西曆月。
-    IncorrectMonth,
-    /// 錯誤的西曆日。
-    IncorrectDay,
+    solar_year: SolarYear,
+    solar_month: SolarMonth,
+    solar_day: SolarDay,
 }
 
 impl SolarDate {
     /// 將無時區的 `Chrono` 年月日實體轉成 `SolarDate` 實體。
-    pub fn from_naive_date(naive_date: NaiveDate) -> Result<SolarDate, SolarDateParseError> {
+    pub fn from_naive_date(naive_date: NaiveDate) -> Result<SolarDate, LunisolarError> {
         let year = naive_date.year();
 
         if year < 0 || year > u16::max_value() as i32 {
-            Err(SolarDateParseError::OutOfRange)
+            Err(LunisolarError::OutOfSolarRange)
         } else {
             let solar_year = SolarYear::from_u16(year as u16);
             let solar_month = SolarMonth::from_u8(naive_date.month() as u8).unwrap();
@@ -47,7 +35,7 @@ impl SolarDate {
     }
 
     /// 將有時區的 `Chrono` 年月日實體，依UTC時區轉成 `SolarDate` 實體。
-    pub fn from_date<Tz: TimeZone>(date: Date<Tz>) -> Result<SolarDate, SolarDateParseError> {
+    pub fn from_date<Tz: TimeZone>(date: Date<Tz>) -> Result<SolarDate, LunisolarError> {
         let naive_date = date.naive_utc();
 
         Self::from_naive_date(naive_date)
@@ -66,15 +54,15 @@ impl SolarDate {
     }
 
     /// 利用西曆的年月日來產生 `SolarDate` 實體。
-    pub fn from_solar_year_month_day<Y: Into<SolarYear>>(solar_year: Y, solar_month: SolarMonth, solar_day: SolarDay) -> Result<SolarDate, SolarDateParseError> {
+    pub fn from_solar_year_month_day<Y: Into<SolarYear>>(solar_year: Y, solar_month: SolarMonth, solar_day: SolarDay) -> Result<SolarDate, LunisolarError> {
         let solar_year = solar_year.into();
 
-        let days = days_in_a_solar_month(solar_year, solar_month);
+        let days = solar_month.get_total_days(solar_year);
 
         let day = solar_day.to_u8();
 
         if day > days {
-            Err(SolarDateParseError::IncorrectDay)
+            Err(LunisolarError::IncorrectSolarDay)
         } else {
             Ok(SolarDate {
                 solar_year,
@@ -85,17 +73,17 @@ impl SolarDate {
     }
 
     /// 利用西曆的年月日來產生 `SolarDate` 實體。
-    pub fn from_ymd(year: u16, month: u8, day: u8) -> Result<SolarDate, SolarDateParseError> {
+    pub fn from_ymd(year: u16, month: u8, day: u8) -> Result<SolarDate, LunisolarError> {
         let solar_year = SolarYear::from_u16(year);
 
         let solar_month = match SolarMonth::from_u8(month) {
             Some(solar_month) => solar_month,
-            None => return Err(SolarDateParseError::IncorrectMonth)
+            None => return Err(LunisolarError::IncorrectSolarMonth)
         };
 
         let solar_day = match SolarDay::from_u8(day) {
             Some(solar_day) => solar_day,
-            None => return Err(SolarDateParseError::IncorrectMonth)
+            None => return Err(LunisolarError::IncorrectSolarMonth)
         };
 
 
@@ -103,11 +91,11 @@ impl SolarDate {
     }
 
     /// 以目前的年月日來產生 `SolarDate` 實體。
-    pub fn now() -> Result<SolarDate, SolarDateParseError> {
+    pub fn now() -> Result<SolarDate, LunisolarError> {
         Self::from_date(Utc::now().date())
     }
 
-    pub fn from_str<S: AsRef<str>>(s: S) -> Result<SolarDate, SolarDateParseError> {
+    pub fn from_str<S: AsRef<str>>(s: S) -> Result<SolarDate, LunisolarError> {
         let s = s.as_ref();
 
         let year_index = {
@@ -115,7 +103,7 @@ impl SolarDate {
                 Some(index) => index,
                 None => match s.find("　") {
                     Some(index) => index,
-                    None => return Err(SolarDateParseError::IncorrectYear)
+                    None => return Err(LunisolarError::IncorrectSolarYear)
                 }
             }
         };
@@ -124,7 +112,7 @@ impl SolarDate {
 
         let solar_year = match SolarYear::from_str(year_str) {
             Some(solar_year) => solar_year,
-            None => return Err(SolarDateParseError::IncorrectYear)
+            None => return Err(LunisolarError::IncorrectSolarYear)
         };
 
         let s = &s[year_index + 3..];
@@ -134,7 +122,7 @@ impl SolarDate {
                 Some(index) => index,
                 None => match s.find("　") {
                     Some(index) => index,
-                    None => return Err(SolarDateParseError::IncorrectMonth)
+                    None => return Err(LunisolarError::IncorrectSolarMonth)
                 }
             }
         };
@@ -143,7 +131,7 @@ impl SolarDate {
 
         let solar_month = match SolarMonth::from_str(month_str) {
             Some(solar_month) => solar_month,
-            None => return Err(SolarDateParseError::IncorrectMonth)
+            None => return Err(LunisolarError::IncorrectSolarMonth)
         };
 
         let mut day_str = s[month_index + 3..].trim();
@@ -154,7 +142,7 @@ impl SolarDate {
 
         let solar_day = match SolarDay::from_str(day_str) {
             Some(solar_day) => solar_day,
-            None => return Err(SolarDateParseError::IncorrectDay)
+            None => return Err(LunisolarError::IncorrectSolarDay)
         };
 
         Self::from_solar_year_month_day(solar_year, solar_month, solar_day)
@@ -191,6 +179,24 @@ impl SolarDate {
     /// 取得西曆日。
     pub fn get_solar_day(&self) -> SolarDay {
         self.solar_day
+    }
+
+    /// 計算此西曆年月日是該西曆年的第幾天。舉例：2013-01-04，就是第四天。
+    pub fn the_n_day_in_this_year(&self) -> u16 {
+        let mut n = 0;
+
+        let solar_year = self.solar_year;
+
+        let month = self.solar_month.to_u8();
+
+        for i in 1..month {
+            let solar_month = unsafe { SolarMonth::from_u8_unsafe(i) };
+            n += solar_month.get_total_days(solar_year) as u16;
+        }
+
+        n += self.solar_day.to_u8() as u16;
+
+        n
     }
 }
 

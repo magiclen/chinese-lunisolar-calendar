@@ -33,44 +33,24 @@ pub enum EarthlyBranch {
     Twelfth,
 }
 
-macro_rules! the_earthly_branches_from {
-    ($a:expr, $v:expr) => {
-        if $a[0].eq($v) {
-            Some(EarthlyBranch::First)
-        } else if $a[1].eq($v) {
-            Some(EarthlyBranch::Second)
-        } else if $a[2].eq($v) {
-            Some(EarthlyBranch::Third)
-        } else if $a[3].eq($v) {
-            Some(EarthlyBranch::Fourth)
-        } else if $a[4].eq($v) {
-            Some(EarthlyBranch::Fifth)
-        } else if $a[5].eq($v) {
-            Some(EarthlyBranch::Sixth)
-        } else if $a[6].eq($v) {
-            Some(EarthlyBranch::Seventh)
-        } else if $a[7].eq($v) {
-            Some(EarthlyBranch::Eighth)
-        } else if $a[8].eq($v) {
-            Some(EarthlyBranch::Ninth)
-        } else if $a[9].eq($v) {
-            Some(EarthlyBranch::Tenth)
-        } else if $a[10].eq($v) {
-            Some(EarthlyBranch::Eleventh)
-        } else if $a[11].eq($v) {
-            Some(EarthlyBranch::Twelfth)
-        } else {
-            None
-        }
-    };
-}
-
 impl EarthlyBranch {
+    pub unsafe fn from_ordinal_unsafe(number: i8) -> EarthlyBranch {
+        transmute(number)
+    }
+
     /// 透過子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥等字串來取得 `EarthlyBranch` 列舉實體。
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<EarthlyBranch> {
         let s = s.as_ref();
 
-        the_earthly_branches_from!(THE_EARTHLY_BRANCHES, s)
+        for (i, &t) in THE_EARTHLY_BRANCHES.iter().enumerate() {
+            if t.eq(s) {
+                return Some(unsafe {
+                    Self::from_ordinal_unsafe(i as i8)
+                });
+            }
+        }
+
+        None
     }
 
     /// 取得 `EarthlyBranch` 列舉實體所代表的地支字串。
@@ -82,7 +62,15 @@ impl EarthlyBranch {
 
     /// 透過子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥等字元來取得 `EarthlyBranch` 列舉實體。
     pub fn from_char(c: char) -> Option<EarthlyBranch> {
-        the_earthly_branches_from!(THE_EARTHLY_BRANCHES_CHARS, &c)
+        for (i, &t) in THE_EARTHLY_BRANCHES_CHARS.iter().enumerate() {
+            if t.eq(&c) {
+                return Some(unsafe {
+                    Self::from_ordinal_unsafe(i as i8)
+                });
+            }
+        }
+
+        None
     }
 
     /// 取得 `EarthlyBranch` 列舉實體所代表的地支字元。

@@ -1,12 +1,11 @@
-use super::{THE_SOLAR_YEAR_NUMBERS, THE_SOLAR_YEAR_NUMBERS_CHARS};
+use super::{SolarMonth, THE_SOLAR_YEAR_NUMBERS, THE_SOLAR_YEAR_NUMBERS_CHARS};
 
 use std::fmt::{self, Display, Formatter};
 
 /// 西曆年份。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
 pub struct SolarYear {
-    /// 西曆年
-    pub(crate) year: u16
+    year: u16
 }
 
 impl SolarYear {
@@ -77,7 +76,7 @@ impl SolarYear {
         }
     }
 
-    /// 透過西曆日期數值來取得 `SolarYear` 實體。
+    /// 透過西曆年份數值來取得 `SolarYear` 實體。
     pub fn from_u16(year: u16) -> SolarYear {
         SolarYear {
             year
@@ -87,6 +86,25 @@ impl SolarYear {
     /// 取得 `SolarYear` 實體所代表的西曆年份數值。
     pub fn to_u16(&self) -> u16 {
         self.year
+    }
+
+    /// 判斷此西曆年是否為閏年。
+    pub fn is_leap(&self) -> bool {
+        ((self.year % 4 == 0) && (self.year % 100 != 0) || self.year % 400 == 0)
+    }
+
+    /// 計算此西曆年共有幾天。。
+    pub fn get_total_days(&self) -> u16 {
+        if self.is_leap() {
+            366
+        } else {
+            365
+        }
+    }
+
+    /// 計算此西曆年下的某個月共有幾天。。
+    pub fn get_total_days_in_a_month(&self, solar_month: SolarMonth) -> u8 {
+        solar_month.get_total_days(*self)
     }
 }
 

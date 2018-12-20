@@ -33,76 +33,67 @@ pub enum Zodiac {
     Pig,
 }
 
-macro_rules! the_zodiac_signs_contains {
-    ($a:expr, $v:expr) => {
-        if $a[0].contains($v) {
-            Some(Zodiac::Rat)
-        } else if $a[1].contains($v) {
-            Some(Zodiac::Ox)
-        } else if $a[2].contains($v) {
-            Some(Zodiac::Tiger)
-        } else if $a[3].contains($v) {
-            Some(Zodiac::Rabbit)
-        } else if $a[4].contains($v) {
-            Some(Zodiac::Dragon)
-        } else if $a[5].contains($v) {
-            Some(Zodiac::Snake)
-        } else if $a[6].contains($v) {
-            Some(Zodiac::Horse)
-        } else if $a[7].contains($v) {
-            Some(Zodiac::Goat)
-        } else if $a[8].contains($v) {
-            Some(Zodiac::Monkey)
-        } else if $a[9].contains($v) {
-            Some(Zodiac::Rooster)
-        } else if $a[10].contains($v) {
-            Some(Zodiac::Dog)
-        } else if $a[11].contains($v) {
-            Some(Zodiac::Pig)
-        } else {
-            None
-        }
-    };
-}
-
-macro_rules! the_zodiac_signs_variants {
-    ($a:expr, $v:expr, $i:expr) => {
-        match $v {
-            ChineseVariant::Simple => {
-                $a[$i][1]
-            }
-            ChineseVariant::Traditional => {
-                $a[$i][0]
-            }
-        }
-    };
-}
-
 impl Zodiac {
+    pub unsafe fn from_ordinal_unsafe(number: i8) -> Zodiac {
+        transmute(number)
+    }
+
     /// 透過鼠、牛、虎、兔、龍、蛇、馬、羊、猴、雞、狗、豬等字串來取得 `Zodiac` 列舉實體。
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<Zodiac> {
         let s = &s.as_ref();
 
-        the_zodiac_signs_contains!(THE_ZODIAC_SIGNS, s)
+        for (i, &t) in THE_ZODIAC_SIGNS.iter().enumerate() {
+            if t.contains(s) {
+                return Some(unsafe {
+                    Self::from_ordinal_unsafe(i as i8)
+                });
+            }
+        }
+
+        None
     }
 
     /// 取得 `Zodiac` 列舉實體所代表的生肖字串。
     pub fn to_str(&self, chinese_variant: ChineseVariant) -> &'static str {
         let i = *self as usize;
 
-        the_zodiac_signs_variants!(THE_ZODIAC_SIGNS, chinese_variant, i)
+        match chinese_variant {
+            ChineseVariant::Simple => {
+                THE_ZODIAC_SIGNS[i][1]
+            }
+            ChineseVariant::Traditional => {
+                THE_ZODIAC_SIGNS[i][0]
+            }
+        }
     }
 
     /// 透過鼠、牛、虎、兔、龍、蛇、馬、羊、猴、雞、狗、豬等字元來取得 `Zodiac` 列舉實體。
     pub fn from_char(c: char) -> Option<Zodiac> {
-        the_zodiac_signs_contains!(THE_ZODIAC_SIGNS_CHARS, &c)
+        let c = &c;
+
+        for (i, &t) in THE_ZODIAC_SIGNS_CHARS.iter().enumerate() {
+            if t.contains(c) {
+                return Some(unsafe {
+                    Self::from_ordinal_unsafe(i as i8)
+                });
+            }
+        }
+
+        None
     }
 
     /// 取得 `Zodiac` 列舉實體所代表的生肖字元。
     pub fn to_char(&self, chinese_variant: ChineseVariant) -> char {
         let i = *self as usize;
 
-        the_zodiac_signs_variants!(THE_ZODIAC_SIGNS_CHARS, chinese_variant, i)
+        match chinese_variant {
+            ChineseVariant::Simple => {
+                THE_ZODIAC_SIGNS_CHARS[i][1]
+            }
+            ChineseVariant::Traditional => {
+                THE_ZODIAC_SIGNS_CHARS[i][0]
+            }
+        }
     }
 
     /// 透過地支來取得生肖。

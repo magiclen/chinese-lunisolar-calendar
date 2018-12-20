@@ -1,4 +1,4 @@
-use super::THE_SOLAR_MONTHS;
+use super::{SolarYear, THE_SOLAR_MONTHS};
 
 use std::mem::transmute;
 
@@ -33,44 +33,24 @@ pub enum SolarMonth {
     December,
 }
 
-macro_rules! the_solar_months_from {
-    ($a:expr, $v:expr) => {
-        if $a[0].eq($v) {
-            Some(SolarMonth::January)
-        } else if $a[1].eq($v) {
-            Some(SolarMonth::February)
-        } else if $a[2].eq($v) {
-            Some(SolarMonth::March)
-        } else if $a[3].eq($v) {
-            Some(SolarMonth::April)
-        } else if $a[4].eq($v) {
-            Some(SolarMonth::May)
-        } else if $a[5].eq($v) {
-            Some(SolarMonth::June)
-        } else if $a[6].eq($v) {
-            Some(SolarMonth::July)
-        } else if $a[7].eq($v) {
-            Some(SolarMonth::August)
-        } else if $a[8].eq($v) {
-            Some(SolarMonth::September)
-        } else if $a[9].eq($v) {
-            Some(SolarMonth::October)
-        } else if $a[10].eq($v) {
-            Some(SolarMonth::November)
-        } else if $a[11].eq($v) {
-            Some(SolarMonth::December)
-        } else {
-            None
-        }
-    };
-}
-
 impl SolarMonth {
+    pub unsafe fn from_ordinal_unsafe(number: i8) -> SolarMonth {
+        transmute(number)
+    }
+
     /// 透過西曆月份字串來取得 `SolarMonth` 列舉實體。
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<SolarMonth> {
         let s = s.as_ref();
 
-        the_solar_months_from!(THE_SOLAR_MONTHS, s)
+        for (i, &t) in THE_SOLAR_MONTHS.iter().enumerate() {
+            if t.eq(s) {
+                return Some(unsafe {
+                    Self::from_ordinal_unsafe(i as i8)
+                });
+            }
+        }
+
+        None
     }
 
     /// 取得 `SolarMonth` 列舉實體所代表的西曆月份字串。
@@ -101,6 +81,29 @@ impl SolarMonth {
         let i = *self as u8;
 
         i + 1
+    }
+
+    /// 傳入指定的西曆年，並計算此西曆月在這個指定的西曆年內共有幾天。
+    pub fn get_total_days<Y: Into<SolarYear>>(&self, solar_year: Y) -> u8 {
+        let month = self.to_u8();
+
+        let m = if month < 8 {
+            1
+        } else {
+            0
+        };
+
+        if month % 2 == m {
+            31
+        } else if month == 2 {
+            if solar_year.into().is_leap() {
+                29
+            } else {
+                28
+            }
+        } else {
+            30
+        }
     }
 }
 

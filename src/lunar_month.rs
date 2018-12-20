@@ -57,81 +57,44 @@ pub enum LunarMonth {
     LeapTwelfth,
 }
 
-macro_rules! the_lunar_months_contains {
-    ($a:expr, $v:expr) => {
-        if $a[0].contains($v) || $a[24].contains($v) {
+impl LunarMonth {
+    pub unsafe fn from_ordinal_unsafe(number: i8) -> LunarMonth {
+        transmute(number)
+    }
+
+    /// 透過農曆月份字串來取得 `LunarMonth` 列舉實體。
+    pub fn from_str<S: AsRef<str>>(s: S) -> Option<LunarMonth> {
+        let s = &s.as_ref();
+
+        for (i, &t) in THE_LUNAR_MONTHS.iter().enumerate().take(24) {
+            if t.contains(s) {
+                if i >= 12 {
+                    return Some(unsafe {
+                        Self::from_ordinal_unsafe((i as i8 - 12) * 2 + 1)
+                    });
+                } else {
+                    return Some(unsafe {
+                        Self::from_ordinal_unsafe(i as i8 * 2)
+                    });
+                }
+            }
+        }
+
+        if THE_LUNAR_MONTHS[24].contains(s) {
             Some(LunarMonth::First)
-        } else if $a[1].contains($v) {
-            Some(LunarMonth::Second)
-        } else if $a[2].contains($v) {
-            Some(LunarMonth::Third)
-        } else if $a[3].contains($v) {
-            Some(LunarMonth::Fourth)
-        } else if $a[4].contains($v) {
-            Some(LunarMonth::Fifth)
-        } else if $a[5].contains($v) {
-            Some(LunarMonth::Sixth)
-        } else if $a[6].contains($v) {
-            Some(LunarMonth::Seventh)
-        } else if $a[7].contains($v) {
-            Some(LunarMonth::Eighth)
-        } else if $a[8].contains($v) {
-            Some(LunarMonth::Ninth)
-        } else if $a[9].contains($v) {
-            Some(LunarMonth::Tenth)
-        } else if $a[10].contains($v) || $a[25].contains($v) {
+        } else if THE_LUNAR_MONTHS[25].contains(s) {
             Some(LunarMonth::Eleventh)
-        } else if $a[11].contains($v) || $a[26].contains($v) {
+        } else if THE_LUNAR_MONTHS[26].contains(s) {
             Some(LunarMonth::Twelfth)
-        } else if $a[12].contains($v) || $a[27].contains($v) {
+        } else if THE_LUNAR_MONTHS[27].contains(s) {
             Some(LunarMonth::LeapFirst)
-        } else if $a[13].contains($v) {
-            Some(LunarMonth::LeapSecond)
-        } else if $a[14].contains($v) {
-            Some(LunarMonth::LeapThird)
-        } else if $a[15].contains($v) {
-            Some(LunarMonth::LeapFourth)
-        } else if $a[16].contains($v) {
-            Some(LunarMonth::LeapFifth)
-        } else if $a[17].contains($v) {
-            Some(LunarMonth::LeapSixth)
-        } else if $a[18].contains($v) {
-            Some(LunarMonth::LeapSeventh)
-        } else if $a[19].contains($v) {
-            Some(LunarMonth::LeapEighth)
-        } else if $a[20].contains($v) {
-            Some(LunarMonth::LeapNinth)
-        } else if $a[21].contains($v) {
-            Some(LunarMonth::LeapTenth)
-        } else if $a[22].contains($v) || $a[28].contains($v) {
+        } else if THE_LUNAR_MONTHS[28].contains(s) {
             Some(LunarMonth::LeapEleventh)
-        } else if $a[23].contains($v) || $a[29].contains($v) || $a[30].contains($v) {
+        } else if THE_LUNAR_MONTHS[29].contains(s) || THE_LUNAR_MONTHS[30].contains(s) {
             Some(LunarMonth::LeapTwelfth)
         } else {
             None
         }
-    };
-}
-
-macro_rules! the_lunar_months_variants {
-    ($a:expr, $v:expr, $i:expr) => {
-        match $v {
-            ChineseVariant::Simple => {
-                $a[$i][1]
-            }
-            ChineseVariant::Traditional => {
-                $a[$i][0]
-            }
-        }
-    };
-}
-
-impl LunarMonth {
-    /// 透過農曆月份字串來取得 `LunarMonth` 列舉實體。
-    pub fn from_str<S: AsRef<str>>(s: S) -> Option<LunarMonth> {
-        let s = s.as_ref();
-
-        the_lunar_months_contains!(THE_LUNAR_MONTHS, &s)
     }
 
     /// 取得 `LunarMonth` 列舉實體所代表的農曆月份字串。
@@ -143,7 +106,15 @@ impl LunarMonth {
         } else {
             i = i / 2;
         }
-        the_lunar_months_variants!(THE_LUNAR_MONTHS, chinese_variant, i)
+
+        match chinese_variant {
+            ChineseVariant::Simple => {
+                THE_LUNAR_MONTHS[i][1]
+            }
+            ChineseVariant::Traditional => {
+                THE_LUNAR_MONTHS[i][0]
+            }
+        }
     }
 
     /// 透過農曆月份數值和是否閏月來取得 `LunarMonth` 列舉實體。

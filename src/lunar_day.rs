@@ -69,80 +69,24 @@ pub enum LunarDay {
     Thirty,
 }
 
-macro_rules! the_lunar_days_from {
-    ($a:expr, $v:expr) => {
-        if $a[0].eq($v) {
-            Some(LunarDay::First)
-        } else if $a[1].eq($v) {
-            Some(LunarDay::Second)
-        } else if $a[2].eq($v) {
-            Some(LunarDay::Third)
-        } else if $a[3].eq($v) {
-            Some(LunarDay::Fourth)
-        } else if $a[4].eq($v) {
-            Some(LunarDay::Fifth)
-        } else if $a[5].eq($v) {
-            Some(LunarDay::Sixth)
-        } else if $a[6].eq($v) {
-            Some(LunarDay::Seventh)
-        } else if $a[7].eq($v) {
-            Some(LunarDay::Eighth)
-        } else if $a[8].eq($v) {
-            Some(LunarDay::Ninth)
-        } else if $a[9].eq($v) {
-            Some(LunarDay::Tenth)
-        } else if $a[10].eq($v) {
-            Some(LunarDay::Eleventh)
-        } else if $a[11].eq($v) {
-            Some(LunarDay::Twelfth)
-        } else if $a[12].eq($v) {
-            Some(LunarDay::Thirteen)
-        } else if $a[13].eq($v) {
-            Some(LunarDay::Fourteen)
-        } else if $a[14].eq($v) {
-            Some(LunarDay::Fifteen)
-        } else if $a[15].eq($v) {
-            Some(LunarDay::Sixteen)
-        } else if $a[16].eq($v) {
-            Some(LunarDay::Seventeen)
-        } else if $a[17].eq($v) {
-            Some(LunarDay::Eighteen)
-        } else if $a[18].eq($v) {
-            Some(LunarDay::Nineteen)
-        } else if $a[19].eq($v) {
-            Some(LunarDay::Twenty)
-        } else if $a[20].eq($v) {
-            Some(LunarDay::TwentyFirst)
-        } else if $a[21].eq($v) {
-            Some(LunarDay::TwentySecond)
-        } else if $a[22].eq($v) {
-            Some(LunarDay::TwentyThird)
-        } else if $a[23].eq($v) {
-            Some(LunarDay::TwentyFourth)
-        } else if $a[24].eq($v) {
-            Some(LunarDay::TwentyFifth)
-        } else if $a[25].eq($v) {
-            Some(LunarDay::TwentySixth)
-        } else if $a[26].eq($v) {
-            Some(LunarDay::TwentySeventh)
-        } else if $a[27].eq($v) {
-            Some(LunarDay::TwentyEighth)
-        } else if $a[28].eq($v) {
-            Some(LunarDay::TwentyNinth)
-        } else if $a[29].eq($v) {
-            Some(LunarDay::Thirty)
-        } else {
-            None
-        }
-    };
-}
-
 impl LunarDay {
+    pub unsafe fn from_ordinal_unsafe(number: i8) -> LunarDay {
+        transmute(number)
+    }
+
     /// 透過農曆日期字串來取得 `LunarDay` 列舉實體。
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<LunarDay> {
         let s = s.as_ref();
 
-        the_lunar_days_from!(THE_LUNAR_DAYS, s)
+        for (i, &t) in THE_LUNAR_DAYS.iter().enumerate() {
+            if t.eq(s) {
+                return Some(unsafe {
+                    Self::from_ordinal_unsafe(i as i8)
+                });
+            }
+        }
+
+        None
     }
 
     /// 取得 `LunarDay` 列舉實體所代表的農曆日期字串。

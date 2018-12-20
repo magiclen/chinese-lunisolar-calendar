@@ -72,3 +72,14 @@ fn to_string() {
 
     assert_eq!("2018-06-19", solar_date.to_string());
 }
+
+#[test]
+fn the_n_day_in_this_year() {
+    assert_eq!(4, SolarDate::from_ymd(2013, 1, 4).unwrap().the_n_day_in_this_year());
+    assert_eq!(63, SolarDate::from_ymd(2013, 3, 4).unwrap().the_n_day_in_this_year());
+    assert_eq!(94, SolarDate::from_ymd(2013, 4, 4).unwrap().the_n_day_in_this_year());
+    assert_eq!(124, SolarDate::from_ymd(2013, 5, 4).unwrap().the_n_day_in_this_year());
+    assert_eq!(64, SolarDate::from_ymd(2020, 3, 4).unwrap().the_n_day_in_this_year());
+    assert_eq!(95, SolarDate::from_ymd(2020, 4, 4).unwrap().the_n_day_in_this_year());
+    assert_eq!(125, SolarDate::from_ymd(2020, 5, 4).unwrap().the_n_day_in_this_year());
+}

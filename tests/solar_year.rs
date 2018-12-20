@@ -13,3 +13,23 @@ fn from_u16_to_chinese_string() {
     let solar_year = SolarYear::from_u16(2018);
     assert_eq!(solar_year.to_chinese_string(), "二零一八");
 }
+
+#[test]
+fn is_leap() {
+    assert_eq!(true, SolarYear::from_u16(2000).is_leap());
+    assert_eq!(false, SolarYear::from_u16(2001).is_leap());
+    assert_eq!(false, SolarYear::from_u16(2002).is_leap());
+    assert_eq!(true, SolarYear::from_u16(2004).is_leap());
+    assert_eq!(false, SolarYear::from_u16(2100).is_leap());
+    assert_eq!(true, SolarYear::from_u16(2104).is_leap());
+}
+
+#[test]
+fn get_total_days() {
+    assert_eq!(366, SolarYear::from_u16(2000).get_total_days());
+    assert_eq!(365, SolarYear::from_u16(2001).get_total_days());
+    assert_eq!(365, SolarYear::from_u16(2002).get_total_days());
+    assert_eq!(366, SolarYear::from_u16(2004).get_total_days());
+    assert_eq!(365, SolarYear::from_u16(2100).get_total_days());
+    assert_eq!(366, SolarYear::from_u16(2104).get_total_days());
+}

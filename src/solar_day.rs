@@ -71,82 +71,24 @@ pub enum SolarDay {
     ThirtyFirst,
 }
 
-macro_rules! the_solar_days_from {
-    ($a:expr, $v:expr) => {
-        if $a[0].eq($v) {
-            Some(SolarDay::First)
-        } else if $a[1].eq($v) {
-            Some(SolarDay::Second)
-        } else if $a[2].eq($v) {
-            Some(SolarDay::Third)
-        } else if $a[3].eq($v) {
-            Some(SolarDay::Fourth)
-        } else if $a[4].eq($v) {
-            Some(SolarDay::Fifth)
-        } else if $a[5].eq($v) {
-            Some(SolarDay::Sixth)
-        } else if $a[6].eq($v) {
-            Some(SolarDay::Seventh)
-        } else if $a[7].eq($v) {
-            Some(SolarDay::Eighth)
-        } else if $a[8].eq($v) {
-            Some(SolarDay::Ninth)
-        } else if $a[9].eq($v) {
-            Some(SolarDay::Tenth)
-        } else if $a[10].eq($v) {
-            Some(SolarDay::Eleventh)
-        } else if $a[11].eq($v) {
-            Some(SolarDay::Twelfth)
-        } else if $a[12].eq($v) {
-            Some(SolarDay::Thirteen)
-        } else if $a[13].eq($v) {
-            Some(SolarDay::Fourteen)
-        } else if $a[14].eq($v) {
-            Some(SolarDay::Fifteen)
-        } else if $a[15].eq($v) {
-            Some(SolarDay::Sixteen)
-        } else if $a[16].eq($v) {
-            Some(SolarDay::Seventeen)
-        } else if $a[17].eq($v) {
-            Some(SolarDay::Eighteen)
-        } else if $a[18].eq($v) {
-            Some(SolarDay::Nineteen)
-        } else if $a[19].eq($v) {
-            Some(SolarDay::Twenty)
-        } else if $a[20].eq($v) {
-            Some(SolarDay::TwentyFirst)
-        } else if $a[21].eq($v) {
-            Some(SolarDay::TwentySecond)
-        } else if $a[22].eq($v) {
-            Some(SolarDay::TwentyThird)
-        } else if $a[23].eq($v) {
-            Some(SolarDay::TwentyFourth)
-        } else if $a[24].eq($v) {
-            Some(SolarDay::TwentyFifth)
-        } else if $a[25].eq($v) {
-            Some(SolarDay::TwentySixth)
-        } else if $a[26].eq($v) {
-            Some(SolarDay::TwentySeventh)
-        } else if $a[27].eq($v) {
-            Some(SolarDay::TwentyEighth)
-        } else if $a[28].eq($v) {
-            Some(SolarDay::TwentyNinth)
-        } else if $a[29].eq($v) {
-            Some(SolarDay::Thirty)
-        } else if $a[30].eq($v) {
-            Some(SolarDay::ThirtyFirst)
-        } else {
-            None
-        }
-    };
-}
-
 impl SolarDay {
+    pub unsafe fn from_ordinal_unsafe(number: i8) -> SolarDay {
+        transmute(number)
+    }
+
     /// 透過西曆日期字串來取得 `SolarDay` 列舉實體。
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<SolarDay> {
         let s = s.as_ref();
 
-        the_solar_days_from!(THE_SOLAR_DAYS, s)
+        for (i, &t) in THE_SOLAR_DAYS.iter().enumerate() {
+            if t.eq(s) {
+                return Some(unsafe {
+                    Self::from_ordinal_unsafe(i as i8)
+                });
+            }
+        }
+
+        None
     }
 
     /// 取得 `SolarDay` 列舉實體所代表的西曆日期字串。
