@@ -1,6 +1,6 @@
 extern crate chinese_lunisolar_calendar;
 
-use chinese_lunisolar_calendar::{LunisolarYear, HeavenlyStems, EarthlyBranch, Zodiac};
+use chinese_lunisolar_calendar::{LunisolarYear, HeavenlyStems, EarthlyBranch, Zodiac, LunarYear};
 
 #[test]
 fn get_heavenly_stems() {
@@ -18,4 +18,10 @@ fn get_earthly_branch() {
 fn get_zodiac() {
     assert_eq!(Zodiac::Rooster, LunisolarYear::from_solar_year(1993).unwrap().get_zodiac());
     assert_eq!(Zodiac::Dog, LunisolarYear::from_solar_year(2018).unwrap().get_zodiac());
+}
+
+#[test]
+fn to_lunar_year() {
+    assert_eq!(LunarYear::from_era(HeavenlyStems::Tenth, EarthlyBranch::Tenth), LunisolarYear::from_solar_year(1993).unwrap().to_lunar_year());
+    assert_eq!(LunarYear::from_era(HeavenlyStems::Fifth, EarthlyBranch::Eleventh), LunisolarYear::from_solar_year(2018).unwrap().to_lunar_year());
 }

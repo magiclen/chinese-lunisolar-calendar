@@ -1,4 +1,4 @@
-use super::{SolarYear, HeavenlyStems, EarthlyBranch, Zodiac, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR, MIN_LUNAR_DATE_IN_SOLAR_CALENDAR};
+use super::{SolarYear, HeavenlyStems, EarthlyBranch, Zodiac, LunarYear, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR, MIN_LUNAR_DATE_IN_SOLAR_CALENDAR};
 
 use std::fmt::{self, Display, Formatter};
 
@@ -38,16 +38,6 @@ impl LunisolarYear {
         }
     }
 
-    /// 取得 `LunisolarYear` 實體所代表的西曆年份數值。
-    pub fn to_u16(&self) -> u16 {
-        self.solar_year.to_u16()
-    }
-
-    /// 取得 `SolarYear` 實體。
-    pub fn to_solar_year(&self) -> SolarYear {
-        self.solar_year
-    }
-
     /// 取得此西曆年中，農曆新年的中國天干。
     pub fn get_heavenly_stems(&self) -> HeavenlyStems {
         let index = (6 + (self.solar_year.to_u16() - 1900)) % 10;
@@ -73,6 +63,24 @@ impl LunisolarYear {
         unsafe {
             Zodiac::from_ordinal_unsafe(index as i8)
         }
+    }
+
+    /// 取得 `LunarYear` 實體。
+    pub fn to_lunar_year(&self) -> LunarYear {
+        let heavenly_stems = self.get_heavenly_stems();
+        let earthly_branch = self.get_earthly_branch();
+
+        LunarYear::from_era(heavenly_stems, earthly_branch)
+    }
+
+    /// 取得 `SolarYear` 實體。
+    pub fn to_solar_year(&self) -> SolarYear {
+        self.solar_year
+    }
+
+    /// 取得 `LunisolarYear` 實體所代表的西曆年份數值。
+    pub fn to_u16(&self) -> u16 {
+        self.solar_year.to_u16()
     }
 }
 
