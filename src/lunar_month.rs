@@ -9,6 +9,8 @@ use std::fmt::{self, Display, Formatter};
 pub enum LunarMonth {
     /// 正月
     First,
+    /// 閏正月
+    LeapFirst,
     /// 二月
     Second,
     /// 閏二月
@@ -57,7 +59,7 @@ pub enum LunarMonth {
 
 macro_rules! the_lunar_months_contains {
     ($a:expr, $v:expr) => {
-        if $a[0].contains($v) {
+        if $a[0].contains($v) || $a[24].contains($v) {
             Some(LunarMonth::First)
         } else if $a[1].contains($v) {
             Some(LunarMonth::Second)
@@ -77,31 +79,33 @@ macro_rules! the_lunar_months_contains {
             Some(LunarMonth::Ninth)
         } else if $a[9].contains($v) {
             Some(LunarMonth::Tenth)
-        } else if $a[10].contains($v) {
+        } else if $a[10].contains($v) || $a[25].contains($v) {
             Some(LunarMonth::Eleventh)
-        } else if $a[11].contains($v) {
+        } else if $a[11].contains($v) || $a[26].contains($v) {
             Some(LunarMonth::Twelfth)
-        } else if $a[12].contains($v) {
-            Some(LunarMonth::LeapSecond)
+        } else if $a[12].contains($v) || $a[27].contains($v) {
+            Some(LunarMonth::LeapFirst)
         } else if $a[13].contains($v) {
-            Some(LunarMonth::LeapThird)
+            Some(LunarMonth::LeapSecond)
         } else if $a[14].contains($v) {
-            Some(LunarMonth::LeapFourth)
+            Some(LunarMonth::LeapThird)
         } else if $a[15].contains($v) {
-            Some(LunarMonth::LeapFifth)
+            Some(LunarMonth::LeapFourth)
         } else if $a[16].contains($v) {
-            Some(LunarMonth::LeapSixth)
+            Some(LunarMonth::LeapFifth)
         } else if $a[17].contains($v) {
-            Some(LunarMonth::LeapSeventh)
+            Some(LunarMonth::LeapSixth)
         } else if $a[18].contains($v) {
-            Some(LunarMonth::LeapEighth)
+            Some(LunarMonth::LeapSeventh)
         } else if $a[19].contains($v) {
-            Some(LunarMonth::LeapNinth)
+            Some(LunarMonth::LeapEighth)
         } else if $a[20].contains($v) {
-            Some(LunarMonth::LeapTenth)
+            Some(LunarMonth::LeapNinth)
         } else if $a[21].contains($v) {
+            Some(LunarMonth::LeapTenth)
+        } else if $a[22].contains($v) || $a[28].contains($v) {
             Some(LunarMonth::LeapEleventh)
-        } else if $a[22].contains($v) || $a[23].contains($v) {
+        } else if $a[23].contains($v) || $a[29].contains($v) || $a[30].contains($v) {
             Some(LunarMonth::LeapTwelfth)
         } else {
             None
@@ -134,12 +138,10 @@ impl LunarMonth {
     pub fn to_str(&self, chinese_variant: ChineseVariant) -> &'static str {
         let mut i = *self as usize;
 
-        if i > 0 {
-            if i % 2 == 0 {
-                i = i / 2 + 11;
-            } else {
-                i = (i + 1) / 2;
-            }
+        if i % 2 == 1 {
+            i = i / 2 + 12;
+        } else {
+            i = i / 2;
         }
         the_lunar_months_variants!(THE_LUNAR_MONTHS, chinese_variant, i)
     }
@@ -150,21 +152,13 @@ impl LunarMonth {
             None
         } else {
             if leap {
-                if month == 1 { // no LeapFirst
-                    None
-                } else {
-                    Some(unsafe {
-                        transmute((month - 1) * 2)
-                    })
-                }
+                Some(unsafe {
+                    transmute((month - 1) * 2 + 1)
+                })
             } else {
-                if month == 1 {
-                    Some(LunarMonth::First)
-                } else {
-                    Some(unsafe {
-                        transmute((month - 1) * 2 - 1)
-                    })
-                }
+                Some(unsafe {
+                    transmute((month - 1) * 2)
+                })
             }
         }
     }
@@ -173,22 +167,14 @@ impl LunarMonth {
     pub fn to_u8(&self) -> u8 {
         let i = *self as u8;
 
-        if i > 0 {
-            if i % 2 == 0 {
-                i / 2 + 1
-            } else {
-                (i + 1) / 2 + 1
-            }
-        } else {
-            1
-        }
+        i / 2 + 1
     }
 
     /// 是否為閏月。
     pub fn is_leap_month(&self) -> bool {
         let i = *self as usize;
 
-        i > 0 && i % 2 == 0
+        i % 2 == 1
     }
 }
 

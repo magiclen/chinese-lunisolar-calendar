@@ -2,7 +2,7 @@ use super::{THE_LUNAR_YEARS, HeavenlyStems, EarthlyBranch, Zodiac};
 
 use std::fmt::{self, Display, Formatter};
 
-/// 農曆年份由天干加地支組成，六十年一輪。
+/// 農曆年份，由天干加地支組成，六十年一輪。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
 pub struct LunarYear {
     /// 天干
@@ -382,19 +382,19 @@ macro_rules! the_lunar_years_from {
 }
 
 impl LunarYear {
-    /// 透過農曆年份字串來取得 `LunarYear` 列舉實體。
+    /// 透過農曆年份字串來取得 `LunarYear` 實體。
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<LunarYear> {
         let s = s.as_ref();
 
         the_lunar_years_from!(THE_LUNAR_YEARS, s)
     }
 
-    /// 取得 `LunarYear` 列舉實體所代表的農曆年份字串。
+    /// 取得 `LunarYear` 實體所代表的農曆年份字串。
     pub fn to_str(&self) -> &'static str {
         THE_LUNAR_YEARS[self.year_index]
     }
 
-    /// 透過中國天干地支來取得 `LunarYear` 列舉實體。
+    /// 透過中國天干地支來取得 `LunarYear` 實體。
     pub fn from_era(heavenly_stems: HeavenlyStems, earthly_branch: EarthlyBranch) -> LunarYear {
         let h = heavenly_stems as usize;
         let e = earthly_branch as usize;
