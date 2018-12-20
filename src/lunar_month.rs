@@ -2,6 +2,8 @@ use super::{THE_LUNAR_MONTHS, ChineseVariant};
 
 use std::mem::transmute;
 
+use std::fmt::{self, Display, Formatter};
+
 /// 列舉農曆十二個月份名稱：正月、二月、三月、四月、五月、六月、七月、八月、九月、十月、冬月、臘月。包含閏月。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
 pub enum LunarMonth {
@@ -187,5 +189,11 @@ impl LunarMonth {
         let i = *self as usize;
 
         i > 0 && i % 2 == 0
+    }
+}
+
+impl Display for LunarMonth {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
+        f.write_str(self.to_str(ChineseVariant::Traditional))
     }
 }

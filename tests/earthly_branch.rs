@@ -3,7 +3,7 @@ extern crate chinese_lunisolar_calendar;
 use chinese_lunisolar_calendar::{EarthlyBranch, Zodiac};
 
 #[test]
-fn test_from_str() {
+fn from_str() {
     assert_eq!(EarthlyBranch::First, EarthlyBranch::from_str("子").unwrap());
     assert_eq!(EarthlyBranch::Second, EarthlyBranch::from_str("丑").unwrap());
     assert_eq!(EarthlyBranch::Fifth, EarthlyBranch::from_str("辰").unwrap());
@@ -11,7 +11,7 @@ fn test_from_str() {
 }
 
 #[test]
-fn test_to_str() {
+fn to_str() {
     assert_eq!(EarthlyBranch::First.to_str(), "子");
     assert_eq!(EarthlyBranch::Second.to_str(), "丑");
     assert_eq!(EarthlyBranch::Fifth.to_str(), "辰");
@@ -19,7 +19,7 @@ fn test_to_str() {
 }
 
 #[test]
-fn test_from_char() {
+fn from_char() {
     assert_eq!(EarthlyBranch::First, EarthlyBranch::from_char('子').unwrap());
     assert_eq!(EarthlyBranch::Second, EarthlyBranch::from_char('丑').unwrap());
     assert_eq!(EarthlyBranch::Fifth, EarthlyBranch::from_char('辰').unwrap());
@@ -27,7 +27,7 @@ fn test_from_char() {
 }
 
 #[test]
-fn test_to_char() {
+fn to_char() {
     assert_eq!(EarthlyBranch::First.to_char(), '子');
     assert_eq!(EarthlyBranch::Second.to_char(), '丑');
     assert_eq!(EarthlyBranch::Fifth.to_char(), '辰');
@@ -35,7 +35,7 @@ fn test_to_char() {
 }
 
 #[test]
-fn test_from_zodiac() {
+fn from_zodiac() {
     assert_eq!(EarthlyBranch::from_zodiac(Zodiac::Rat), EarthlyBranch::First);
     assert_eq!(EarthlyBranch::from_zodiac(Zodiac::Ox), EarthlyBranch::Second);
     assert_eq!(EarthlyBranch::from_zodiac(Zodiac::Dragon), EarthlyBranch::Fifth);
@@ -43,7 +43,7 @@ fn test_from_zodiac() {
 }
 
 #[test]
-fn test_to_zodiac() {
+fn to_zodiac() {
     assert_eq!(Zodiac::Rat, EarthlyBranch::First.to_zodiac());
     assert_eq!(Zodiac::Ox, EarthlyBranch::Second.to_zodiac());
     assert_eq!(Zodiac::Dragon, EarthlyBranch::Fifth.to_zodiac());

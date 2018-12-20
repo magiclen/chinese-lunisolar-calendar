@@ -3,7 +3,7 @@ extern crate chinese_lunisolar_calendar;
 use chinese_lunisolar_calendar::{ChineseVariant, LunarMonth};
 
 #[test]
-fn test_from_str() {
+fn from_str() {
     assert_eq!(LunarMonth::First, LunarMonth::from_str("正月").unwrap());
     assert_eq!(LunarMonth::Second, LunarMonth::from_str("二月").unwrap());
     assert_eq!(LunarMonth::Fifth, LunarMonth::from_str("五月").unwrap());
@@ -18,7 +18,7 @@ fn test_from_str() {
 }
 
 #[test]
-fn test_to_str() {
+fn to_str() {
     assert_eq!(LunarMonth::First.to_str(ChineseVariant::Traditional), "正月");
     assert_eq!(LunarMonth::Second.to_str(ChineseVariant::Traditional), "二月");
     assert_eq!(LunarMonth::Fifth.to_str(ChineseVariant::Traditional), "五月");
@@ -33,7 +33,7 @@ fn test_to_str() {
 }
 
 #[test]
-fn test_from_u8() {
+fn from_u8() {
     assert_eq!(LunarMonth::First, LunarMonth::from_u8(1, false).unwrap());
     assert_eq!(LunarMonth::Second, LunarMonth::from_u8(2, false).unwrap());
     assert_eq!(LunarMonth::Fifth, LunarMonth::from_u8(5, false).unwrap());
@@ -46,7 +46,7 @@ fn test_from_u8() {
 }
 
 #[test]
-fn test_to_u8() {
+fn to_u8() {
     assert_eq!(LunarMonth::First.to_u8(), 1);
     assert_eq!(LunarMonth::Second.to_u8(), 2);
     assert_eq!(LunarMonth::Fifth.to_u8(), 5);

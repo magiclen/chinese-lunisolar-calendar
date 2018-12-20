@@ -3,7 +3,7 @@ extern crate chinese_lunisolar_calendar;
 use chinese_lunisolar_calendar::LunarDay;
 
 #[test]
-fn test_from_str() {
+fn from_str() {
     assert_eq!(LunarDay::First, LunarDay::from_str("初一").unwrap());
     assert_eq!(LunarDay::Second, LunarDay::from_str("初二").unwrap());
     assert_eq!(LunarDay::Fifth, LunarDay::from_str("初五").unwrap());
@@ -11,7 +11,7 @@ fn test_from_str() {
 }
 
 #[test]
-fn test_to_str() {
+fn to_str() {
     assert_eq!(LunarDay::First.to_str(), "初一");
     assert_eq!(LunarDay::Second.to_str(), "初二");
     assert_eq!(LunarDay::Fifth.to_str(), "初五");
@@ -19,7 +19,7 @@ fn test_to_str() {
 }
 
 #[test]
-fn test_from_u8() {
+fn from_u8() {
     assert_eq!(LunarDay::First, LunarDay::from_u8(1).unwrap());
     assert_eq!(LunarDay::Second, LunarDay::from_u8(2).unwrap());
     assert_eq!(LunarDay::Fifth, LunarDay::from_u8(5).unwrap());
@@ -27,7 +27,7 @@ fn test_from_u8() {
 }
 
 #[test]
-fn test_to_u8() {
+fn to_u8() {
     assert_eq!(LunarDay::First.to_u8(), 1);
     assert_eq!(LunarDay::Second.to_u8(), 2);
     assert_eq!(LunarDay::Fifth.to_u8(), 5);

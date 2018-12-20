@@ -2,6 +2,8 @@ use super::{THE_EARTHLY_BRANCHES, THE_EARTHLY_BRANCHES_CHARS, Zodiac};
 
 use std::mem::transmute;
 
+use std::fmt::{self, Display, Formatter};
+
 /// 列舉中國十二地支：子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
 pub enum EarthlyBranch {
@@ -98,5 +100,11 @@ impl EarthlyBranch {
     /// 將地支轉成生肖。
     pub fn to_zodiac(&self) -> Zodiac {
         unsafe { transmute(*self) }
+    }
+}
+
+impl Display for EarthlyBranch {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
+        f.write_str(self.to_str())
     }
 }

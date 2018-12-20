@@ -2,6 +2,8 @@ use super::THE_LUNAR_DAYS;
 
 use std::mem::transmute;
 
+use std::fmt::{self, Display, Formatter};
+
 /// 列舉農曆三十個天數名稱：初一、初二、...、十一、十二、...、廿一、廿二、...、三十。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
 pub enum LunarDay {
@@ -164,5 +166,11 @@ impl LunarDay {
     /// 取得 `LunarDay` 列舉實體所代表的農曆日期數值。
     pub fn to_u8(&self) -> u8 {
         *self as u8 + 1
+    }
+}
+
+impl Display for LunarDay {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
+        f.write_str(self.to_str())
     }
 }
