@@ -1,4 +1,4 @@
-use super::{THE_LUNAR_MONTHS, ChineseVariant};
+use super::{THE_LUNAR_MONTHS, ChineseVariant, LunisolarYear, BIG_MONTHS, MIN_YEAR_IN_SOLAR_CALENDAR};
 
 use std::mem::transmute;
 
@@ -149,6 +149,39 @@ impl LunarMonth {
         let i = *self as usize;
 
         i % 2 == 1
+    }
+
+    /// 傳入指定的農曆西曆年，並計算此農曆月在這個指定的農曆西曆年內共有幾天。
+    pub fn get_total_days(&self, lunisolar_year: LunisolarYear) -> Option<u8> {
+        let mut month = self.to_u8();
+
+        let year = lunisolar_year.to_u16();
+
+        let leap_month = match lunisolar_year.get_leap_lunar_month() {
+            Some(leap_lunar_month) => leap_lunar_month.to_u8(),
+            None => 0
+        };
+
+        if self.is_leap_month() {
+            if month != leap_month { // 防呆
+                None
+            } else { // 此為閏月，需計算其後一個月的天數
+                if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> leap_month)) == 0 {
+                    Some(29)
+                } else {
+                    Some(30)
+                }
+            }
+        } else {
+            if leap_month > 0 && month > leap_month { // 若今年有閏月，且該西曆月應在閏月之後再加一個月
+                month += 1;
+            }
+            if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> (month - 1))) == 0 {
+                Some(29)
+            } else {
+                Some(30)
+            }
+        }
     }
 }
 

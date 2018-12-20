@@ -1,10 +1,8 @@
-use super::{SolarYear, HeavenlyStems, EarthlyBranch, Zodiac, LunarYear, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR, MIN_LUNAR_DATE_IN_SOLAR_CALENDAR};
+use super::{SolarYear, HeavenlyStems, EarthlyBranch, Zodiac, LunarYear, LunarMonth, LEAP_MONTHS, BIG_MONTHS, MIN_YEAR_IN_SOLAR_CALENDAR, MAX_YEAR_IN_SOLAR_CALENDAR};
 
 use std::fmt::{self, Display, Formatter};
 
-use chrono::prelude::*;
-
-/// 農曆新年所在的西曆年份。
+/// 農曆西曆年，農曆新年所在的西曆年份。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
 pub struct LunisolarYear {
     solar_year: SolarYear,
@@ -26,10 +24,7 @@ impl LunisolarYear {
 
         let year = solar_year.to_u16();
 
-        let min_year = MIN_LUNAR_DATE_IN_SOLAR_CALENDAR.year() as u16;
-        let max_year = MAX_LUNAR_DATE_IN_SOLAR_CALENDAR.year() as u16;
-
-        if year >= min_year && max_year <= max_year {
+        if year >= MIN_YEAR_IN_SOLAR_CALENDAR && year <= MAX_YEAR_IN_SOLAR_CALENDAR {
             Some(LunisolarYear {
                 solar_year
             })
@@ -40,7 +35,7 @@ impl LunisolarYear {
 
     /// 取得此西曆年中，農曆新年的中國天干。
     pub fn get_heavenly_stems(&self) -> HeavenlyStems {
-        let index = (6 + (self.solar_year.to_u16() - 1900)) % 10;
+        let index = (7 + (self.solar_year.to_u16() - MIN_YEAR_IN_SOLAR_CALENDAR)) % 10;
 
         unsafe {
             HeavenlyStems::from_ordinal_unsafe(index as i8)
@@ -49,7 +44,7 @@ impl LunisolarYear {
 
     /// 取得此西曆年中，農曆新年的中國地支。
     pub fn get_earthly_branch(&self) -> EarthlyBranch {
-        let index = (self.solar_year.to_u16() - 1900) % 12;
+        let index = (self.solar_year.to_u16() - MIN_YEAR_IN_SOLAR_CALENDAR + 1) % 12;
 
         unsafe {
             EarthlyBranch::from_ordinal_unsafe(index as i8)
@@ -58,11 +53,103 @@ impl LunisolarYear {
 
     /// 取得此西曆年中，農曆新年所屬的生肖。
     pub fn get_zodiac(&self) -> Zodiac {
-        let index = (self.solar_year.to_u16() - 1900) % 12;
+        let index = (self.solar_year.to_u16() - MIN_YEAR_IN_SOLAR_CALENDAR + 1) % 12;
 
         unsafe {
             Zodiac::from_ordinal_unsafe(index as i8)
         }
+    }
+
+    /// 取得此年的農曆閏月月份。
+    pub fn get_leap_lunar_month(&self) -> Option<LunarMonth> {
+        let year = self.to_u16();
+
+        let month = LEAP_MONTHS[((year - MIN_YEAR_IN_SOLAR_CALENDAR) / 2) as usize];
+
+        let index = if year % 2 == 1 {
+            ((month & 0xf0) >> 4)
+        } else {
+            (month & 0x0f)
+        };
+
+        if index == 0 {
+            None
+        } else {
+            Some(unsafe {
+                LunarMonth::from_u8_unsafe(index, true)
+            })
+        }
+    }
+
+    /// 計算此西曆年下的農曆閏月共有幾天。如果沒有閏月，則回傳0。
+    pub fn get_total_days_in_leap_month(&self) -> u16 {
+        let leap_lunar_month = self.get_leap_lunar_month();
+
+        match leap_lunar_month {
+            Some(leap_lunar_month) => {
+                self.get_total_days_in_leap_month_inner(leap_lunar_month)
+            }
+            None => 0
+        }
+    }
+
+    fn get_total_days_in_leap_month_inner(&self, leap_lunar_month: LunarMonth) -> u16 {
+        let year = self.to_u16();
+
+        let leap_month = leap_lunar_month.to_u8();
+
+        if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> leap_month)) == 0 {
+            29
+        } else {
+            30
+        }
+    }
+
+    /// 計算此西曆年下的農曆年共有幾天。。
+    pub fn get_total_days(&self) -> u16 {
+        let leap_lunar_month = self.get_leap_lunar_month();
+
+        let (leap_month, mut n) = match leap_lunar_month {
+            Some(leap_lunar_month) => {
+                (leap_lunar_month.to_u8(), self.get_total_days_in_leap_month_inner(leap_lunar_month))
+            }
+            None => (0, 0)
+        };
+
+        let year = self.to_u16();
+
+        if leap_month > 0 {
+            for month in 1..=leap_month {
+                if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> (month - 1))) == 0 {
+                    n += 29;
+                } else {
+                    n += 30;
+                }
+            }
+
+            for month in (leap_month + 1)..=12 {
+                if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> month)) == 0 {
+                    n += 29;
+                } else {
+                    n += 30;
+                }
+            }
+        } else {
+            for month in 1..=12 {
+                if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> (month - 1))) == 0 {
+                    n += 29;
+                } else {
+                    n += 30;
+                }
+            }
+        }
+
+        n
+    }
+
+    /// 計算此西曆年下的某個月共有幾天。。
+    pub fn get_total_days_in_a_month(&self, lunar_month: LunarMonth) -> Option<u8> {
+        lunar_month.get_total_days(*self)
     }
 
     /// 取得 `LunarYear` 實體。

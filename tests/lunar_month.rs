@@ -1,6 +1,6 @@
 extern crate chinese_lunisolar_calendar;
 
-use chinese_lunisolar_calendar::{ChineseVariant, LunarMonth};
+use chinese_lunisolar_calendar::{ChineseVariant, LunarMonth, LunisolarYear};
 
 #[test]
 fn from_str() {
@@ -60,4 +60,11 @@ fn to_u8() {
     assert_eq!(LunarMonth::LeapFifth.to_u8(), 5);
     assert_eq!(LunarMonth::LeapSixth.to_u8(), 6);
     assert_eq!(LunarMonth::LeapTwelfth.to_u8(), 12);
+}
+
+#[test]
+fn get_total_days() {
+    assert_eq!(Some(30), LunarMonth::Fourth.get_total_days(LunisolarYear::from_solar_year(2020).unwrap()));
+    assert_eq!(Some(29), LunarMonth::LeapFourth.get_total_days(LunisolarYear::from_solar_year(2020).unwrap()));
+    assert_eq!(Some(30), LunarMonth::Fifth.get_total_days(LunisolarYear::from_solar_year(2020).unwrap()));
 }
