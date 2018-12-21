@@ -20,7 +20,7 @@ pub const MAX_YEAR_IN_SOLAR_CALENDAR: u16 = 2101;
 pub const MIN_YEAR_IN_SOLAR_CALENDAR: u16 = 1901;
 
 lazy_static! {
-    /// 最大支援的農曆日期(以西曆日期表示)：2101-01-18。*(lazy_static的實體)*
+    /// 最大支援的農曆日期(以西曆日期表示)：2101-01-28。*(lazy_static的實體)*
     pub static ref MAX_LUNAR_DATE_IN_SOLAR_CALENDAR: NaiveDate = Utc.ymd(MAX_YEAR_IN_SOLAR_CALENDAR as i32, 1, 28).naive_utc();
 
     /// 最大支援的農曆日期的新年偏差。*(lazy_static的實體)*
