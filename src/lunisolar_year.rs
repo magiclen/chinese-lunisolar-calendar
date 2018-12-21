@@ -148,7 +148,7 @@ impl LunisolarYear {
         n
     }
 
-    /// 計算此西曆年下的某個月共有幾天。。
+    /// 計算此西曆年下的農曆年的某個月共有幾天。。
     pub fn get_total_days_in_a_month(&self, lunar_month: LunarMonth) -> Option<u8> {
         lunar_month.get_total_days(*self)
     }
