@@ -6,13 +6,13 @@ repository = "https://github.com/magiclen/chinese-lunisolar-calendar"
 homepage = "https://magiclen.org/chinese-lunisolar-calendar"
 keywords = ["chinese", "calendar", "lunar", "leap", "solar"]
 categories = ["localization"]
-description= "The traditional Chinese Calendar, called **農曆** or **陰曆** in Chinese, is based on the moon, so it's also known as Lunar Calendar."
+description = "The traditional Chinese Calendar, called 農曆 or 陰曆 in Chinese, is based on the moon, so it's also known as Lunar Calendar."
 readme = "README.md"
 license = "MIT"
 
 [badges]
-travis-ci = { repository = "magiclen/chinese-number", branch = "master" }
-appveyor = { repository = "magiclen/chinese-number", branch = "master", service = "github" }
+travis-ci = { repository = "magiclen/chinese-lunisolar-calendar", branch = "master" }
+appveyor = { repository = "magiclen/chinese-lunisolar-calendar", branch = "master", service = "github" }
 
 [dependencies]
 chrono = "0.4.6"
