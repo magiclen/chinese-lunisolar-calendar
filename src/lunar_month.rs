@@ -1,4 +1,4 @@
-use super::{THE_LUNAR_MONTHS, ChineseVariant, LunisolarYear, BIG_MONTHS, MIN_YEAR_IN_SOLAR_CALENDAR};
+use super::{THE_LUNAR_MONTHS, ChineseVariant, LunisolarYear, BIG_MONTHS, MIN_YEAR_IN_SOLAR_CALENDAR, BA_ZI_WEIGHT_MONTHS};
 
 use std::mem::transmute;
 
@@ -182,6 +182,13 @@ impl LunarMonth {
                 Some(30)
             }
         }
+    }
+
+    /// 取得八字重量。
+    pub fn get_ba_zi_weight(&self) -> u8 {
+        let i = self.to_u8() as usize;
+
+        BA_ZI_WEIGHT_MONTHS[i]
     }
 }
 

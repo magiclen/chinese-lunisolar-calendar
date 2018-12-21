@@ -1,4 +1,4 @@
-use super::{THE_LUNAR_YEARS, HeavenlyStems, EarthlyBranch, Zodiac};
+use super::{THE_LUNAR_YEARS, HeavenlyStems, EarthlyBranch, Zodiac, BA_ZI_WEIGHT_YEARS};
 
 use std::fmt::{self, Display, Formatter};
 
@@ -67,6 +67,11 @@ impl LunarYear {
     /// 取得生肖。
     pub fn get_zodiac(&self) -> Zodiac {
         self.earthly_branch.to_zodiac()
+    }
+
+    /// 取得八字重量。
+    pub fn get_ba_zi_weight(&self) -> u8 {
+        BA_ZI_WEIGHT_YEARS[self.year_index]
     }
 }
 

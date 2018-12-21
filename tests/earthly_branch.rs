@@ -2,12 +2,22 @@ extern crate chinese_lunisolar_calendar;
 
 use chinese_lunisolar_calendar::{EarthlyBranch, Zodiac};
 
+use chinese_lunisolar_calendar::chrono::prelude::*;
+
 #[test]
 fn from_str() {
     assert_eq!(EarthlyBranch::First, EarthlyBranch::from_str("子").unwrap());
     assert_eq!(EarthlyBranch::Second, EarthlyBranch::from_str("丑").unwrap());
     assert_eq!(EarthlyBranch::Fifth, EarthlyBranch::from_str("辰").unwrap());
     assert_eq!(EarthlyBranch::Twelfth, EarthlyBranch::from_str("亥").unwrap());
+}
+
+#[test]
+fn from_time() {
+    assert_eq!(EarthlyBranch::First, EarthlyBranch::from_time(NaiveTime::from_hms(23, 30, 0)));
+    assert_eq!(EarthlyBranch::Second, EarthlyBranch::from_time(NaiveTime::from_hms(1, 30, 0)));
+    assert_eq!(EarthlyBranch::Fifth, EarthlyBranch::from_time(NaiveTime::from_hms(7, 0, 1)));
+    assert_eq!(EarthlyBranch::Twelfth, EarthlyBranch::from_time(NaiveTime::from_hms(22, 0, 0)));
 }
 
 #[test]

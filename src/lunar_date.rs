@@ -1,4 +1,4 @@
-use super::{ChineseVariant, LunisolarError, LunisolarYear, SolarYear, SolarDate, LunarYear, LunarMonth, LunarDay, MIN_LUNAR_DATE_IN_SOLAR_CALENDAR, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR_NEW_YEAR_DIFFERENCE, MIN_YEAR_IN_SOLAR_CALENDAR, MAX_YEAR_IN_SOLAR_CALENDAR, NEW_YEAR_DIFFERENCE};
+use super::{ChineseVariant, LunisolarError, LunisolarYear, SolarYear, SolarDate, LunarYear, LunarMonth, LunarDay, EarthlyBranch, MIN_LUNAR_DATE_IN_SOLAR_CALENDAR, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR_NEW_YEAR_DIFFERENCE, MIN_YEAR_IN_SOLAR_CALENDAR, MAX_YEAR_IN_SOLAR_CALENDAR, NEW_YEAR_DIFFERENCE};
 
 use std::fmt::{self, Display, Formatter};
 
@@ -315,6 +315,33 @@ impl LunarDate {
     /// 計算此農曆年月日是該農曆年的第幾天。舉例：2013/正月/初五，就是第五天。
     pub fn the_n_day_in_this_year(&self) -> u16 {
         Self::the_n_day_in_this_year_inner(self.lunisolar_year, self.lunar_month, self.lunar_day)
+    }
+
+    /// 搭配出生時間(地支)，來計算八字有幾兩重。
+    ///
+    /// * 子：２３～１
+    /// * 丑：１～３
+    /// * 寅：３～５
+    /// * 卯：５～７
+    /// * 辰：７～９
+    /// * 巳：９～１１
+    /// * 午：１１～１３
+    /// * 未：１３～１５
+    /// * 申：１５～１７
+    /// * 酉：１７～１９
+    /// * 戌：１９～２１
+    /// * 亥：２１～２３
+    pub fn get_ba_zi_weight(&self, earthly_branch: EarthlyBranch) -> f64 {
+        let sum = self.lunisolar_year.to_lunar_year().get_ba_zi_weight() + self.lunar_month.get_ba_zi_weight() + self.lunar_day.get_ba_zi_weight() + earthly_branch.get_ba_zi_weight();
+
+        sum as f64 / 10.0
+    }
+
+    /// 搭配出生時間，來計算八字有幾兩重。
+    pub fn get_ba_zi_weight_by_time<T: Timelike>(&self, time: T) -> f64 {
+        let earthly_branch = EarthlyBranch::from_time(time);
+
+        self.get_ba_zi_weight(earthly_branch)
     }
 }
 

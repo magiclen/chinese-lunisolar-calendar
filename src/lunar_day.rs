@@ -1,4 +1,4 @@
-use super::THE_LUNAR_DAYS;
+use super::{THE_LUNAR_DAYS, BA_ZI_WEIGHT_DAYS};
 
 use std::mem::transmute;
 
@@ -115,6 +115,14 @@ impl LunarDay {
     /// 取得 `LunarDay` 列舉實體所代表的農曆日期數值。
     pub fn to_u8(&self) -> u8 {
         *self as u8 + 1
+    }
+
+
+    /// 取得八字重量。
+    pub fn get_ba_zi_weight(&self) -> u8 {
+        let i = *self as usize;
+
+        BA_ZI_WEIGHT_DAYS[i]
     }
 }
 

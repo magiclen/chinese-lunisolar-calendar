@@ -1,8 +1,10 @@
-use super::{THE_EARTHLY_BRANCHES, THE_EARTHLY_BRANCHES_CHARS, Zodiac};
+use super::{THE_EARTHLY_BRANCHES, THE_EARTHLY_BRANCHES_CHARS, Zodiac, BA_ZI_WEIGHT_TIME};
 
 use std::mem::transmute;
 
 use std::fmt::{self, Display, Formatter};
+
+use chrono::prelude::*;
 
 /// 列舉中國十二地支：子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
@@ -36,6 +38,17 @@ pub enum EarthlyBranch {
 impl EarthlyBranch {
     pub unsafe fn from_ordinal_unsafe(number: i8) -> EarthlyBranch {
         transmute(number)
+    }
+
+    /// 將時間轉成對應的地支。
+    pub fn from_time<T: Timelike>(time: T) -> EarthlyBranch {
+        let hour = time.hour();
+
+        let ordinal = ((hour + 1) % 24) / 2;
+
+        unsafe {
+            Self::from_ordinal_unsafe(ordinal as i8)
+        }
     }
 
     /// 透過子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥等字串來取得 `EarthlyBranch` 列舉實體。
@@ -88,6 +101,13 @@ impl EarthlyBranch {
     /// 將地支轉成生肖。
     pub fn to_zodiac(&self) -> Zodiac {
         unsafe { transmute(*self) }
+    }
+
+    /// 取得八字重量。
+    pub fn get_ba_zi_weight(&self) -> u8 {
+        let i = *self as usize;
+
+        BA_ZI_WEIGHT_TIME[i]
     }
 }
 
