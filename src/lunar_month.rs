@@ -188,7 +188,7 @@ impl LunarMonth {
     pub fn get_ba_zi_weight(&self) -> u8 {
         let i = self.to_u8() as usize;
 
-        BA_ZI_WEIGHT_MONTHS[i]
+        BA_ZI_WEIGHT_MONTHS[i - 1]
     }
 }
 

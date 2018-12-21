@@ -2,6 +2,8 @@ extern crate chinese_lunisolar_calendar;
 
 use chinese_lunisolar_calendar::{ChineseVariant, SolarYear, SolarDate, LunisolarYear, LunarYear, LunarMonth, LunarDay, LunarDate};
 
+use chinese_lunisolar_calendar::chrono::prelude::*;
+
 #[test]
 fn from_solar_date() {
     let solar_date = SolarDate::from_ymd(1993, 1, 12).unwrap();
@@ -112,5 +114,12 @@ fn the_n_day_in_this_year() {
     assert_eq!(60, LunarDate::from_ymd(1993, 3, false, 1).unwrap().the_n_day_in_this_year());
     assert_eq!(200, LunarDate::from_ymd(1993, 6, false, 23).unwrap().the_n_day_in_this_year());
     assert_eq!(324, LunarDate::from_ymd(1993, 10, false, 29).unwrap().the_n_day_in_this_year());
+}
+
+
+
+#[test]
+fn get_ba_zi_weight_by_time() {
+    assert_eq!(4.8,  LunarDate::from_ymd(1993, 6, false, 23).unwrap().get_ba_zi_weight_by_time(NaiveTime::from_hms(23,30,0)));
 }
 
