@@ -1,4 +1,4 @@
-use super::{LunisolarError, SolarYear, SolarMonth, SolarDay};
+use super::{LunisolarError, SolarYear, SolarMonth, SolarDay, LunarDate, NEW_YEAR_DIFFERENCE, MIN_YEAR_IN_SOLAR_CALENDAR};
 
 use std::fmt::{self, Display, Formatter};
 
@@ -86,8 +86,59 @@ impl SolarDate {
             None => return Err(LunisolarError::IncorrectSolarMonth)
         };
 
-
         Self::from_solar_year_month_day(solar_year, solar_month, solar_day)
+    }
+
+
+    /// 利用農曆年月日來產生 `SolarDate` 實體。
+    pub fn from_lunar_date(lunar_date: LunarDate) -> SolarDate {
+        let n = lunar_date.the_n_day_in_this_year();
+
+        let solar_year = lunar_date.get_solar_year();
+
+        let sy = solar_year.to_u16();
+
+        let lunisolar_year = lunar_date.get_lunisolar_year();
+
+        let ly = lunisolar_year.to_u16();
+
+        let mut days_diff = if sy == ly {
+            n - 1 + NEW_YEAR_DIFFERENCE[(ly - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] as u16 // 天數差距為該農曆日期與對應西曆年新年的天數差距。其實就是轉換成西曆日期後，西曆日期與新年的距離。(舉例，農曆2012-01-03，為第3天，和農曆新年差了2天。加上西曆農曆偏差52天。因此天數差距為54)
+        } else {
+            n - 1 - (lunisolar_year.to_solar_year().get_total_days() - NEW_YEAR_DIFFERENCE[(ly - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] as u16)
+        };
+
+        let mut month = 1;
+
+        let mut solar_month = unsafe { SolarMonth::from_u8_unsafe(month) };
+
+        let mut month_days = solar_month.get_total_days(solar_year) as u16;
+
+        while days_diff >= month_days {
+            days_diff -= month_days;
+
+            if month == 12 {
+                break;
+            }
+
+            month += 1;
+
+            solar_month = unsafe { SolarMonth::from_u8_unsafe(month) };
+
+            month_days = solar_month.get_total_days(solar_year) as u16;
+        }
+
+        SolarDate {
+            solar_year,
+            solar_month,
+            solar_day: unsafe { SolarDay::from_u8_unsafe(days_diff as u8 + 1) },
+        }
+    }
+
+
+    /// 轉成農曆年月日。
+    pub fn to_lunar_date(&self) -> Result<LunarDate, LunisolarError> {
+        LunarDate::from_solar_date(*self)
     }
 
     /// 以目前的年月日來產生 `SolarDate` 實體。
@@ -150,20 +201,22 @@ impl SolarDate {
 
     /// 取得 `SolarDate` 實體所代表的中文西曆年月日字串。
     pub fn to_chinese_string(&self) -> String {
-        let mut s = String::with_capacity(36);
+        let mut s = String::new();
 
-        self.solar_year.write_to_chinese_string(&mut s);
-        s.push_str("年");
-        s.push_str(self.solar_month.to_str());
-        s.push_str(self.solar_day.to_str());
-        s.push_str("日");
+        self.write_to_chinese_string(&mut s);
 
         s
     }
 
-    /// 取得 `SolarDate` 實體所代表的西曆年月日字串(格式：yyyy-mm-dd)。
-    pub fn to_string(&self) -> String {
-        format!("{:04}-{:02}-{:02}", self.solar_year.to_u16(), self.solar_month.to_u8(), self.solar_day.to_u8())
+    /// 取得 `SolarDate` 實體所代表的中文西曆年月日字串。
+    pub fn write_to_chinese_string(&self, s: &mut String) {
+        s.reserve(36);
+
+        self.solar_year.write_to_chinese_string(s);
+        s.push_str("年");
+        s.push_str(self.solar_month.to_str());
+        s.push_str(self.solar_day.to_str());
+        s.push_str("日");
     }
 
     /// 取得西曆年。

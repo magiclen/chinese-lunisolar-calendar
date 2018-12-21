@@ -10,8 +10,8 @@ pub enum LunisolarError {
     IncorrectSolarDay,
     /// 超出農曆支援的日期範圍。
     OutOfLunarRange,
-    /// 錯誤的農曆年。
-    IncorrectLunarYear,
+    /// 錯誤的農曆西曆年。
+    IncorrectLunisolarYear,
     /// 錯誤的農曆月。
     IncorrectLunarMonth,
     /// 錯誤的農曆日。

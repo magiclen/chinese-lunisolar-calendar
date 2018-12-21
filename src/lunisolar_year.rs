@@ -93,7 +93,8 @@ impl LunisolarYear {
         }
     }
 
-    fn get_total_days_in_leap_month_inner(&self, leap_lunar_month: LunarMonth) -> u16 {
+    /// 計算指定的農曆閏月共有幾天。
+    pub(crate) fn get_total_days_in_leap_month_inner(&self, leap_lunar_month: LunarMonth) -> u16 {
         let year = self.to_u16();
 
         let leap_month = leap_lunar_month.to_u8();
