@@ -101,6 +101,21 @@ fn from_ymd() {
 }
 
 #[test]
+fn from_str() {
+    let lunar_date = LunarDate::from_str("二零一八　戊戌、狗年　六月　十九").unwrap();
+
+    assert_eq!(SolarYear::from_u16(2018), lunar_date.get_solar_year());
+    assert_eq!(LunarMonth::from_u8(6, false).unwrap(), lunar_date.get_lunar_month());
+    assert_eq!(LunarDay::from_u8(19).unwrap(), lunar_date.get_lunar_day());
+
+    let lunar_date = LunarDate::from_str("2018　六月　十九日").unwrap();
+
+    assert_eq!(SolarYear::from_u16(2018), lunar_date.get_solar_year());
+    assert_eq!(LunarMonth::from_u8(6, false).unwrap(), lunar_date.get_lunar_month());
+    assert_eq!(LunarDay::from_u8(19).unwrap(), lunar_date.get_lunar_day());
+}
+
+#[test]
 fn to_chinese_string() {
     let lunar_date = LunarDate::from_ymd(2018, 6,false, 19).unwrap();
 

@@ -146,6 +146,7 @@ impl SolarDate {
         Self::from_date(Utc::now().date())
     }
 
+    /// 用中文西曆年月日字串來產生 `SolarDate` 實體。
     pub fn from_str<S: AsRef<str>>(s: S) -> Result<SolarDate, LunisolarError> {
         let s = s.as_ref();
 

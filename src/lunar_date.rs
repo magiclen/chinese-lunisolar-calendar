@@ -233,7 +233,74 @@ impl LunarDate {
         Self::from_date(Utc::now().date())
     }
 
-    /// 取得 `LunarDate` 實體所代表的中文農曆年月日字串。
+    /// 用中文農曆西曆年和農曆月日字串來產生 `SolarDate` 實體。
+    pub fn from_str<S: AsRef<str>>(s: S) -> Result<LunarDate, LunisolarError> {
+        let s = s.as_ref();
+
+        let year_index = {
+            match s.find("　") {
+                Some(index) => index,
+                None => match s.find("年") {
+                    Some(index) => index,
+                    None => return Err(LunisolarError::IncorrectLunisolarYear)
+                }
+            }
+        };
+
+        let year_str = s[..year_index].trim();
+
+        let lunisolar_year = match SolarYear::from_str(year_str) {
+            Some(solar_year) => match LunisolarYear::from_solar_year(solar_year) {
+                Some(lunisolar_year) => lunisolar_year,
+                None => return Err(LunisolarError::IncorrectLunisolarYear)
+            },
+            None => return Err(LunisolarError::IncorrectLunisolarYear)
+        };
+
+        let s = &s[year_index + 3..];
+
+        let month_index = {
+            match s.find("月") {
+                Some(index) => index,
+                None => match s.find("　") {
+                    Some(index) => index,
+                    None => return Err(LunisolarError::IncorrectLunarMonth)
+                }
+            }
+        };
+
+        let month_str = s[..month_index + 3].trim();
+
+        let month_str = {
+            match month_str.find("年") {
+                Some(index) => &month_str[index + 3..].trim(),
+                None => match month_str.find("　") {
+                    Some(index) => &month_str[index + 3..].trim(),
+                    None => month_str
+                }
+            }
+        };
+
+        let lunar_month = match LunarMonth::from_str(month_str) {
+            Some(lunar_month) => lunar_month,
+            None => return Err(LunisolarError::IncorrectLunarMonth)
+        };
+
+        let mut day_str = s[month_index + 3..].trim();
+
+        if day_str.ends_with("日") {
+            day_str = &day_str[..day_str.len() - 3];
+        }
+
+        let lunar_day = match LunarDay::from_str(day_str) {
+            Some(lunar_day) => lunar_day,
+            None => return Err(LunisolarError::IncorrectLunarDay)
+        };
+
+        Self::from_lunisolar_year_lunar_month_day(lunisolar_year, lunar_month, lunar_day)
+    }
+
+    /// 取得 `LunarDate` 實體所代表的中文農曆西曆年和農曆月日字串。
     pub fn to_chinese_string(&self, chinese_variant: ChineseVariant) -> String {
         let mut s = String::new();
 
@@ -242,13 +309,15 @@ impl LunarDate {
         s
     }
 
-    /// 取得 `LunarDate` 實體所代表的中文農曆年月日字串。
+    /// 取得 `LunarDate` 實體所代表的中文農曆西曆年和農曆月日字串。
     pub fn write_to_chinese_string(&self, chinese_variant: ChineseVariant, s: &mut String) {
         s.reserve(48);
 
-        self.solar_year.write_to_chinese_string(s);
+        let lunisolar_year = self.lunisolar_year;
+
+        lunisolar_year.to_solar_year().write_to_chinese_string(s);
         s.push_str("　");
-        s.push_str(self.lunisolar_year.to_lunar_year().to_str());
+        s.push_str(lunisolar_year.to_lunar_year().to_str());
         s.push_str("、");
         s.push_str(self.lunisolar_year.get_zodiac().to_str(chinese_variant));
         s.push_str("年");
