@@ -1,6 +1,6 @@
 extern crate chinese_lunisolar_calendar;
 
-use chinese_lunisolar_calendar::{SolarDate, SolarYear, SolarMonth, SolarDay, LunarDate};
+use chinese_lunisolar_calendar::{SolarDate, SolarYear, SolarMonth, SolarDay, LunisolarDate};
 use chinese_lunisolar_calendar::chrono::prelude::*;
 
 #[test]
@@ -45,10 +45,10 @@ fn from_ymd() {
 }
 
 #[test]
-fn from_lunar_date() {
-    let lunar_date = LunarDate::from_ymd(1993, 6, false, 23).unwrap();
+fn from_lunisolar_date() {
+    let lunisolar_date = LunisolarDate::from_ymd(1993, 6, false, 23).unwrap();
 
-    let solar_date = SolarDate::from_lunar_date(lunar_date);
+    let solar_date = SolarDate::from_lunisolar_date(lunisolar_date);
 
     assert_eq!(SolarYear::from_u16(1993), solar_date.get_solar_year());
     assert_eq!(SolarMonth::from_u8(8).unwrap(), solar_date.get_solar_month());

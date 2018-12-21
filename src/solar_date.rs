@@ -1,4 +1,4 @@
-use super::{LunisolarError, SolarYear, SolarMonth, SolarDay, LunarDate, NEW_YEAR_DIFFERENCE, MIN_YEAR_IN_SOLAR_CALENDAR};
+use super::{LunisolarError, SolarYear, SolarMonth, SolarDay, LunisolarDate, NEW_YEAR_DIFFERENCE, MIN_YEAR_IN_SOLAR_CALENDAR};
 
 use std::fmt::{self, Display, Formatter};
 
@@ -91,14 +91,14 @@ impl SolarDate {
 
 
     /// 利用農曆年月日來產生 `SolarDate` 實體。
-    pub fn from_lunar_date(lunar_date: LunarDate) -> SolarDate {
-        let n = lunar_date.the_n_day_in_this_year();
+    pub fn from_lunisolar_date(lunisolar_date: LunisolarDate) -> SolarDate {
+        let n = lunisolar_date.the_n_day_in_this_year();
 
-        let solar_year = lunar_date.get_solar_year();
+        let solar_year = lunisolar_date.get_solar_year();
 
         let sy = solar_year.to_u16();
 
-        let lunisolar_year = lunar_date.get_lunisolar_year();
+        let lunisolar_year = lunisolar_date.get_lunisolar_year();
 
         let ly = lunisolar_year.to_u16();
 
@@ -137,8 +137,8 @@ impl SolarDate {
 
 
     /// 轉成農曆年月日。
-    pub fn to_lunar_date(&self) -> Result<LunarDate, LunisolarError> {
-        LunarDate::from_solar_date(*self)
+    pub fn to_lunisolar_date(&self) -> Result<LunisolarDate, LunisolarError> {
+        LunisolarDate::from_solar_date(*self)
     }
 
     /// 以目前的年月日來產生 `SolarDate` 實體。

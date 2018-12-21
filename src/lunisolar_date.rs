@@ -8,16 +8,16 @@ use chrono::NaiveDate;
 
 /// 農曆年月日，必須包含西曆年。
 #[derive(Debug, PartialEq, Clone, Eq, Hash, Copy)]
-pub struct LunarDate {
+pub struct LunisolarDate {
     solar_year: SolarYear,
     lunisolar_year: LunisolarYear,
     lunar_month: LunarMonth,
     lunar_day: LunarDay,
 }
 
-impl LunarDate {
+impl LunisolarDate {
     /// 將西曆年月日轉成農曆年月日(包含西曆年)。
-    pub(crate) fn from_solar_date_inner(solar_date: SolarDate, naive_date: NaiveDate) -> Result<LunarDate, LunisolarError> {
+    pub(crate) fn from_solar_date_inner(solar_date: SolarDate, naive_date: NaiveDate) -> Result<LunisolarDate, LunisolarError> {
         if naive_date < *MIN_LUNAR_DATE_IN_SOLAR_CALENDAR || naive_date > *MAX_LUNAR_DATE_IN_SOLAR_CALENDAR {
             Err(LunisolarError::OutOfLunarRange)
         } else {
@@ -79,7 +79,7 @@ impl LunarDate {
                 }
 
                 if day_diff == 0 {
-                    Ok(LunarDate {
+                    Ok(LunisolarDate {
                         solar_year,
                         lunisolar_year,
                         lunar_month: unsafe { LunarMonth::from_u8_unsafe((month + 1) % 12 + 1, is_leap) },
@@ -87,7 +87,7 @@ impl LunarDate {
                     })
                 } else {
                     let lunar_month = unsafe { LunarMonth::from_u8_unsafe(month, is_leap) };
-                    Ok(LunarDate {
+                    Ok(LunisolarDate {
                         solar_year,
                         lunisolar_year,
                         lunar_month,
@@ -122,7 +122,7 @@ impl LunarDate {
                     month += 1;
                 }
 
-                Ok(LunarDate {
+                Ok(LunisolarDate {
                     solar_year,
                     lunisolar_year,
                     lunar_month: unsafe { LunarMonth::from_u8_unsafe(month, is_leap) },
@@ -133,17 +133,17 @@ impl LunarDate {
     }
 
     /// 將西曆年月日轉成農曆年月日(包含西曆年)。
-    pub fn from_solar_date(solar_date: SolarDate) -> Result<LunarDate, LunisolarError> {
+    pub fn from_solar_date(solar_date: SolarDate) -> Result<LunisolarDate, LunisolarError> {
         Self::from_solar_date_inner(solar_date, solar_date.to_naive_date())
     }
 
     /// 轉成西曆年月日。
     pub fn to_solar_date(&self) -> SolarDate {
-        SolarDate::from_lunar_date(*self)
+        SolarDate::from_lunisolar_date(*self)
     }
 
     /// 將無時區的 `Chrono` 年月日實體，轉成農曆年月日(包含西曆年)。
-    pub fn from_naive_date(naive_date: NaiveDate) -> Result<LunarDate, LunisolarError> {
+    pub fn from_naive_date(naive_date: NaiveDate) -> Result<LunisolarDate, LunisolarError> {
         if naive_date < *MIN_LUNAR_DATE_IN_SOLAR_CALENDAR || naive_date > *MAX_LUNAR_DATE_IN_SOLAR_CALENDAR {
             Err(LunisolarError::OutOfLunarRange)
         } else {
@@ -154,14 +154,14 @@ impl LunarDate {
     }
 
     /// 將有時區的 `Chrono` 年月日實體，依UTC時區轉成農曆年月日(包含西曆年)。
-    pub fn from_date<Tz: TimeZone>(date: Date<Tz>) -> Result<LunarDate, LunisolarError> {
+    pub fn from_date<Tz: TimeZone>(date: Date<Tz>) -> Result<LunisolarDate, LunisolarError> {
         let naive_date = date.naive_utc();
 
         Self::from_naive_date(naive_date)
     }
 
-    /// 利用農曆西曆年和農曆月日來產生 `LunarDate` 實體。
-    pub unsafe fn from_lunisolar_year_lunar_month_day_unsafe(lunisolar_year: LunisolarYear, lunar_month: LunarMonth, lunar_day: LunarDay) -> LunarDate {
+    /// 利用農曆西曆年和農曆月日來產生 `LunisolarDate` 實體。
+    pub unsafe fn from_lunisolar_year_lunar_month_day_unsafe(lunisolar_year: LunisolarYear, lunar_month: LunarMonth, lunar_day: LunarDay) -> LunisolarDate {
         let n = Self::the_n_day_in_this_year_inner(lunisolar_year, lunar_month, lunar_day);
 
         let solar_year = lunisolar_year.to_solar_year();
@@ -174,7 +174,7 @@ impl LunarDate {
             solar_year
         };
 
-        LunarDate {
+        LunisolarDate {
             solar_year,
             lunisolar_year,
             lunar_month,
@@ -182,8 +182,8 @@ impl LunarDate {
         }
     }
 
-    /// 利用農曆西曆年和農曆月日來產生 `LunarDate` 實體。
-    pub fn from_lunisolar_year_lunar_month_day(lunisolar_year: LunisolarYear, lunar_month: LunarMonth, lunar_day: LunarDay) -> Result<LunarDate, LunisolarError> {
+    /// 利用農曆西曆年和農曆月日來產生 `LunisolarDate` 實體。
+    pub fn from_lunisolar_year_lunar_month_day(lunisolar_year: LunisolarYear, lunar_month: LunarMonth, lunar_day: LunarDay) -> Result<LunisolarDate, LunisolarError> {
         if lunar_month.is_leap_month() {
             let leap_lunar_month = lunisolar_year.get_leap_lunar_month();
 
@@ -208,8 +208,8 @@ impl LunarDate {
         }
     }
 
-    /// 利用農曆西曆年和農曆月日來產生 `LunarDate` 實體。
-    pub fn from_ymd(year: u16, month: u8, leap: bool, day: u8) -> Result<LunarDate, LunisolarError> {
+    /// 利用農曆西曆年和農曆月日來產生 `LunisolarDate` 實體。
+    pub fn from_ymd(year: u16, month: u8, leap: bool, day: u8) -> Result<LunisolarDate, LunisolarError> {
         let lunisolar_year = match LunisolarYear::from_solar_year(year) {
             Some(lunisolar_year) => lunisolar_year,
             None => return Err(LunisolarError::IncorrectLunisolarYear)
@@ -228,13 +228,13 @@ impl LunarDate {
         Self::from_lunisolar_year_lunar_month_day(lunisolar_year, lunar_month, lunar_day)
     }
 
-    /// 以目前的年月日來產生 `LunarDate` 實體。
-    pub fn now() -> Result<LunarDate, LunisolarError> {
+    /// 以目前的年月日來產生 `LunisolarDate` 實體。
+    pub fn now() -> Result<LunisolarDate, LunisolarError> {
         Self::from_date(Utc::now().date())
     }
 
     /// 用中文農曆西曆年和農曆月日字串來產生 `SolarDate` 實體。
-    pub fn from_str<S: AsRef<str>>(s: S) -> Result<LunarDate, LunisolarError> {
+    pub fn from_str<S: AsRef<str>>(s: S) -> Result<LunisolarDate, LunisolarError> {
         let s = s.as_ref();
 
         let year_index = {
@@ -300,7 +300,7 @@ impl LunarDate {
         Self::from_lunisolar_year_lunar_month_day(lunisolar_year, lunar_month, lunar_day)
     }
 
-    /// 取得 `LunarDate` 實體所代表的中文農曆西曆年和農曆月日字串。
+    /// 取得 `LunisolarDate` 實體所代表的中文農曆西曆年和農曆月日字串。
     pub fn to_chinese_string(&self, chinese_variant: ChineseVariant) -> String {
         let mut s = String::new();
 
@@ -309,7 +309,7 @@ impl LunarDate {
         s
     }
 
-    /// 取得 `LunarDate` 實體所代表的中文農曆西曆年和農曆月日字串。
+    /// 取得 `LunisolarDate` 實體所代表的中文農曆西曆年和農曆月日字串。
     pub fn write_to_chinese_string(&self, chinese_variant: ChineseVariant, s: &mut String) {
         s.reserve(48);
 
@@ -414,7 +414,7 @@ impl LunarDate {
     }
 }
 
-impl Display for LunarDate {
+impl Display for LunisolarDate {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(&self.to_chinese_string(ChineseVariant::Traditional))
     }
