@@ -10,7 +10,7 @@ Because the cycle of Lunar Calendar is 60 years and there are no regular rules f
 
 The Linisolar Calendar relies on three datasets, `BIG_MONTHS`, `LEAP_MONTHS`, and `NEW_YEAR_DIFFERENCE` which are written in the **constants.rs** file. Currently, the data range is from 1901 to 2100 (linisolar year), so this Linisolar Calendar supports from 1901-02-19 to 2101-01-28 (in Solar Calendar).
 
-This library allows you to convert date between the Linisolar Calendar and the Solar Calendar, and to compute the weight of Ba Zi(八字). Moreover, it can convert a date to a Chinese text string and parse a Chinese text string to a date in Simple Chinese or Traditional Chinese.
+This library allows you to convert a date between the Linisolar Calendar and the Solar Calendar, and to compute the weight of Ba Zi(八字). Moreover, it can convert a date to a Chinese text string and parse a Chinese text string to a date in Simple Chinese or Traditional Chinese.
 
 ## Examples
 
