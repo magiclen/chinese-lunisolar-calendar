@@ -10,9 +10,9 @@ description = "The traditional Chinese Calendar, called 農曆 or 陰曆 in Chin
 readme = "README.md"
 license = "MIT"
 
-[badges]
-travis-ci = { repository = "magiclen/chinese-lunisolar-calendar", branch = "master" }
-appveyor = { repository = "magiclen/chinese-lunisolar-calendar", branch = "master", service = "github" }
+[badges.travis-ci]
+repository = "magiclen/chinese-lunisolar-calendar"
+branch = "master"
 
 [dependencies]
 chrono = "0.4.6"
