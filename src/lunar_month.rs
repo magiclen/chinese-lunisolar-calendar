@@ -166,7 +166,7 @@ impl LunarMonth {
             if month != leap_month { // 防呆
                 None
             } else { // 此為閏月，需計算其後一個月的天數
-                if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> leap_month)) == 0 {
+                if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> leap_month as u16)) == 0 {
                     Some(29)
                 } else {
                     Some(30)
@@ -176,7 +176,7 @@ impl LunarMonth {
             if leap_month > 0 && month > leap_month { // 若今年有閏月，且該西曆月應在閏月之後再加一個月
                 month += 1;
             }
-            if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> (month - 1))) == 0 {
+            if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> (month - 1) as u16)) == 0 {
                 Some(29)
             } else {
                 Some(30)

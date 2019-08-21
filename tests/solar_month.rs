@@ -15,7 +15,7 @@ fn to_str() {
     assert_eq!(SolarMonth::January.to_str(), "一月");
     assert_eq!(SolarMonth::February.to_str(), "二月");
     assert_eq!(SolarMonth::May.to_str(), "五月");
-    assert_eq!(SolarMonth::December.to_str(), "十二月");;
+    assert_eq!(SolarMonth::December.to_str(), "十二月");
 }
 
 #[test]

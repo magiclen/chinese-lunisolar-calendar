@@ -99,7 +99,7 @@ impl LunisolarYear {
 
         let leap_month = leap_lunar_month.to_u8();
 
-        if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> leap_month)) == 0 {
+        if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> leap_month as u16)) == 0 {
             29
         } else {
             30
@@ -121,7 +121,7 @@ impl LunisolarYear {
 
         if leap_month > 0 {
             for month in 1..=leap_month {
-                if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> (month - 1))) == 0 {
+                if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> (month - 1) as u16)) == 0 {
                     n += 29;
                 } else {
                     n += 30;
@@ -129,7 +129,7 @@ impl LunisolarYear {
             }
 
             for month in (leap_month + 1)..=12 {
-                if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> month)) == 0 {
+                if (BIG_MONTHS[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] & (0x8000 >> month as u16)) == 0 {
                     n += 29;
                 } else {
                     n += 30;
