@@ -1,6 +1,7 @@
-use super::{THE_LUNAR_YEARS, HeavenlyStems, EarthlyBranch, Zodiac, BA_ZI_WEIGHT_YEARS};
+use super::{EarthlyBranch, HeavenlyStems, Zodiac, BA_ZI_WEIGHT_YEARS, THE_LUNAR_YEARS};
 
 use std::fmt::{self, Display, Formatter};
+use std::str::FromStr;
 
 /// 農曆年份，由天干加地支組成，六十年一輪。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
@@ -12,6 +13,7 @@ pub struct LunarYear {
 
 impl LunarYear {
     /// 透過農曆年份字串來取得 `LunarYear` 實體。
+    #[allow(clippy::should_implement_trait)]
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<LunarYear> {
         let s = s.as_ref();
 
@@ -41,7 +43,7 @@ impl LunarYear {
         let e = earthly_branch as usize;
         let mut diff = e - h;
 
-        if diff <= 0 {
+        if diff == 0 {
             diff += 12;
         }
 
@@ -78,5 +80,14 @@ impl LunarYear {
 impl Display for LunarYear {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(self.to_str())
+    }
+}
+
+impl FromStr for LunarYear {
+    type Err = ();
+
+    #[inline]
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        LunarYear::from_str(s).ok_or(())
     }
 }

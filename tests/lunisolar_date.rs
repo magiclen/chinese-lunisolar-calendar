@@ -1,6 +1,9 @@
 extern crate chinese_lunisolar_calendar;
 
-use chinese_lunisolar_calendar::{ChineseVariant, SolarYear, SolarDate, LunisolarYear, LunarYear, LunarMonth, LunarDay, LunisolarDate};
+use chinese_lunisolar_calendar::{
+    ChineseVariant, LunarDay, LunarMonth, LunarYear, LunisolarDate, LunisolarYear, SolarDate,
+    SolarYear,
+};
 
 use chinese_lunisolar_calendar::chrono::prelude::*;
 
@@ -119,7 +122,10 @@ fn from_str() {
 fn to_chinese_string() {
     let lunisolar_date = LunisolarDate::from_ymd(2018, 6, false, 19).unwrap();
 
-    assert_eq!("二零一八　戊戌、狗年　六月　十九", lunisolar_date.to_chinese_string(ChineseVariant::Traditional));
+    assert_eq!(
+        "二零一八　戊戌、狗年　六月　十九",
+        lunisolar_date.to_chinese_string(ChineseVariant::Traditional)
+    );
 }
 
 #[test]
@@ -131,10 +137,12 @@ fn the_n_day_in_this_year() {
     assert_eq!(324, LunisolarDate::from_ymd(1993, 10, false, 29).unwrap().the_n_day_in_this_year());
 }
 
-
-
 #[test]
 fn get_ba_zi_weight_by_time() {
-    assert_eq!(4.8, LunisolarDate::from_ymd(1993, 6, false, 23).unwrap().get_ba_zi_weight_by_time(NaiveTime::from_hms(23, 30, 0)));
+    assert_eq!(
+        4.8,
+        LunisolarDate::from_ymd(1993, 6, false, 23)
+            .unwrap()
+            .get_ba_zi_weight_by_time(NaiveTime::from_hms(23, 30, 0))
+    );
 }
-

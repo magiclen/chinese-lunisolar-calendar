@@ -3,6 +3,7 @@ use super::{SolarYear, THE_SOLAR_MONTHS};
 use std::mem::transmute;
 
 use std::fmt::{self, Display, Formatter};
+use std::str::FromStr;
 
 /// 列舉西曆十二個月份名稱：一月、二月、三月、四月、五月、六月、七月、八月、九月、十月、十一月、十二月。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
@@ -39,14 +40,13 @@ impl SolarMonth {
     }
 
     /// 透過西曆月份字串來取得 `SolarMonth` 列舉實體。
+    #[allow(clippy::should_implement_trait)]
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<SolarMonth> {
         let s = s.as_ref();
 
         for (i, &t) in THE_SOLAR_MONTHS.iter().enumerate() {
             if t.eq(s) {
-                return Some(unsafe {
-                    Self::from_ordinal_unsafe(i as i8)
-                });
+                return Some(unsafe { Self::from_ordinal_unsafe(i as i8) });
             }
         }
 
@@ -54,8 +54,8 @@ impl SolarMonth {
     }
 
     /// 取得 `SolarMonth` 列舉實體所代表的西曆月份字串。
-    pub fn to_str(&self) -> &'static str {
-        let i = *self as usize;
+    pub fn to_str(self) -> &'static str {
+        let i = self as usize;
 
         THE_SOLAR_MONTHS[i]
     }
@@ -70,21 +70,19 @@ impl SolarMonth {
         if month == 0 || month > 12 {
             None
         } else {
-            Some(unsafe {
-                Self::from_u8_unsafe(month)
-            })
+            Some(unsafe { Self::from_u8_unsafe(month) })
         }
     }
 
     /// 取得 `SolarMonth` 列舉實體所代表的西曆月份數值。
-    pub fn to_u8(&self) -> u8 {
-        let i = *self as u8;
+    pub fn to_u8(self) -> u8 {
+        let i = self as u8;
 
         i + 1
     }
 
     /// 傳入指定的西曆年，並計算此西曆月在這個指定的西曆年內共有幾天。
-    pub fn get_total_days<Y: Into<SolarYear>>(&self, solar_year: Y) -> u8 {
+    pub fn get_total_days<Y: Into<SolarYear>>(self, solar_year: Y) -> u8 {
         let month = self.to_u8();
 
         let m = if month < 8 {
@@ -110,5 +108,14 @@ impl SolarMonth {
 impl Display for SolarMonth {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(self.to_str())
+    }
+}
+
+impl FromStr for SolarMonth {
+    type Err = ();
+
+    #[inline]
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        SolarMonth::from_str(s).ok_or(())
     }
 }

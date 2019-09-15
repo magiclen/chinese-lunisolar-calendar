@@ -1,6 +1,6 @@
 extern crate chinese_lunisolar_calendar;
 
-use chinese_lunisolar_calendar::{ChineseVariant, Zodiac, EarthlyBranch};
+use chinese_lunisolar_calendar::{ChineseVariant, EarthlyBranch, Zodiac};
 
 #[test]
 fn from_str() {

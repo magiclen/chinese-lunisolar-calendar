@@ -1,8 +1,9 @@
-use super::{THE_EARTHLY_BRANCHES, THE_EARTHLY_BRANCHES_CHARS, Zodiac, BA_ZI_WEIGHT_TIME};
+use super::{Zodiac, BA_ZI_WEIGHT_TIME, THE_EARTHLY_BRANCHES, THE_EARTHLY_BRANCHES_CHARS};
 
 use std::mem::transmute;
 
 use std::fmt::{self, Display, Formatter};
+use std::str::FromStr;
 
 use chrono::prelude::*;
 
@@ -46,20 +47,17 @@ impl EarthlyBranch {
 
         let ordinal = ((hour + 1) % 24) / 2;
 
-        unsafe {
-            Self::from_ordinal_unsafe(ordinal as i8)
-        }
+        unsafe { Self::from_ordinal_unsafe(ordinal as i8) }
     }
 
     /// 透過子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥等字串來取得 `EarthlyBranch` 列舉實體。
+    #[allow(clippy::should_implement_trait)]
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<EarthlyBranch> {
         let s = s.as_ref();
 
         for (i, &t) in THE_EARTHLY_BRANCHES.iter().enumerate() {
             if t.eq(s) {
-                return Some(unsafe {
-                    Self::from_ordinal_unsafe(i as i8)
-                });
+                return Some(unsafe { Self::from_ordinal_unsafe(i as i8) });
             }
         }
 
@@ -67,8 +65,8 @@ impl EarthlyBranch {
     }
 
     /// 取得 `EarthlyBranch` 列舉實體所代表的地支字串。
-    pub fn to_str(&self) -> &'static str {
-        let i = *self as usize;
+    pub fn to_str(self) -> &'static str {
+        let i = self as usize;
 
         THE_EARTHLY_BRANCHES[i]
     }
@@ -77,9 +75,7 @@ impl EarthlyBranch {
     pub fn from_char(c: char) -> Option<EarthlyBranch> {
         for (i, &t) in THE_EARTHLY_BRANCHES_CHARS.iter().enumerate() {
             if t.eq(&c) {
-                return Some(unsafe {
-                    Self::from_ordinal_unsafe(i as i8)
-                });
+                return Some(unsafe { Self::from_ordinal_unsafe(i as i8) });
             }
         }
 
@@ -87,8 +83,8 @@ impl EarthlyBranch {
     }
 
     /// 取得 `EarthlyBranch` 列舉實體所代表的地支字元。
-    pub fn to_char(&self) -> char {
-        let i = *self as usize;
+    pub fn to_char(self) -> char {
+        let i = self as usize;
 
         THE_EARTHLY_BRANCHES_CHARS[i]
     }
@@ -99,13 +95,13 @@ impl EarthlyBranch {
     }
 
     /// 將地支轉成生肖。
-    pub fn to_zodiac(&self) -> Zodiac {
-        unsafe { transmute(*self) }
+    pub fn to_zodiac(self) -> Zodiac {
+        unsafe { transmute(self) }
     }
 
     /// 取得八字重量。
-    pub fn get_ba_zi_weight(&self) -> u8 {
-        let i = *self as usize;
+    pub fn get_ba_zi_weight(self) -> u8 {
+        let i = self as usize;
 
         BA_ZI_WEIGHT_TIME[i]
     }
@@ -120,5 +116,14 @@ impl Display for EarthlyBranch {
 impl From<Zodiac> for EarthlyBranch {
     fn from(zodiac: Zodiac) -> EarthlyBranch {
         EarthlyBranch::from_zodiac(zodiac)
+    }
+}
+
+impl FromStr for EarthlyBranch {
+    type Err = ();
+
+    #[inline]
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        EarthlyBranch::from_str(s).ok_or(())
     }
 }

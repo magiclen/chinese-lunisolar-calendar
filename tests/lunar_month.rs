@@ -64,7 +64,16 @@ fn to_u8() {
 
 #[test]
 fn get_total_days() {
-    assert_eq!(Some(30), LunarMonth::Fourth.get_total_days(LunisolarYear::from_solar_year(2020).unwrap()));
-    assert_eq!(Some(29), LunarMonth::LeapFourth.get_total_days(LunisolarYear::from_solar_year(2020).unwrap()));
-    assert_eq!(Some(30), LunarMonth::Fifth.get_total_days(LunisolarYear::from_solar_year(2020).unwrap()));
+    assert_eq!(
+        Some(30),
+        LunarMonth::Fourth.get_total_days(LunisolarYear::from_solar_year(2020).unwrap())
+    );
+    assert_eq!(
+        Some(29),
+        LunarMonth::LeapFourth.get_total_days(LunisolarYear::from_solar_year(2020).unwrap())
+    );
+    assert_eq!(
+        Some(30),
+        LunarMonth::Fifth.get_total_days(LunisolarYear::from_solar_year(2020).unwrap())
+    );
 }

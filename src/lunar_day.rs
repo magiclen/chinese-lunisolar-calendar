@@ -1,8 +1,9 @@
-use super::{THE_LUNAR_DAYS, BA_ZI_WEIGHT_DAYS};
+use super::{BA_ZI_WEIGHT_DAYS, THE_LUNAR_DAYS};
 
 use std::mem::transmute;
 
 use std::fmt::{self, Display, Formatter};
+use std::str::FromStr;
 
 /// 列舉農曆三十個天數名稱：初一、初二、...、十一、十二、...、廿一、廿二、...、三十。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
@@ -75,14 +76,13 @@ impl LunarDay {
     }
 
     /// 透過農曆日期字串來取得 `LunarDay` 列舉實體。
+    #[allow(clippy::should_implement_trait)]
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<LunarDay> {
         let s = s.as_ref();
 
         for (i, &t) in THE_LUNAR_DAYS.iter().enumerate() {
             if t.eq(s) {
-                return Some(unsafe {
-                    Self::from_ordinal_unsafe(i as i8)
-                });
+                return Some(unsafe { Self::from_ordinal_unsafe(i as i8) });
             }
         }
 
@@ -90,8 +90,8 @@ impl LunarDay {
     }
 
     /// 取得 `LunarDay` 列舉實體所代表的農曆日期字串。
-    pub fn to_str(&self) -> &'static str {
-        let i = *self as usize;
+    pub fn to_str(self) -> &'static str {
+        let i = self as usize;
 
         THE_LUNAR_DAYS[i]
     }
@@ -106,21 +106,18 @@ impl LunarDay {
         if day == 0 || day > 30 {
             None
         } else {
-            Some(unsafe {
-                Self::from_u8_unsafe(day)
-            })
+            Some(unsafe { Self::from_u8_unsafe(day) })
         }
     }
 
     /// 取得 `LunarDay` 列舉實體所代表的農曆日期數值。
-    pub fn to_u8(&self) -> u8 {
-        *self as u8 + 1
+    pub fn to_u8(self) -> u8 {
+        self as u8 + 1
     }
 
-
     /// 取得八字重量。
-    pub fn get_ba_zi_weight(&self) -> u8 {
-        let i = *self as usize;
+    pub fn get_ba_zi_weight(self) -> u8 {
+        let i = self as usize;
 
         BA_ZI_WEIGHT_DAYS[i]
     }
@@ -129,5 +126,14 @@ impl LunarDay {
 impl Display for LunarDay {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(self.to_str())
+    }
+}
+
+impl FromStr for LunarDay {
+    type Err = ();
+
+    #[inline]
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        LunarDay::from_str(s).ok_or(())
     }
 }

@@ -1,7 +1,7 @@
 extern crate chinese_lunisolar_calendar;
 
-use chinese_lunisolar_calendar::{SolarDate, SolarYear, SolarMonth, SolarDay, LunisolarDate};
 use chinese_lunisolar_calendar::chrono::prelude::*;
+use chinese_lunisolar_calendar::{LunisolarDate, SolarDate, SolarDay, SolarMonth, SolarYear};
 
 #[test]
 fn from_naive_date() {
@@ -13,7 +13,6 @@ fn from_naive_date() {
     assert_eq!(SolarMonth::from_u8(6).unwrap(), solar_date.get_solar_month());
     assert_eq!(SolarDay::from_u8(19).unwrap(), solar_date.get_solar_day());
 }
-
 
 #[test]
 fn from_date() {
@@ -28,7 +27,12 @@ fn from_date() {
 
 #[test]
 fn from_solar_year_month_day() {
-    let solar_date = SolarDate::from_solar_year_month_day(2018, SolarMonth::from_u8(6).unwrap(), SolarDay::from_u8(19).unwrap()).unwrap();
+    let solar_date = SolarDate::from_solar_year_month_day(
+        2018,
+        SolarMonth::from_u8(6).unwrap(),
+        SolarDay::from_u8(19).unwrap(),
+    )
+    .unwrap();
 
     assert_eq!(SolarYear::from_u16(2018), solar_date.get_solar_year());
     assert_eq!(SolarMonth::from_u8(6).unwrap(), solar_date.get_solar_month());

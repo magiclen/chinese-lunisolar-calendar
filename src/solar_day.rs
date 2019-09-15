@@ -3,6 +3,7 @@ use super::THE_SOLAR_DAYS;
 use std::mem::transmute;
 
 use std::fmt::{self, Display, Formatter};
+use std::str::FromStr;
 
 /// 列舉西曆三十一個天數名稱：一、二、...、十一、十二、...、二十一、二十二、...、三十、三十一。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
@@ -77,14 +78,13 @@ impl SolarDay {
     }
 
     /// 透過西曆日期字串來取得 `SolarDay` 列舉實體。
+    #[allow(clippy::should_implement_trait)]
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<SolarDay> {
         let s = s.as_ref();
 
         for (i, &t) in THE_SOLAR_DAYS.iter().enumerate() {
             if t.eq(s) {
-                return Some(unsafe {
-                    Self::from_ordinal_unsafe(i as i8)
-                });
+                return Some(unsafe { Self::from_ordinal_unsafe(i as i8) });
             }
         }
 
@@ -92,8 +92,8 @@ impl SolarDay {
     }
 
     /// 取得 `SolarDay` 列舉實體所代表的西曆日期字串。
-    pub fn to_str(&self) -> &'static str {
-        let i = *self as usize;
+    pub fn to_str(self) -> &'static str {
+        let i = self as usize;
 
         THE_SOLAR_DAYS[i]
     }
@@ -108,20 +108,27 @@ impl SolarDay {
         if day == 0 || day > 31 {
             None
         } else {
-            Some(unsafe {
-                Self::from_u8_unsafe(day)
-            })
+            Some(unsafe { Self::from_u8_unsafe(day) })
         }
     }
 
     /// 取得 `SolarDay` 列舉實體所代表的西曆日期數值。
-    pub fn to_u8(&self) -> u8 {
-        *self as u8 + 1
+    pub fn to_u8(self) -> u8 {
+        self as u8 + 1
     }
 }
 
 impl Display for SolarDay {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(self.to_str())
+    }
+}
+
+impl FromStr for SolarDay {
+    type Err = ();
+
+    #[inline]
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        SolarDay::from_str(s).ok_or(())
     }
 }
