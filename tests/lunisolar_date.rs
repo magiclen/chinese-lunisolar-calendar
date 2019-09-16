@@ -1,5 +1,8 @@
 extern crate chinese_lunisolar_calendar;
 
+#[macro_use]
+extern crate assert_approx_eq;
+
 use chinese_lunisolar_calendar::{
     ChineseVariant, LunarDay, LunarMonth, LunarYear, LunisolarDate, LunisolarYear, SolarDate,
     SolarYear,
@@ -8,6 +11,7 @@ use chinese_lunisolar_calendar::{
 use chinese_lunisolar_calendar::chrono::prelude::*;
 
 #[test]
+#[allow(clippy::cognitive_complexity)]
 fn from_solar_date() {
     let solar_date = SolarDate::from_ymd(1993, 1, 12).unwrap();
 
@@ -61,6 +65,7 @@ fn from_solar_date() {
 }
 
 #[test]
+#[allow(clippy::cognitive_complexity)]
 fn from_ymd() {
     let lunisolar_date = LunisolarDate::from_ymd(1992, 12, false, 20).unwrap();
 
@@ -139,7 +144,7 @@ fn the_n_day_in_this_year() {
 
 #[test]
 fn get_ba_zi_weight_by_time() {
-    assert_eq!(
+    assert_approx_eq!(
         4.8,
         LunisolarDate::from_ymd(1993, 6, false, 23)
             .unwrap()
