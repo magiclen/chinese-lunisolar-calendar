@@ -64,9 +64,9 @@ impl LunisolarYear {
         let month = LEAP_MONTHS[((year - MIN_YEAR_IN_SOLAR_CALENDAR) / 2) as usize];
 
         let index = if year % 2 == 1 {
-            ((month & 0xf0) >> 4)
+            (month & 0xf0) >> 4
         } else {
-            (month & 0x0f)
+            month & 0x0f
         };
 
         if index == 0 {

@@ -88,7 +88,7 @@ impl SolarYear {
 
     /// 判斷此西曆年是否為閏年。
     pub fn is_leap(self) -> bool {
-        ((self.year % 4 == 0) && (self.year % 100 != 0) || self.year % 400 == 0)
+        (self.year % 4 == 0) && (self.year % 100 != 0) || self.year % 400 == 0
     }
 
     /// 計算此西曆年共有幾天。。
