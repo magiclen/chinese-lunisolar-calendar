@@ -1,6 +1,6 @@
 [package]
 name = "chinese-lunisolar-calendar"
-version = "0.1.9"
+version = "0.1.10"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2018"
 repository = "https://github.com/magiclen/chinese-lunisolar-calendar"
@@ -10,6 +10,7 @@ categories = ["localization", "date-and-time"]
 description = "The traditional Chinese Calendar, called 農曆 or 陰曆 in Chinese, is based on the moon, so it's also known as Lunar Calendar."
 readme = "README.md"
 license = "MIT"
+include = ["src/**/*", "Cargo.toml"]
 
 [badges.travis-ci]
 repository = "magiclen/chinese-lunisolar-calendar"
