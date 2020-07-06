@@ -13,6 +13,8 @@ pub struct LunisolarYear {
 
 impl LunisolarYear {
     /// 透過西曆年份來取得 `LunisolarYear` 實體。
+    #[allow(clippy::missing_safety_doc)]
+    #[inline]
     pub unsafe fn from_solar_year_unsafe<Y: Into<SolarYear>>(solar_year: Y) -> LunisolarYear {
         let solar_year = solar_year.into();
 
@@ -22,6 +24,7 @@ impl LunisolarYear {
     }
 
     /// 透過西曆年份來取得 `LunisolarYear` 實體。
+    #[inline]
     pub fn from_solar_year<Y: Into<SolarYear>>(solar_year: Y) -> Option<LunisolarYear> {
         let solar_year = solar_year.into();
 
@@ -37,6 +40,7 @@ impl LunisolarYear {
     }
 
     /// 取得此西曆年中，農曆新年的中國天干。
+    #[inline]
     pub fn get_heavenly_stems(self) -> HeavenlyStems {
         let index = (7 + (self.solar_year.to_u16() - MIN_YEAR_IN_SOLAR_CALENDAR)) % 10;
 
@@ -44,6 +48,7 @@ impl LunisolarYear {
     }
 
     /// 取得此西曆年中，農曆新年的中國地支。
+    #[inline]
     pub fn get_earthly_branch(self) -> EarthlyBranch {
         let index = (self.solar_year.to_u16() - MIN_YEAR_IN_SOLAR_CALENDAR + 1) % 12;
 
@@ -51,6 +56,7 @@ impl LunisolarYear {
     }
 
     /// 取得此西曆年中，農曆新年所屬的生肖。
+    #[inline]
     pub fn get_zodiac(self) -> Zodiac {
         let index = (self.solar_year.to_u16() - MIN_YEAR_IN_SOLAR_CALENDAR + 1) % 12;
 
@@ -58,6 +64,7 @@ impl LunisolarYear {
     }
 
     /// 取得此年的農曆閏月月份。
+    #[inline]
     pub fn get_leap_lunar_month(self) -> Option<LunarMonth> {
         let year = self.to_u16();
 
@@ -77,6 +84,7 @@ impl LunisolarYear {
     }
 
     /// 計算此西曆年下的農曆閏月共有幾天。如果沒有閏月，則回傳0。
+    #[inline]
     pub fn get_total_days_in_leap_month(self) -> u16 {
         let leap_lunar_month = self.get_leap_lunar_month();
 
@@ -87,6 +95,7 @@ impl LunisolarYear {
     }
 
     /// 計算指定的農曆閏月共有幾天。
+    #[inline]
     pub(crate) fn get_total_days_in_leap_month_inner(self, leap_lunar_month: LunarMonth) -> u16 {
         let year = self.to_u16();
 
@@ -157,11 +166,13 @@ impl LunisolarYear {
     }
 
     /// 計算此西曆年下的農曆年的某個月共有幾天。。
+    #[inline]
     pub fn get_total_days_in_a_month(self, lunar_month: LunarMonth) -> Option<u8> {
         lunar_month.get_total_days(self)
     }
 
     /// 取得 `LunarYear` 實體。
+    #[inline]
     pub fn to_lunar_year(self) -> LunarYear {
         let heavenly_stems = self.get_heavenly_stems();
         let earthly_branch = self.get_earthly_branch();
@@ -170,17 +181,20 @@ impl LunisolarYear {
     }
 
     /// 取得 `SolarYear` 實體。
+    #[inline]
     pub fn to_solar_year(self) -> SolarYear {
         self.solar_year
     }
 
     /// 取得 `LunisolarYear` 實體所代表的西曆年份數值。
+    #[inline]
     pub fn to_u16(self) -> u16 {
         self.solar_year.to_u16()
     }
 }
 
 impl Display for LunisolarYear {
+    #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         Display::fmt(&self.solar_year, f)
     }

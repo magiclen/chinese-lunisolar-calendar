@@ -62,16 +62,19 @@ pub enum LunarMonth {
 }
 
 impl LunarMonth {
+    #[allow(clippy::missing_safety_doc)]
+    #[inline]
     pub unsafe fn from_ordinal_unsafe(number: i8) -> LunarMonth {
         transmute(number)
     }
 
     /// 透過農曆月份字串來取得 `LunarMonth` 列舉實體。
     #[allow(clippy::should_implement_trait)]
+    #[inline]
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<LunarMonth> {
         let s = &s.as_ref();
 
-        for (i, &t) in THE_LUNAR_MONTHS.iter().enumerate().take(24) {
+        for (i, t) in THE_LUNAR_MONTHS.iter().enumerate().take(24) {
             if t.contains(s) {
                 if i >= 12 {
                     return Some(unsafe { Self::from_ordinal_unsafe((i as i8 - 12) * 2 + 1) });
@@ -99,6 +102,7 @@ impl LunarMonth {
     }
 
     /// 取得 `LunarMonth` 列舉實體所代表的農曆月份字串。
+    #[inline]
     pub fn to_str(self, chinese_variant: ChineseVariant) -> &'static str {
         let mut i = self as usize;
 
@@ -115,6 +119,8 @@ impl LunarMonth {
     }
 
     /// 透過農曆月份數值和是否閏月來取得 `LunarMonth` 列舉實體。
+    #[allow(clippy::missing_safety_doc)]
+    #[inline]
     pub unsafe fn from_u8_unsafe(month: u8, leap: bool) -> LunarMonth {
         if leap {
             transmute((month - 1) * 2 + 1)
@@ -124,6 +130,7 @@ impl LunarMonth {
     }
 
     /// 透過農曆月份數值和是否閏月來取得 `LunarMonth` 列舉實體。
+    #[inline]
     pub fn from_u8(month: u8, leap: bool) -> Option<LunarMonth> {
         if month == 0 || month > 12 {
             None
@@ -133,6 +140,7 @@ impl LunarMonth {
     }
 
     /// 取得 `LunarMonth` 列舉實體所代表的農曆月份數值。
+    #[inline]
     pub fn to_u8(self) -> u8 {
         let i = self as u8;
 
@@ -140,6 +148,7 @@ impl LunarMonth {
     }
 
     /// 是否為閏月。
+    #[inline]
     pub fn is_leap_month(self) -> bool {
         let i = self as usize;
 
@@ -189,6 +198,7 @@ impl LunarMonth {
     }
 
     /// 取得八字重量。
+    #[inline]
     pub fn get_ba_zi_weight(self) -> u8 {
         let i = self.to_u8() as usize;
 
@@ -197,6 +207,7 @@ impl LunarMonth {
 }
 
 impl Display for LunarMonth {
+    #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(self.to_str(ChineseVariant::Traditional))
     }

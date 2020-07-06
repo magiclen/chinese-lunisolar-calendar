@@ -31,17 +31,20 @@ pub enum HeavenlyStems {
 }
 
 impl HeavenlyStems {
+    #[allow(clippy::missing_safety_doc)]
+    #[inline]
     pub unsafe fn from_ordinal_unsafe(number: i8) -> HeavenlyStems {
         transmute(number)
     }
 
     /// 透過甲、乙、丙、丁、戊、己、更、辛、壬、葵等字串來取得 `HeavenlyStems` 列舉實體。
     #[allow(clippy::should_implement_trait)]
+    #[inline]
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<HeavenlyStems> {
         let s = s.as_ref();
 
         for (i, &t) in THE_HEAVENLY_STEMS.iter().enumerate() {
-            if t.eq(s) {
+            if t == s {
                 return Some(unsafe { Self::from_ordinal_unsafe(i as i8) });
             }
         }
@@ -50,6 +53,7 @@ impl HeavenlyStems {
     }
 
     /// 取得 `HeavenlyStems` 列舉實體所代表的地支字串。
+    #[inline]
     pub fn to_str(self) -> &'static str {
         let i = self as usize;
 
@@ -57,9 +61,10 @@ impl HeavenlyStems {
     }
 
     /// 透過甲、乙、丙、丁、戊、己、更、辛、壬、葵等字元來取得 `HeavenlyStems` 列舉實體。
+    #[inline]
     pub fn from_char(c: char) -> Option<HeavenlyStems> {
-        for (i, &t) in THE_HEAVENLY_STEMS_CHARS.iter().enumerate() {
-            if t.eq(&c) {
+        for (i, t) in THE_HEAVENLY_STEMS_CHARS.iter().copied().enumerate() {
+            if t == c {
                 return Some(unsafe { Self::from_ordinal_unsafe(i as i8) });
             }
         }
@@ -68,6 +73,7 @@ impl HeavenlyStems {
     }
 
     /// 取得 `HeavenlyStems` 列舉實體所代表的地支字元。
+    #[inline]
     pub fn to_char(self) -> char {
         let i = self as usize;
 
@@ -76,6 +82,7 @@ impl HeavenlyStems {
 }
 
 impl Display for HeavenlyStems {
+    #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(self.to_str())
     }

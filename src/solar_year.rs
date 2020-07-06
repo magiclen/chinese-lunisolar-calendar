@@ -26,7 +26,7 @@ impl SolarYear {
                 year = year * 10 + u32::from(c as u8 - b'0');
             } else {
                 let mut failed = true;
-                for (i, &cc) in THE_SOLAR_YEAR_NUMBERS_CHARS.iter().enumerate() {
+                for (i, cc) in THE_SOLAR_YEAR_NUMBERS_CHARS.iter().copied().enumerate() {
                     if c == cc {
                         year = year * 10 + i as u32;
                         failed = false;
@@ -50,6 +50,7 @@ impl SolarYear {
     }
 
     /// 取得 `SolarYear` 實體所代表的中文西曆年份字串。
+    #[inline]
     pub fn to_chinese_string(self) -> String {
         let mut year_string = String::new();
 
@@ -59,6 +60,7 @@ impl SolarYear {
     }
 
     /// 取得 `SolarYear` 實體所代表的中文西曆年份字串。
+    #[inline]
     pub fn write_to_chinese_string(self, s: &mut String) {
         let mut year = self.year;
 
@@ -75,6 +77,7 @@ impl SolarYear {
     }
 
     /// 透過西曆年份數值來取得 `SolarYear` 實體。
+    #[inline]
     pub fn from_u16(year: u16) -> SolarYear {
         SolarYear {
             year,
@@ -82,16 +85,19 @@ impl SolarYear {
     }
 
     /// 取得 `SolarYear` 實體所代表的西曆年份數值。
+    #[inline]
     pub fn to_u16(self) -> u16 {
         self.year
     }
 
     /// 判斷此西曆年是否為閏年。
+    #[inline]
     pub fn is_leap(self) -> bool {
         (self.year % 4 == 0) && (self.year % 100 != 0) || self.year % 400 == 0
     }
 
     /// 計算此西曆年共有幾天。。
+    #[inline]
     pub fn get_total_days(self) -> u16 {
         if self.is_leap() {
             366
@@ -101,18 +107,21 @@ impl SolarYear {
     }
 
     /// 計算此西曆年下的某個月共有幾天。。
+    #[inline]
     pub fn get_total_days_in_a_month(self, solar_month: SolarMonth) -> u8 {
         solar_month.get_total_days(self)
     }
 }
 
 impl Display for SolarYear {
+    #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(&self.to_chinese_string())
     }
 }
 
 impl From<u16> for SolarYear {
+    #[inline]
     fn from(year: u16) -> SolarYear {
         SolarYear::from_u16(year)
     }

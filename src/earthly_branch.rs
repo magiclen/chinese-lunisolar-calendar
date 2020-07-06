@@ -37,11 +37,14 @@ pub enum EarthlyBranch {
 }
 
 impl EarthlyBranch {
+    #[allow(clippy::missing_safety_doc)]
+    #[inline]
     pub unsafe fn from_ordinal_unsafe(number: i8) -> EarthlyBranch {
         transmute(number)
     }
 
     /// 將時間轉成對應的地支。
+    #[inline]
     pub fn from_time<T: Timelike>(time: T) -> EarthlyBranch {
         let hour = time.hour();
 
@@ -52,11 +55,12 @@ impl EarthlyBranch {
 
     /// 透過子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥等字串來取得 `EarthlyBranch` 列舉實體。
     #[allow(clippy::should_implement_trait)]
+    #[inline]
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<EarthlyBranch> {
         let s = s.as_ref();
 
         for (i, &t) in THE_EARTHLY_BRANCHES.iter().enumerate() {
-            if t.eq(s) {
+            if t == s {
                 return Some(unsafe { Self::from_ordinal_unsafe(i as i8) });
             }
         }
@@ -65,6 +69,7 @@ impl EarthlyBranch {
     }
 
     /// 取得 `EarthlyBranch` 列舉實體所代表的地支字串。
+    #[inline]
     pub fn to_str(self) -> &'static str {
         let i = self as usize;
 
@@ -72,9 +77,10 @@ impl EarthlyBranch {
     }
 
     /// 透過子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥等字元來取得 `EarthlyBranch` 列舉實體。
+    #[inline]
     pub fn from_char(c: char) -> Option<EarthlyBranch> {
-        for (i, &t) in THE_EARTHLY_BRANCHES_CHARS.iter().enumerate() {
-            if t.eq(&c) {
+        for (i, t) in THE_EARTHLY_BRANCHES_CHARS.iter().copied().enumerate() {
+            if t == c {
                 return Some(unsafe { Self::from_ordinal_unsafe(i as i8) });
             }
         }
@@ -83,6 +89,7 @@ impl EarthlyBranch {
     }
 
     /// 取得 `EarthlyBranch` 列舉實體所代表的地支字元。
+    #[inline]
     pub fn to_char(self) -> char {
         let i = self as usize;
 
@@ -90,16 +97,19 @@ impl EarthlyBranch {
     }
 
     /// 透過生肖來取得地支。
+    #[inline]
     pub fn from_zodiac(zodiac: Zodiac) -> EarthlyBranch {
         unsafe { transmute(zodiac) }
     }
 
     /// 將地支轉成生肖。
+    #[inline]
     pub fn to_zodiac(self) -> Zodiac {
         unsafe { transmute(self) }
     }
 
     /// 取得八字重量。
+    #[inline]
     pub fn get_ba_zi_weight(self) -> u8 {
         let i = self as usize;
 
@@ -108,12 +118,14 @@ impl EarthlyBranch {
 }
 
 impl Display for EarthlyBranch {
+    #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(self.to_str())
     }
 }
 
 impl From<Zodiac> for EarthlyBranch {
+    #[inline]
     fn from(zodiac: Zodiac) -> EarthlyBranch {
         EarthlyBranch::from_zodiac(zodiac)
     }

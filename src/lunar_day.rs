@@ -71,17 +71,20 @@ pub enum LunarDay {
 }
 
 impl LunarDay {
+    #[allow(clippy::missing_safety_doc)]
+    #[inline]
     pub unsafe fn from_ordinal_unsafe(number: i8) -> LunarDay {
         transmute(number)
     }
 
     /// 透過農曆日期字串來取得 `LunarDay` 列舉實體。
     #[allow(clippy::should_implement_trait)]
+    #[inline]
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<LunarDay> {
         let s = s.as_ref();
 
         for (i, &t) in THE_LUNAR_DAYS.iter().enumerate() {
-            if t.eq(s) {
+            if t == s {
                 return Some(unsafe { Self::from_ordinal_unsafe(i as i8) });
             }
         }
@@ -90,6 +93,7 @@ impl LunarDay {
     }
 
     /// 取得 `LunarDay` 列舉實體所代表的農曆日期字串。
+    #[inline]
     pub fn to_str(self) -> &'static str {
         let i = self as usize;
 
@@ -97,11 +101,14 @@ impl LunarDay {
     }
 
     /// 透過農曆日期數值來取得 `LunarDay` 列舉實體。
+    #[allow(clippy::missing_safety_doc)]
+    #[inline]
     pub unsafe fn from_u8_unsafe(day: u8) -> LunarDay {
         transmute(day - 1)
     }
 
     /// 透過農曆日期數值來取得 `LunarDay` 列舉實體。
+    #[inline]
     pub fn from_u8(day: u8) -> Option<LunarDay> {
         if day == 0 || day > 30 {
             None
@@ -111,11 +118,13 @@ impl LunarDay {
     }
 
     /// 取得 `LunarDay` 列舉實體所代表的農曆日期數值。
+    #[inline]
     pub fn to_u8(self) -> u8 {
         self as u8 + 1
     }
 
     /// 取得八字重量。
+    #[inline]
     pub fn get_ba_zi_weight(self) -> u8 {
         let i = self as usize;
 
@@ -124,6 +133,7 @@ impl LunarDay {
 }
 
 impl Display for LunarDay {
+    #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(self.to_str())
     }

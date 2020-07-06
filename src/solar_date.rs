@@ -20,6 +20,7 @@ pub struct SolarDate {
 
 impl SolarDate {
     /// 將無時區的 `Chrono` 年月日實體轉成 `SolarDate` 實體。
+    #[inline]
     pub fn from_naive_date(naive_date: NaiveDate) -> Result<SolarDate, LunisolarError> {
         let year = naive_date.year();
 
@@ -39,6 +40,7 @@ impl SolarDate {
     }
 
     /// 將有時區的 `Chrono` 年月日實體，依UTC時區轉成 `SolarDate` 實體。
+    #[inline]
     pub fn from_date<Tz: TimeZone>(date: Date<Tz>) -> Result<SolarDate, LunisolarError> {
         let naive_date = date.naive_utc();
 
@@ -46,6 +48,7 @@ impl SolarDate {
     }
 
     /// 將 `SolarDate` 實體轉成無時區的 `Chrono` 年月日實體。
+    #[inline]
     pub fn to_naive_date(self) -> NaiveDate {
         NaiveDate::from_ymd(
             i32::from(self.solar_year.to_u16()),
@@ -55,6 +58,7 @@ impl SolarDate {
     }
 
     /// 將 `SolarDate` 實體轉成UTC時區的 `Chrono` 年月日實體。
+    #[inline]
     pub fn to_date_utc(self) -> Date<Utc> {
         let naive_date = self.to_naive_date();
 
@@ -62,6 +66,7 @@ impl SolarDate {
     }
 
     /// 利用西曆的年月日來產生 `SolarDate` 實體。
+    #[inline]
     pub fn from_solar_year_month_day<Y: Into<SolarYear>>(
         solar_year: Y,
         solar_month: SolarMonth,
@@ -85,6 +90,7 @@ impl SolarDate {
     }
 
     /// 利用西曆的年月日來產生 `SolarDate` 實體。
+    #[inline]
     pub fn from_ymd(year: u16, month: u8, day: u8) -> Result<SolarDate, LunisolarError> {
         let solar_year = SolarYear::from_u16(year);
 
@@ -150,11 +156,13 @@ impl SolarDate {
     }
 
     /// 轉成農曆年月日。
+    #[inline]
     pub fn to_lunisolar_date(self) -> Result<LunisolarDate, LunisolarError> {
         LunisolarDate::from_solar_date(self)
     }
 
     /// 以目前的年月日來產生 `SolarDate` 實體。
+    #[inline]
     pub fn now() -> Result<SolarDate, LunisolarError> {
         Self::from_date(Utc::now().date())
     }
@@ -219,6 +227,7 @@ impl SolarDate {
     }
 
     /// 取得 `SolarDate` 實體所代表的中文西曆年月日字串。
+    #[inline]
     pub fn to_chinese_string(self) -> String {
         let mut s = String::new();
 
@@ -228,6 +237,7 @@ impl SolarDate {
     }
 
     /// 取得 `SolarDate` 實體所代表的中文西曆年月日字串。
+    #[inline]
     pub fn write_to_chinese_string(self, s: &mut String) {
         s.reserve(36);
 
@@ -239,21 +249,25 @@ impl SolarDate {
     }
 
     /// 取得西曆年。
+    #[inline]
     pub fn get_solar_year(self) -> SolarYear {
         self.solar_year
     }
 
     /// 取得西曆月。
+    #[inline]
     pub fn get_solar_month(self) -> SolarMonth {
         self.solar_month
     }
 
     /// 取得西曆日。
+    #[inline]
     pub fn get_solar_day(self) -> SolarDay {
         self.solar_day
     }
 
     /// 計算此西曆年月日是該西曆年的第幾天。舉例：2013-01-04，就是第四天。
+    #[inline]
     pub fn the_n_day_in_this_year(self) -> u16 {
         let mut n = 0;
 
@@ -273,6 +287,7 @@ impl SolarDate {
 }
 
 impl Display for SolarDate {
+    #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(&self.to_chinese_string())
     }

@@ -177,16 +177,19 @@ impl LunisolarDate {
     }
 
     /// 將西曆年月日轉成農曆年月日(包含西曆年)。
+    #[inline]
     pub fn from_solar_date(solar_date: SolarDate) -> Result<LunisolarDate, LunisolarError> {
         Self::from_solar_date_inner(solar_date, solar_date.to_naive_date())
     }
 
     /// 轉成西曆年月日。
+    #[inline]
     pub fn to_solar_date(self) -> SolarDate {
         SolarDate::from_lunisolar_date(self)
     }
 
     /// 將無時區的 `Chrono` 年月日實體，轉成農曆年月日(包含西曆年)。
+    #[inline]
     pub fn from_naive_date(naive_date: NaiveDate) -> Result<LunisolarDate, LunisolarError> {
         if naive_date < *MIN_LUNAR_DATE_IN_SOLAR_CALENDAR
             || naive_date > *MAX_LUNAR_DATE_IN_SOLAR_CALENDAR
@@ -200,6 +203,7 @@ impl LunisolarDate {
     }
 
     /// 將有時區的 `Chrono` 年月日實體，依UTC時區轉成農曆年月日(包含西曆年)。
+    #[inline]
     pub fn from_date<Tz: TimeZone>(date: Date<Tz>) -> Result<LunisolarDate, LunisolarError> {
         let naive_date = date.naive_utc();
 
@@ -207,6 +211,8 @@ impl LunisolarDate {
     }
 
     /// 利用農曆西曆年和農曆月日來產生 `LunisolarDate` 實體。
+    #[allow(clippy::missing_safety_doc)]
+    #[inline]
     pub unsafe fn from_lunisolar_year_lunar_month_day_unsafe(
         lunisolar_year: LunisolarYear,
         lunar_month: LunarMonth,
@@ -236,6 +242,7 @@ impl LunisolarDate {
     }
 
     /// 利用農曆西曆年和農曆月日來產生 `LunisolarDate` 實體。
+    #[inline]
     pub fn from_lunisolar_year_lunar_month_day(
         lunisolar_year: LunisolarYear,
         lunar_month: LunarMonth,
@@ -270,6 +277,7 @@ impl LunisolarDate {
     }
 
     /// 利用農曆西曆年和農曆月日來產生 `LunisolarDate` 實體。
+    #[inline]
     pub fn from_ymd(
         year: u16,
         month: u8,
@@ -295,6 +303,7 @@ impl LunisolarDate {
     }
 
     /// 以目前的年月日來產生 `LunisolarDate` 實體。
+    #[inline]
     pub fn now() -> Result<LunisolarDate, LunisolarError> {
         Self::from_date(Utc::now().date())
     }
@@ -376,6 +385,7 @@ impl LunisolarDate {
     }
 
     /// 取得 `LunisolarDate` 實體所代表的中文農曆西曆年和農曆月日字串。
+    #[inline]
     pub fn to_chinese_string(self, chinese_variant: ChineseVariant) -> String {
         let mut s = String::new();
 
@@ -385,6 +395,7 @@ impl LunisolarDate {
     }
 
     /// 取得 `LunisolarDate` 實體所代表的中文農曆西曆年和農曆月日字串。
+    #[inline]
     pub fn write_to_chinese_string(self, chinese_variant: ChineseVariant, s: &mut String) {
         s.reserve(48);
 
@@ -403,31 +414,37 @@ impl LunisolarDate {
     }
 
     /// 取得西曆年。
+    #[inline]
     pub fn get_solar_year(self) -> SolarYear {
         self.solar_year
     }
 
     /// 取得農曆西曆年。
+    #[inline]
     pub fn get_lunisolar_year(self) -> LunisolarYear {
         self.lunisolar_year
     }
 
     /// 取得農曆年。
+    #[inline]
     pub fn get_lunar_year(self) -> LunarYear {
         self.lunisolar_year.to_lunar_year()
     }
 
     /// 取得農曆月。
+    #[inline]
     pub fn get_lunar_month(self) -> LunarMonth {
         self.lunar_month
     }
 
     /// 取得農曆日。
+    #[inline]
     pub fn get_lunar_day(self) -> LunarDay {
         self.lunar_day
     }
 
     /// 計算此農曆年月日是該農曆年的第幾天。舉例：2013/正月/初五，就是第五天。
+    #[inline]
     pub(crate) fn the_n_day_in_this_year_inner(
         lunisolar_year: LunisolarYear,
         lunar_month: LunarMonth,
@@ -461,6 +478,7 @@ impl LunisolarDate {
     }
 
     /// 計算此農曆年月日是該農曆年的第幾天。舉例：2013/正月/初五，就是第五天。
+    #[inline]
     pub fn the_n_day_in_this_year(self) -> u16 {
         Self::the_n_day_in_this_year_inner(self.lunisolar_year, self.lunar_month, self.lunar_day)
     }
@@ -479,6 +497,7 @@ impl LunisolarDate {
     /// * 酉：１７～１９
     /// * 戌：１９～２１
     /// * 亥：２１～２３
+    #[inline]
     pub fn get_ba_zi_weight(self, earthly_branch: EarthlyBranch) -> f64 {
         let sum = self.lunisolar_year.to_lunar_year().get_ba_zi_weight()
             + self.lunar_month.get_ba_zi_weight()
@@ -489,6 +508,7 @@ impl LunisolarDate {
     }
 
     /// 搭配出生時間，來計算八字有幾兩重。
+    #[inline]
     pub fn get_ba_zi_weight_by_time<T: Timelike>(self, time: T) -> f64 {
         let earthly_branch = EarthlyBranch::from_time(time);
 
@@ -497,6 +517,7 @@ impl LunisolarDate {
 }
 
 impl Display for LunisolarDate {
+    #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(&self.to_chinese_string(ChineseVariant::Traditional))
     }

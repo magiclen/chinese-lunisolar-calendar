@@ -73,17 +73,20 @@ pub enum SolarDay {
 }
 
 impl SolarDay {
+    #[allow(clippy::missing_safety_doc)]
+    #[inline]
     pub unsafe fn from_ordinal_unsafe(number: i8) -> SolarDay {
         transmute(number)
     }
 
     /// 透過西曆日期字串來取得 `SolarDay` 列舉實體。
     #[allow(clippy::should_implement_trait)]
+    #[inline]
     pub fn from_str<S: AsRef<str>>(s: S) -> Option<SolarDay> {
         let s = s.as_ref();
 
         for (i, &t) in THE_SOLAR_DAYS.iter().enumerate() {
-            if t.eq(s) {
+            if t == s {
                 return Some(unsafe { Self::from_ordinal_unsafe(i as i8) });
             }
         }
@@ -92,6 +95,7 @@ impl SolarDay {
     }
 
     /// 取得 `SolarDay` 列舉實體所代表的西曆日期字串。
+    #[inline]
     pub fn to_str(self) -> &'static str {
         let i = self as usize;
 
@@ -99,11 +103,14 @@ impl SolarDay {
     }
 
     /// 透過西曆日期數值來取得 `SolarDay` 列舉實體。
+    #[allow(clippy::missing_safety_doc)]
+    #[inline]
     pub unsafe fn from_u8_unsafe(day: u8) -> SolarDay {
         transmute(day - 1)
     }
 
     /// 透過西曆日期數值來取得 `SolarDay` 列舉實體。
+    #[inline]
     pub fn from_u8(day: u8) -> Option<SolarDay> {
         if day == 0 || day > 31 {
             None
@@ -113,12 +120,14 @@ impl SolarDay {
     }
 
     /// 取得 `SolarDay` 列舉實體所代表的西曆日期數值。
+    #[inline]
     pub fn to_u8(self) -> u8 {
         self as u8 + 1
     }
 }
 
 impl Display for SolarDay {
+    #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         f.write_str(self.to_str())
     }
