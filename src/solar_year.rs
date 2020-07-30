@@ -64,15 +64,23 @@ impl SolarYear {
     pub fn write_to_chinese_string(self, s: &mut String) {
         let mut year = self.year;
 
-        s.reserve(12);
+        if year == 0 {
+            s.push_str(THE_SOLAR_YEAR_NUMBERS[0]);
+        } else {
+            s.reserve(12);
 
-        let len = s.len();
+            let len = s.len();
 
-        while year > 0 {
-            let digit = year % 10;
-            year /= 10;
+            loop {
+                let digit = year % 10;
+                year /= 10;
 
-            s.insert_str(len, THE_SOLAR_YEAR_NUMBERS[digit as usize]);
+                s.insert_str(len, THE_SOLAR_YEAR_NUMBERS[digit as usize]);
+
+                if year == 0 {
+                    break;
+                }
+            }
         }
     }
 
