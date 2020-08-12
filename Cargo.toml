@@ -1,6 +1,6 @@
 [package]
 name = "chinese-lunisolar-calendar"
-version = "0.1.13"
+version = "0.1.14"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2018"
 repository = "https://github.com/magiclen/chinese-lunisolar-calendar"
@@ -18,7 +18,7 @@ branch = "master"
 
 [dependencies]
 chrono = "0.4.6"
-lazy_static = "1.2.0"
+once_cell = "1"
 chinese-variant = "1.0.1"
 
 [dev-dependencies]

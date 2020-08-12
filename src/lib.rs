@@ -40,14 +40,14 @@ assert_eq!(4.3, lunisolar_date.get_ba_zi_weight_by_time(NaiveTime::from_hms(15, 
 ```
 */
 
-#[macro_use]
-extern crate lazy_static;
-
 extern crate chinese_variant;
+extern crate once_cell;
 
 pub use chinese_variant::ChineseVariant;
 
 pub extern crate chrono;
+
+use once_cell::sync::Lazy;
 
 use chrono::prelude::*;
 
@@ -61,16 +61,20 @@ pub const MAX_YEAR_IN_SOLAR_CALENDAR: u16 = 2101;
 /// 最小支援的農曆西曆年。*(u16)*
 pub const MIN_YEAR_IN_SOLAR_CALENDAR: u16 = 1901;
 
-lazy_static! {
-    /// 最大支援的農曆日期(以西曆日期表示)：2101-01-28。*(lazy_static的實體)*
-    pub static ref MAX_LUNAR_DATE_IN_SOLAR_CALENDAR: NaiveDate = Utc.ymd(i32::from(MAX_YEAR_IN_SOLAR_CALENDAR), 1, 28).naive_utc();
+/// 最大支援的農曆日期(以西曆日期表示)：2101-01-28。*(lazy_static的實體)*
+pub static MAX_LUNAR_DATE_IN_SOLAR_CALENDAR: Lazy<NaiveDate> =
+    Lazy::new(|| Utc.ymd(i32::from(MAX_YEAR_IN_SOLAR_CALENDAR), 1, 28).naive_utc());
 
-    /// 最大支援的農曆日期的新年偏差。*(lazy_static的實體)*
-    pub(crate) static ref MAX_LUNAR_DATE_IN_SOLAR_CALENDAR_NEW_YEAR_DIFFERENCE: u16 = SolarDate::from_naive_date(*MAX_LUNAR_DATE_IN_SOLAR_CALENDAR).unwrap().the_n_day_in_this_year();
+pub(crate) static MAX_LUNAR_DATE_IN_SOLAR_CALENDAR_NEW_YEAR_DIFFERENCE: Lazy<u16> =
+    Lazy::new(|| {
+        SolarDate::from_naive_date(*MAX_LUNAR_DATE_IN_SOLAR_CALENDAR)
+            .unwrap()
+            .the_n_day_in_this_year()
+    });
 
-    /// 最小支援的農曆日期(以西曆日期表示)：1901-02-19。*(lazy_static的實體)*
-    pub static ref MIN_LUNAR_DATE_IN_SOLAR_CALENDAR: NaiveDate = Utc.ymd(i32::from(MIN_YEAR_IN_SOLAR_CALENDAR), 2, 19).naive_utc();
-}
+/// 最小支援的農曆日期(以西曆日期表示)：1901-02-19。*(lazy_static的實體)*
+pub static MIN_LUNAR_DATE_IN_SOLAR_CALENDAR: Lazy<NaiveDate> =
+    Lazy::new(|| Utc.ymd(i32::from(MIN_YEAR_IN_SOLAR_CALENDAR), 2, 19).naive_utc());
 
 mod lunisolar_error;
 
