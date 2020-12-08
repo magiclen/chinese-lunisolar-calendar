@@ -1,5 +1,6 @@
 use super::{EarthlyBranch, HeavenlyStems, Zodiac, BA_ZI_WEIGHT_YEARS, THE_LUNAR_YEARS};
 
+use std::cmp::Ordering;
 use std::fmt::{self, Display, Formatter};
 use std::str::FromStr;
 
@@ -44,13 +45,20 @@ impl LunarYear {
     pub fn from_era(heavenly_stems: HeavenlyStems, earthly_branch: EarthlyBranch) -> LunarYear {
         let h = heavenly_stems as usize;
         let e = earthly_branch as usize;
-        let mut diff = e - h;
 
-        if diff == 0 {
-            diff += 12;
-        }
+        let year_index = match h.cmp(&e) {
+            Ordering::Equal => h,
+            Ordering::Less => {
+                let diff = e - h;
 
-        let year_index = h + (12 - diff) * 5;
+                h + (12 - diff) * 5
+            }
+            Ordering::Greater => {
+                let diff = h - e;
+
+                e + diff * 6
+            }
+        };
 
         LunarYear {
             heavenly_stems,
