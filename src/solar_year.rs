@@ -22,7 +22,7 @@ impl SolarYear {
                 return None;
             }
 
-            if c >= '0' && c <= '9' {
+            if ('0'..='9').contains(&c) {
                 year = year * 10 + u32::from(c as u8 - b'0');
             } else {
                 let mut failed = true;

@@ -173,10 +173,10 @@ impl SolarDate {
         let s = s.as_ref();
 
         let year_index = {
-            match s.find("年") {
+            match s.find('年') {
                 Some(index) => index,
                 None => {
-                    match s.find("　") {
+                    match s.find('　') {
                         Some(index) => index,
                         None => return Err(LunisolarError::IncorrectSolarYear),
                     }
@@ -194,10 +194,10 @@ impl SolarDate {
         let s = &s[year_index + 3..];
 
         let month_index = {
-            match s.find("月") {
+            match s.find('月') {
                 Some(index) => index,
                 None => {
-                    match s.find("　") {
+                    match s.find('　') {
                         Some(index) => index,
                         None => return Err(LunisolarError::IncorrectSolarMonth),
                     }
@@ -214,7 +214,7 @@ impl SolarDate {
 
         let mut day_str = s[month_index + 3..].trim();
 
-        if day_str.ends_with("日") {
+        if day_str.ends_with('日') {
             day_str = &day_str[..day_str.len() - 3];
         }
 
@@ -242,10 +242,10 @@ impl SolarDate {
         s.reserve(36);
 
         self.solar_year.write_to_chinese_string(s);
-        s.push_str("年");
+        s.push('年');
         s.push_str(self.solar_month.to_str());
         s.push_str(self.solar_day.to_str());
-        s.push_str("日");
+        s.push('日');
     }
 
     /// 取得西曆年。

@@ -314,10 +314,10 @@ impl LunisolarDate {
         let s = s.as_ref();
 
         let year_index = {
-            match s.find("　") {
+            match s.find('　') {
                 Some(index) => index,
                 None => {
-                    match s.find("年") {
+                    match s.find('年') {
                         Some(index) => index,
                         None => return Err(LunisolarError::IncorrectLunisolarYear),
                     }
@@ -340,10 +340,10 @@ impl LunisolarDate {
         let s = &s[year_index + 3..];
 
         let month_index = {
-            match s.find("月") {
+            match s.find('月') {
                 Some(index) => index,
                 None => {
-                    match s.find("　") {
+                    match s.find('　') {
                         Some(index) => index,
                         None => return Err(LunisolarError::IncorrectLunarMonth),
                     }
@@ -354,10 +354,10 @@ impl LunisolarDate {
         let month_str = s[..month_index + 3].trim();
 
         let month_str = {
-            match month_str.find("年") {
+            match month_str.find('年') {
                 Some(index) => &month_str[index + 3..].trim(),
                 None => {
-                    match month_str.find("　") {
+                    match month_str.find('　') {
                         Some(index) => &month_str[index + 3..].trim(),
                         None => month_str,
                     }
@@ -372,7 +372,7 @@ impl LunisolarDate {
 
         let mut day_str = s[month_index + 3..].trim();
 
-        if day_str.ends_with("日") {
+        if day_str.ends_with('日') {
             day_str = &day_str[..day_str.len() - 3];
         }
 
@@ -402,14 +402,14 @@ impl LunisolarDate {
         let lunisolar_year = self.lunisolar_year;
 
         lunisolar_year.to_solar_year().write_to_chinese_string(s);
-        s.push_str("　");
+        s.push('　');
         s.push_str(lunisolar_year.to_lunar_year().to_str());
-        s.push_str("、");
+        s.push('、');
         s.push_str(self.lunisolar_year.get_zodiac().to_str(chinese_variant));
-        s.push_str("年");
-        s.push_str("　");
+        s.push('年');
+        s.push('　');
         s.push_str(self.lunar_month.to_str(chinese_variant));
-        s.push_str("　");
+        s.push('　');
         s.push_str(self.lunar_day.to_str());
     }
 

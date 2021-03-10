@@ -30,7 +30,7 @@ impl LunisolarYear {
 
         let year = solar_year.to_u16();
 
-        if year >= MIN_YEAR_IN_SOLAR_CALENDAR && year <= MAX_YEAR_IN_SOLAR_CALENDAR {
+        if (MIN_YEAR_IN_SOLAR_CALENDAR..=MAX_YEAR_IN_SOLAR_CALENDAR).contains(&year) {
             Some(LunisolarYear {
                 solar_year,
             })
