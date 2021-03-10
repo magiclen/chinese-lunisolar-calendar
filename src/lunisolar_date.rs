@@ -384,7 +384,7 @@ impl LunisolarDate {
         Self::from_lunisolar_year_lunar_month_day(lunisolar_year, lunar_month, lunar_day)
     }
 
-    /// 取得 `LunisolarDate` 實體所代表的中文農曆西曆年和農曆月日字串。
+    /// 取得 `LunisolarDate` 實體所代表的中文農曆西曆年和農曆月日字串。以`零`表示數字`0`。
     #[inline]
     pub fn to_chinese_string(self, chinese_variant: ChineseVariant) -> String {
         let mut s = String::new();
@@ -394,7 +394,17 @@ impl LunisolarDate {
         s
     }
 
-    /// 取得 `LunisolarDate` 實體所代表的中文農曆西曆年和農曆月日字串。
+    /// 取得 `LunisolarDate` 實體所代表的中文農曆西曆年和農曆月日字串。以`〇`表示數字`0`。
+    #[inline]
+    pub fn to_chinese_string_2(self, chinese_variant: ChineseVariant) -> String {
+        let mut s = String::new();
+
+        self.write_to_chinese_string_2(chinese_variant, &mut s);
+
+        s
+    }
+
+    /// 取得 `LunisolarDate` 實體所代表的中文農曆西曆年和農曆月日字串。以`零`表示數字`0`。
     #[inline]
     pub fn write_to_chinese_string(self, chinese_variant: ChineseVariant, s: &mut String) {
         s.reserve(48);
@@ -402,6 +412,25 @@ impl LunisolarDate {
         let lunisolar_year = self.lunisolar_year;
 
         lunisolar_year.to_solar_year().write_to_chinese_string(s);
+        s.push('　');
+        s.push_str(lunisolar_year.to_lunar_year().to_str());
+        s.push('、');
+        s.push_str(self.lunisolar_year.get_zodiac().to_str(chinese_variant));
+        s.push('年');
+        s.push('　');
+        s.push_str(self.lunar_month.to_str(chinese_variant));
+        s.push('　');
+        s.push_str(self.lunar_day.to_str());
+    }
+
+    /// 取得 `LunisolarDate` 實體所代表的中文農曆西曆年和農曆月日字串。以`〇`表示數字`0`。
+    #[inline]
+    pub fn write_to_chinese_string_2(self, chinese_variant: ChineseVariant, s: &mut String) {
+        s.reserve(48);
+
+        let lunisolar_year = self.lunisolar_year;
+
+        lunisolar_year.to_solar_year().write_to_chinese_string_2(s);
         s.push('　');
         s.push_str(lunisolar_year.to_lunar_year().to_str());
         s.push('、');

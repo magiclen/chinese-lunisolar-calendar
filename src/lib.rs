@@ -21,6 +21,7 @@ use chinese_lunisolar_calendar::SolarDate;
 let solar_date = SolarDate::from_naive_date(NaiveDate::from_ymd(2019, 1, 15)).unwrap();
 
 assert_eq!("二零一九年一月十五日", solar_date.to_chinese_string());
+assert_eq!("二〇一九年一月十五日", solar_date.to_chinese_string_2());
 ```
 
 ```rust
@@ -35,6 +36,8 @@ let lunisolar_date = LunisolarDate::from_naive_date(NaiveDate::from_ymd(2019, 1,
 assert_eq!(2019, lunisolar_date.get_solar_year().to_u16());
 assert_eq!("二零一八　戊戌、狗年　臘月　初十", lunisolar_date.to_chinese_string(ChineseVariant::Traditional));
 assert_eq!("二零一八　戊戌、狗年　腊月　初十", lunisolar_date.to_chinese_string(ChineseVariant::Simple));
+assert_eq!("二〇一八　戊戌、狗年　臘月　初十", lunisolar_date.to_chinese_string_2(ChineseVariant::Traditional));
+assert_eq!("二〇一八　戊戌、狗年　腊月　初十", lunisolar_date.to_chinese_string_2(ChineseVariant::Simple));
 
 assert_eq!(4.3, lunisolar_date.get_ba_zi_weight_by_time(NaiveTime::from_hms(15, 30, 0)));
 ```

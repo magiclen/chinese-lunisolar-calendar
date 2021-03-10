@@ -226,7 +226,7 @@ impl SolarDate {
         Self::from_solar_year_month_day(solar_year, solar_month, solar_day)
     }
 
-    /// 取得 `SolarDate` 實體所代表的中文西曆年月日字串。
+    /// 取得 `SolarDate` 實體所代表的中文西曆年月日字串。以`零`表示數字`0`。
     #[inline]
     pub fn to_chinese_string(self) -> String {
         let mut s = String::new();
@@ -236,12 +236,34 @@ impl SolarDate {
         s
     }
 
-    /// 取得 `SolarDate` 實體所代表的中文西曆年月日字串。
+    /// 取得 `SolarDate` 實體所代表的中文西曆年月日字串。以`〇`表示數字`0`。
+    #[inline]
+    pub fn to_chinese_string_2(self) -> String {
+        let mut s = String::new();
+
+        self.write_to_chinese_string_2(&mut s);
+
+        s
+    }
+
+    /// 取得 `SolarDate` 實體所代表的中文西曆年月日字串。以`零`表示數字`0`。
     #[inline]
     pub fn write_to_chinese_string(self, s: &mut String) {
         s.reserve(36);
 
         self.solar_year.write_to_chinese_string(s);
+        s.push('年');
+        s.push_str(self.solar_month.to_str());
+        s.push_str(self.solar_day.to_str());
+        s.push('日');
+    }
+
+    /// 取得 `SolarDate` 實體所代表的中文西曆年月日字串。以`〇`表示數字`0`。
+    #[inline]
+    pub fn write_to_chinese_string_2(self, s: &mut String) {
+        s.reserve(36);
+
+        self.solar_year.write_to_chinese_string_2(s);
         s.push('年');
         s.push_str(self.solar_month.to_str());
         s.push_str(self.solar_day.to_str());

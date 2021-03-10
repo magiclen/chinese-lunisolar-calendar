@@ -116,6 +116,12 @@ fn from_str() {
     assert_eq!(LunarMonth::from_u8(6, false).unwrap(), lunisolar_date.get_lunar_month());
     assert_eq!(LunarDay::from_u8(19).unwrap(), lunisolar_date.get_lunar_day());
 
+    let lunisolar_date = LunisolarDate::from_str("二〇一八　戊戌、狗年　六月　十九").unwrap();
+
+    assert_eq!(SolarYear::from_u16(2018), lunisolar_date.get_solar_year());
+    assert_eq!(LunarMonth::from_u8(6, false).unwrap(), lunisolar_date.get_lunar_month());
+    assert_eq!(LunarDay::from_u8(19).unwrap(), lunisolar_date.get_lunar_day());
+
     let lunisolar_date = LunisolarDate::from_str("2018　六月　十九日").unwrap();
 
     assert_eq!(SolarYear::from_u16(2018), lunisolar_date.get_solar_year());
@@ -130,6 +136,11 @@ fn to_chinese_string() {
     assert_eq!(
         "二零一八　戊戌、狗年　六月　十九",
         lunisolar_date.to_chinese_string(ChineseVariant::Traditional)
+    );
+
+    assert_eq!(
+        "二〇一八　戊戌、狗年　六月　十九",
+        lunisolar_date.to_chinese_string_2(ChineseVariant::Traditional)
     );
 }
 

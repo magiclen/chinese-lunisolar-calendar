@@ -153,6 +153,10 @@ pub(crate) const THE_LUNAR_DAYS: [&str; 30] = [
 pub(crate) const THE_SOLAR_YEAR_NUMBERS: [&str; 10] =
     ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
 
+/// 列舉西曆年用到的數字(根據GB/T)：〇、一、二、...、九。
+pub(crate) const THE_SOLAR_YEAR_NUMBERS_2: [&str; 10] =
+    ["〇", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+
 /// 列舉西曆年用到的數字：零、一、二、...、九。
 pub(crate) const THE_SOLAR_YEAR_NUMBERS_CHARS: [char; 10] =
     ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];

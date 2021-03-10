@@ -1,4 +1,6 @@
-use super::{SolarMonth, THE_SOLAR_YEAR_NUMBERS, THE_SOLAR_YEAR_NUMBERS_CHARS};
+use super::{
+    SolarMonth, THE_SOLAR_YEAR_NUMBERS, THE_SOLAR_YEAR_NUMBERS_2, THE_SOLAR_YEAR_NUMBERS_CHARS,
+};
 
 use std::fmt::{self, Display, Formatter};
 use std::str::FromStr;
@@ -34,7 +36,9 @@ impl SolarYear {
                     }
                 }
 
-                if failed {
+                if c == '〇' {
+                    year *= 10;
+                } else if failed {
                     return None;
                 }
             }
@@ -49,7 +53,7 @@ impl SolarYear {
         })
     }
 
-    /// 取得 `SolarYear` 實體所代表的中文西曆年份字串。
+    /// 取得 `SolarYear` 實體所代表的中文西曆年份字串。以`零`表示數字`0`。
     #[inline]
     pub fn to_chinese_string(self) -> String {
         let mut year_string = String::new();
@@ -59,7 +63,17 @@ impl SolarYear {
         year_string
     }
 
-    /// 取得 `SolarYear` 實體所代表的中文西曆年份字串。
+    /// 取得 `SolarYear` 實體所代表的中文西曆年份字串。以`〇`表示數字`0`。
+    #[inline]
+    pub fn to_chinese_string_2(self) -> String {
+        let mut year_string = String::new();
+
+        self.write_to_chinese_string_2(&mut year_string);
+
+        year_string
+    }
+
+    /// 取得 `SolarYear` 實體所代表的中文西曆年份字串。以`零`表示數字`0`。
     #[inline]
     pub fn write_to_chinese_string(self, s: &mut String) {
         let mut year = self.year;
@@ -76,6 +90,31 @@ impl SolarYear {
                 year /= 10;
 
                 s.insert_str(len, THE_SOLAR_YEAR_NUMBERS[digit as usize]);
+
+                if year == 0 {
+                    break;
+                }
+            }
+        }
+    }
+
+    /// 取得 `SolarYear` 實體所代表的中文西曆年份字串。以`〇`表示數字`0`。
+    #[inline]
+    pub fn write_to_chinese_string_2(self, s: &mut String) {
+        let mut year = self.year;
+
+        if year == 0 {
+            s.push_str(THE_SOLAR_YEAR_NUMBERS_2[0]);
+        } else {
+            s.reserve(12);
+
+            let len = s.len();
+
+            loop {
+                let digit = year % 10;
+                year /= 10;
+
+                s.insert_str(len, THE_SOLAR_YEAR_NUMBERS_2[digit as usize]);
 
                 if year == 0 {
                     break;

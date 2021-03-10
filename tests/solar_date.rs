@@ -67,6 +67,12 @@ fn from_str() {
     assert_eq!(SolarMonth::from_u8(6).unwrap(), solar_date.get_solar_month());
     assert_eq!(SolarDay::from_u8(19).unwrap(), solar_date.get_solar_day());
 
+    let solar_date = SolarDate::from_str("二〇一八年六月十九日").unwrap();
+
+    assert_eq!(SolarYear::from_u16(2018), solar_date.get_solar_year());
+    assert_eq!(SolarMonth::from_u8(6).unwrap(), solar_date.get_solar_month());
+    assert_eq!(SolarDay::from_u8(19).unwrap(), solar_date.get_solar_day());
+
     let solar_date = SolarDate::from_str("2018　六月　十九").unwrap();
 
     assert_eq!(SolarYear::from_u16(2018), solar_date.get_solar_year());
@@ -79,6 +85,7 @@ fn to_chinese_string() {
     let solar_date = SolarDate::from_ymd(2018, 6, 19).unwrap();
 
     assert_eq!("二零一八年六月十九日", solar_date.to_chinese_string());
+    assert_eq!("二〇一八年六月十九日", solar_date.to_chinese_string_2());
 }
 
 #[test]
