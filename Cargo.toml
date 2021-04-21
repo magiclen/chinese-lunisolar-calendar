@@ -1,6 +1,6 @@
 [package]
 name = "chinese-lunisolar-calendar"
-version = "0.1.17"
+version = "0.1.18"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2018"
 repository = "https://github.com/magiclen/chinese-lunisolar-calendar"

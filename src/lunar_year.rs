@@ -36,7 +36,7 @@ impl LunarYear {
 
     /// 取得 `LunarYear` 實體所代表的農曆年份字串。
     #[inline]
-    pub fn to_str(&self) -> &'static str {
+    pub fn to_str(self) -> &'static str {
         THE_LUNAR_YEARS[self.year_index]
     }
 
