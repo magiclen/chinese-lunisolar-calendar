@@ -1,7 +1,7 @@
 Chinese Lunisolar Calendar
 ====================
 
-[![Build Status](https://travis-ci.org/magiclen/chinese-lunisolar-calendar.svg?branch=master)](https://travis-ci.org/magiclen/chinese-lunisolar-calendar)
+[![CI](https://github.com/magiclen/chinese-lunisolar-calendar/actions/workflows/ci.yml/badge.svg)](https://github.com/magiclen/chinese-lunisolar-calendar/actions/workflows/ci.yml)
 
 The traditional Chinese Calendar, called **農曆** or **陰曆** in Chinese, is based on the moon, so it's also known as Lunar Calendar.
 

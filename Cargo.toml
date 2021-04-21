@@ -1,6 +1,6 @@
 [package]
 name = "chinese-lunisolar-calendar"
-version = "0.1.16"
+version = "0.1.17"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2018"
 repository = "https://github.com/magiclen/chinese-lunisolar-calendar"
@@ -11,10 +11,6 @@ description = "The traditional Chinese Calendar, called 農曆 or 陰曆 in Chin
 readme = "README.md"
 license = "MIT"
 include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]
-
-[badges.travis-ci]
-repository = "magiclen/chinese-lunisolar-calendar"
-branch = "master"
 
 [dependencies]
 chrono = "0.4.6"
