@@ -355,10 +355,10 @@ impl LunisolarDate {
 
         let month_str = {
             match month_str.find('年') {
-                Some(index) => &month_str[index + 3..].trim(),
+                Some(index) => month_str[index + 3..].trim(),
                 None => {
                     match month_str.find('　') {
-                        Some(index) => &month_str[index + 3..].trim(),
+                        Some(index) => month_str[index + 3..].trim(),
                         None => month_str,
                     }
                 }

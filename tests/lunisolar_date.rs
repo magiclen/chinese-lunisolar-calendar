@@ -11,7 +11,6 @@ use chinese_lunisolar_calendar::{
 use chinese_lunisolar_calendar::chrono::prelude::*;
 
 #[test]
-#[allow(clippy::cognitive_complexity)]
 fn from_solar_date() {
     let solar_date = SolarDate::from_ymd(1993, 1, 12).unwrap();
 
@@ -65,7 +64,6 @@ fn from_solar_date() {
 }
 
 #[test]
-#[allow(clippy::cognitive_complexity)]
 fn from_ymd() {
     let lunisolar_date = LunisolarDate::from_ymd(1992, 12, false, 20).unwrap();
 
