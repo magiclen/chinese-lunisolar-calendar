@@ -1,7 +1,4 @@
-extern crate chinese_lunisolar_calendar;
-
-#[macro_use]
-extern crate assert_approx_eq;
+use assert_approx_eq::assert_approx_eq;
 
 use chinese_lunisolar_calendar::{
     ChineseVariant, LunarDay, LunarMonth, LunarYear, LunisolarDate, LunisolarYear, SolarDate,

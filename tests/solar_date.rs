@@ -1,5 +1,3 @@
-extern crate chinese_lunisolar_calendar;
-
 use chinese_lunisolar_calendar::chrono::prelude::*;
 use chinese_lunisolar_calendar::{LunisolarDate, SolarDate, SolarDay, SolarMonth, SolarYear};
 

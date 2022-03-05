@@ -1,5 +1,3 @@
-extern crate chinese_lunisolar_calendar;
-
 use chinese_lunisolar_calendar::SolarYear;
 
 #[test]
@@ -20,12 +18,12 @@ fn from_u16_to_chinese_string() {
 
 #[test]
 fn is_leap() {
-    assert_eq!(true, SolarYear::from_u16(2000).is_leap());
-    assert_eq!(false, SolarYear::from_u16(2001).is_leap());
-    assert_eq!(false, SolarYear::from_u16(2002).is_leap());
-    assert_eq!(true, SolarYear::from_u16(2004).is_leap());
-    assert_eq!(false, SolarYear::from_u16(2100).is_leap());
-    assert_eq!(true, SolarYear::from_u16(2104).is_leap());
+    assert!(SolarYear::from_u16(2000).is_leap());
+    assert!(!SolarYear::from_u16(2001).is_leap());
+    assert!(!SolarYear::from_u16(2002).is_leap());
+    assert!(SolarYear::from_u16(2004).is_leap());
+    assert!(!SolarYear::from_u16(2100).is_leap());
+    assert!(SolarYear::from_u16(2104).is_leap());
 }
 
 #[test]

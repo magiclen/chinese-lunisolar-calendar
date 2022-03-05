@@ -1,5 +1,3 @@
-extern crate chinese_lunisolar_calendar;
-
 use std::ops::Add;
 
 use chinese_lunisolar_calendar::chrono::Duration;
