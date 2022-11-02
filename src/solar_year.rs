@@ -44,7 +44,7 @@ impl SolarYear {
             }
         }
 
-        if year > u32::from(u16::max_value()) {
+        if year > u32::from(u16::MAX) {
             return None;
         }
 

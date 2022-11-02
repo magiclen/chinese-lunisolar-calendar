@@ -24,7 +24,7 @@ impl SolarDate {
     pub fn from_naive_date(naive_date: NaiveDate) -> Result<SolarDate, LunisolarError> {
         let year = naive_date.year();
 
-        if year < 0 || year > i32::from(u16::max_value()) {
+        if year < 0 || year > i32::from(u16::MAX) {
             Err(LunisolarError::OutOfSolarRange)
         } else {
             let solar_year = SolarYear::from_u16(year as u16);
