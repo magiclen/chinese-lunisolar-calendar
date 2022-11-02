@@ -94,11 +94,7 @@ impl SolarMonth {
     pub fn get_total_days<Y: Into<SolarYear>>(self, solar_year: Y) -> u8 {
         let month = self.to_u8();
 
-        let m = if month < 8 {
-            1
-        } else {
-            0
-        };
+        let m = u8::from(month < 8);
 
         if month % 2 == m {
             31

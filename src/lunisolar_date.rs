@@ -498,7 +498,7 @@ impl LunisolarDate {
 
             if let Some(leap_lunar_month) = lunisolar_year.get_leap_lunar_month() {
                 if lunar_month > leap_lunar_month {
-                    n += lunisolar_year.get_total_days_in_leap_month_inner(leap_lunar_month) as u16;
+                    n += lunisolar_year.get_total_days_in_leap_month_inner(leap_lunar_month);
                 }
             }
         }
