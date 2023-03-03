@@ -1,3 +1,5 @@
+#![allow(deprecated)] // wait for chrono 0.5
+
 use chinese_lunisolar_calendar::chrono::prelude::*;
 use chinese_lunisolar_calendar::{LunisolarDate, SolarDate, SolarDay, SolarMonth, SolarYear};
 

@@ -24,7 +24,7 @@ impl SolarYear {
                 return None;
             }
 
-            if ('0'..='9').contains(&c) {
+            if c.is_ascii_digit() {
                 year = year * 10 + u32::from(c as u8 - b'0');
             } else {
                 let mut failed = true;

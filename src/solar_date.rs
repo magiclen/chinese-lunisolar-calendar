@@ -111,22 +111,15 @@ impl SolarDate {
     pub fn from_lunisolar_date(lunisolar_date: LunisolarDate) -> SolarDate {
         let n = lunisolar_date.the_n_day_in_this_year();
 
-        let solar_year = lunisolar_date.get_solar_year();
-
-        let sy = solar_year.to_u16();
-
         let lunisolar_year = lunisolar_date.get_lunisolar_year();
 
         let ly = lunisolar_year.to_u16();
 
-        let mut days_diff = if sy == ly {
-            n - 1 + u16::from(NEW_YEAR_DIFFERENCE[(ly - MIN_YEAR_IN_SOLAR_CALENDAR) as usize])
         // 天數差距為該農曆日期與對應西曆年新年的天數差距。其實就是轉換成西曆日期後，西曆日期與新年的距離。(舉例，農曆2012-01-03，為第3天，和農曆新年差了2天。加上西曆農曆偏差52天。因此天數差距為54)
-        } else {
-            n - 1
-                - (lunisolar_year.to_solar_year().get_total_days()
-                    - u16::from(NEW_YEAR_DIFFERENCE[(ly - MIN_YEAR_IN_SOLAR_CALENDAR) as usize]))
-        };
+        let mut days_diff =
+            n - 1 + u16::from(NEW_YEAR_DIFFERENCE[(ly - MIN_YEAR_IN_SOLAR_CALENDAR) as usize]);
+
+        let mut solar_year = SolarYear::from_u16(ly);
 
         let mut month = 1;
 
@@ -138,10 +131,12 @@ impl SolarDate {
             days_diff -= month_days;
 
             if month == 12 {
-                break;
-            }
+                solar_year = SolarYear::from_u16(solar_year.to_u16() + 1);
 
-            month += 1;
+                month = 1;
+            } else {
+                month += 1;
+            }
 
             solar_month = unsafe { SolarMonth::from_u8_unsafe(month) };
 

@@ -1,3 +1,5 @@
+#![allow(deprecated)] // wait for chrono 0.5
+
 use assert_approx_eq::assert_approx_eq;
 
 use chinese_lunisolar_calendar::{

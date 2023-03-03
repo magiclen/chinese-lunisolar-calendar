@@ -12,6 +12,8 @@ This library allows you to convert a date between the Lunisolar Calendar and the
 ## Examples
 
 ```rust
+# #![allow(deprecated)] // wait for chrono 0.5
+
 use chinese_lunisolar_calendar::chrono::prelude::*;
 
 use chinese_lunisolar_calendar::SolarDate;
@@ -23,6 +25,8 @@ assert_eq!("二〇一九年一月十五日", solar_date.to_chinese_string_2());
 ```
 
 ```rust
+# #![allow(deprecated)] // wait for chrono 0.5
+
 use chinese_lunisolar_calendar::chrono::prelude::*;
 
 use chinese_lunisolar_calendar::{ChineseVariant, LunisolarDate};
@@ -38,6 +42,8 @@ assert_eq!("二〇一八　戊戌、狗年　腊月　初十", lunisolar_date.to
 assert_eq!(4.3, lunisolar_date.get_ba_zi_weight_by_time(NaiveTime::from_hms(15, 30, 0)));
 ```
 */
+
+#![allow(deprecated)] // wait for chrono 0.5
 
 pub extern crate chrono;
 
