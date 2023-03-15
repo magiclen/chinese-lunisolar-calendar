@@ -1,13 +1,15 @@
 #![allow(deprecated)] // wait for chrono 0.5
 
-use assert_approx_eq::assert_approx_eq;
-
 use chinese_lunisolar_calendar::{
     ChineseVariant, LunarDay, LunarMonth, LunarYear, LunisolarDate, LunisolarYear, SolarDate,
     SolarYear,
 };
 
-use chinese_lunisolar_calendar::chrono::prelude::*;
+#[cfg(feature = "ba-zi-weight")]
+use chinese_lunisolar_calendar::chrono::NaiveTime;
+
+#[cfg(feature = "ba-zi-weight")]
+use assert_approx_eq::assert_approx_eq;
 
 #[test]
 fn from_solar_date() {
@@ -150,6 +152,7 @@ fn the_n_day_in_this_year() {
     assert_eq!(324, LunisolarDate::from_ymd(1993, 10, false, 29).unwrap().the_n_day_in_this_year());
 }
 
+#[cfg(feature = "ba-zi-weight")]
 #[test]
 fn get_ba_zi_weight_by_time() {
     assert_approx_eq!(

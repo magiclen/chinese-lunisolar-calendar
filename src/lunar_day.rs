@@ -1,4 +1,7 @@
-use super::{BA_ZI_WEIGHT_DAYS, THE_LUNAR_DAYS};
+use super::THE_LUNAR_DAYS;
+
+#[cfg(feature = "ba-zi-weight")]
+use super::BA_ZI_WEIGHT_DAYS;
 
 use std::mem::transmute;
 
@@ -123,6 +126,7 @@ impl LunarDay {
         self as u8 + 1
     }
 
+    #[cfg(feature = "ba-zi-weight")]
     /// 取得八字重量。
     #[inline]
     pub fn get_ba_zi_weight(self) -> u8 {

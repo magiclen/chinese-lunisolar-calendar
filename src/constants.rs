@@ -233,6 +233,7 @@ pub(crate) const NEW_YEAR_DIFFERENCE: [u8; 200] = [
     48, 37, 26, 45, 35, 24, 42, 31, 20, 39, // 2100
 ];
 
+#[cfg(feature = "ba-zi-weight")]
 /// 從甲子年到癸亥年共六十年的八字重量。
 pub(crate) const BA_ZI_WEIGHT_YEARS: [u8; 60] = [
     12, 9, 6, 7, 12, 5, 9, 8, 7, 8, 15, 9, 16, 8, 8, 19, 12, 6, 8, 7, 5, 15, 6, 16, 15, 7, 9, 12,
@@ -240,14 +241,17 @@ pub(crate) const BA_ZI_WEIGHT_YEARS: [u8; 60] = [
     8, 16, 10, 7,
 ];
 
+#[cfg(feature = "ba-zi-weight")]
 /// 從正月到臘月共十二個月的八字重量。
 pub(crate) const BA_ZI_WEIGHT_MONTHS: [u8; 12] = [6, 7, 18, 9, 5, 16, 9, 15, 18, 8, 9, 5];
 
+#[cfg(feature = "ba-zi-weight")]
 /// 從初一到三十共三十天的八字重量。
 pub(crate) const BA_ZI_WEIGHT_DAYS: [u8; 30] = [
     5, 10, 8, 15, 16, 15, 8, 16, 8, 16, 9, 17, 8, 17, 10, 8, 9, 18, 5, 15, 10, 9, 8, 9, 15, 18, 7,
     8, 16, 6,
 ];
 
+#[cfg(feature = "ba-zi-weight")]
 /// 從子時到亥時共十二地支的八字重量。
 pub(crate) const BA_ZI_WEIGHT_TIME: [u8; 12] = [16, 6, 7, 10, 9, 16, 10, 8, 8, 9, 6, 6];

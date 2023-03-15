@@ -1,4 +1,7 @@
-use super::{Zodiac, BA_ZI_WEIGHT_TIME, THE_EARTHLY_BRANCHES, THE_EARTHLY_BRANCHES_CHARS};
+use super::{Zodiac, THE_EARTHLY_BRANCHES, THE_EARTHLY_BRANCHES_CHARS};
+
+#[cfg(feature = "ba-zi-weight")]
+use super::BA_ZI_WEIGHT_TIME;
 
 use std::mem::transmute;
 
@@ -108,6 +111,7 @@ impl EarthlyBranch {
         unsafe { transmute(self) }
     }
 
+    #[cfg(feature = "ba-zi-weight")]
     /// 取得八字重量。
     #[inline]
     pub fn get_ba_zi_weight(self) -> u8 {

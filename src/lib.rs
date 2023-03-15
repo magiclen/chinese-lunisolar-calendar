@@ -39,6 +39,7 @@ assert_eq!("二零一八　戊戌、狗年　腊月　初十", lunisolar_date.to
 assert_eq!("二〇一八　戊戌、狗年　臘月　初十", lunisolar_date.to_chinese_string_2(ChineseVariant::Traditional));
 assert_eq!("二〇一八　戊戌、狗年　腊月　初十", lunisolar_date.to_chinese_string_2(ChineseVariant::Simple));
 
+# #[cfg(feature = "ba-zi-weight")]
 assert_eq!(4.3, lunisolar_date.get_ba_zi_weight_by_time(NaiveTime::from_hms(15, 30, 0)));
 ```
 */

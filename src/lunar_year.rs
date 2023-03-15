@@ -1,4 +1,7 @@
-use super::{EarthlyBranch, HeavenlyStems, Zodiac, BA_ZI_WEIGHT_YEARS, THE_LUNAR_YEARS};
+use super::{EarthlyBranch, HeavenlyStems, Zodiac, THE_LUNAR_YEARS};
+
+#[cfg(feature = "ba-zi-weight")]
+use super::BA_ZI_WEIGHT_YEARS;
 
 use std::cmp::Ordering;
 use std::fmt::{self, Display, Formatter};
@@ -85,6 +88,7 @@ impl LunarYear {
         self.earthly_branch.to_zodiac()
     }
 
+    #[cfg(feature = "ba-zi-weight")]
     /// 取得八字重量。
     #[inline]
     pub fn get_ba_zi_weight(&self) -> u8 {

@@ -1,9 +1,12 @@
 use super::{
-    ChineseVariant, EarthlyBranch, LunarDay, LunarMonth, LunarYear, LunisolarError, LunisolarYear,
+    ChineseVariant, LunarDay, LunarMonth, LunarYear, LunisolarError, LunisolarYear,
     SolarDate, SolarYear, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR,
     MAX_LUNAR_DATE_IN_SOLAR_CALENDAR_NEW_YEAR_DIFFERENCE, MAX_YEAR_IN_SOLAR_CALENDAR,
     MIN_LUNAR_DATE_IN_SOLAR_CALENDAR, MIN_YEAR_IN_SOLAR_CALENDAR, NEW_YEAR_DIFFERENCE,
 };
+
+#[cfg(feature = "ba-zi-weight")]
+use super::EarthlyBranch;
 
 use std::fmt::{self, Display, Formatter};
 use std::str::FromStr;
@@ -512,6 +515,7 @@ impl LunisolarDate {
         Self::the_n_day_in_this_year_inner(self.lunisolar_year, self.lunar_month, self.lunar_day)
     }
 
+    #[cfg(feature = "ba-zi-weight")]
     /// 搭配出生時間(地支)，來計算八字有幾兩重。
     ///
     /// * 子：２３～１
@@ -536,6 +540,7 @@ impl LunisolarDate {
         f64::from(sum) / 10.0
     }
 
+    #[cfg(feature = "ba-zi-weight")]
     /// 搭配出生時間，來計算八字有幾兩重。
     #[inline]
     pub fn get_ba_zi_weight_by_time<T: Timelike>(self, time: T) -> f64 {

@@ -1,7 +1,9 @@
 use super::{
-    ChineseVariant, LunisolarYear, BA_ZI_WEIGHT_MONTHS, BIG_MONTHS, MIN_YEAR_IN_SOLAR_CALENDAR,
-    THE_LUNAR_MONTHS,
+    ChineseVariant, LunisolarYear, BIG_MONTHS, MIN_YEAR_IN_SOLAR_CALENDAR, THE_LUNAR_MONTHS,
 };
+
+#[cfg(feature = "ba-zi-weight")]
+use super::BA_ZI_WEIGHT_MONTHS;
 
 use std::mem::transmute;
 
@@ -197,6 +199,7 @@ impl LunarMonth {
         }
     }
 
+    #[cfg(feature = "ba-zi-weight")]
     /// 取得八字重量。
     #[inline]
     pub fn get_ba_zi_weight(self) -> u8 {
