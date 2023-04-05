@@ -1,12 +1,12 @@
-use super::THE_LUNAR_DAYS;
+use std::{
+    fmt::{self, Display, Formatter},
+    mem::transmute,
+    str::FromStr,
+};
 
 #[cfg(feature = "ba-zi-weight")]
 use super::BA_ZI_WEIGHT_DAYS;
-
-use std::mem::transmute;
-
-use std::fmt::{self, Display, Formatter};
-use std::str::FromStr;
+use super::THE_LUNAR_DAYS;
 
 /// 列舉農曆三十個天數名稱：初一、初二、...、十一、十二、...、廿一、廿二、...、三十。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]

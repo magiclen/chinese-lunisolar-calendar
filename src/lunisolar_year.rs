@@ -1,9 +1,9 @@
+use std::fmt::{self, Display, Formatter};
+
 use super::{
     EarthlyBranch, HeavenlyStems, LunarMonth, LunarYear, SolarYear, Zodiac, BIG_MONTHS,
     LEAP_MONTHS, MAX_YEAR_IN_SOLAR_CALENDAR, MIN_YEAR_IN_SOLAR_CALENDAR,
 };
-
-use std::fmt::{self, Display, Formatter};
 
 /// 農曆西曆年，農曆新年所在的西曆年份。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
@@ -70,11 +70,7 @@ impl LunisolarYear {
 
         let month = LEAP_MONTHS[((year - MIN_YEAR_IN_SOLAR_CALENDAR) / 2) as usize];
 
-        let index = if year % 2 == 1 {
-            (month & 0xf0) >> 4
-        } else {
-            month & 0x0f
-        };
+        let index = if year % 2 == 1 { (month & 0xF0) >> 4 } else { month & 0x0F };
 
         if index == 0 {
             None
@@ -116,12 +112,10 @@ impl LunisolarYear {
         let leap_lunar_month = self.get_leap_lunar_month();
 
         let (leap_month, mut n) = match leap_lunar_month {
-            Some(leap_lunar_month) => {
-                (
-                    leap_lunar_month.to_u8(),
-                    self.get_total_days_in_leap_month_inner(leap_lunar_month),
-                )
-            }
+            Some(leap_lunar_month) => (
+                leap_lunar_month.to_u8(),
+                self.get_total_days_in_leap_month_inner(leap_lunar_month),
+            ),
             None => (0, 0),
         };
 

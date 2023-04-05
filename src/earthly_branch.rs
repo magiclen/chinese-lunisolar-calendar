@@ -1,14 +1,14 @@
-use super::{Zodiac, THE_EARTHLY_BRANCHES, THE_EARTHLY_BRANCHES_CHARS};
+use std::{
+    fmt::{self, Display, Formatter},
+    mem::transmute,
+    str::FromStr,
+};
+
+use chrono::prelude::*;
 
 #[cfg(feature = "ba-zi-weight")]
 use super::BA_ZI_WEIGHT_TIME;
-
-use std::mem::transmute;
-
-use std::fmt::{self, Display, Formatter};
-use std::str::FromStr;
-
-use chrono::prelude::*;
+use super::{Zodiac, THE_EARTHLY_BRANCHES, THE_EARTHLY_BRANCHES_CHARS};
 
 /// 列舉中國十二地支：子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]

@@ -1,9 +1,10 @@
+use std::{
+    fmt::{self, Display, Formatter},
+    mem::transmute,
+    str::FromStr,
+};
+
 use super::THE_SOLAR_DAYS;
-
-use std::mem::transmute;
-
-use std::fmt::{self, Display, Formatter};
-use std::str::FromStr;
 
 /// 列舉西曆三十一個天數名稱：一、二、...、十一、十二、...、二十一、二十二、...、三十、三十一。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]

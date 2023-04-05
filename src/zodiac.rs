@@ -1,9 +1,10 @@
+use std::{
+    fmt::{self, Display, Formatter},
+    mem::transmute,
+    str::FromStr,
+};
+
 use super::{ChineseVariant, EarthlyBranch, THE_ZODIAC_SIGNS, THE_ZODIAC_SIGNS_CHARS};
-
-use std::mem::transmute;
-
-use std::fmt::{self, Display, Formatter};
-use std::str::FromStr;
 
 /// 列舉中國十二生肖：鼠、牛、虎、兔、龍、蛇、馬、羊、猴、雞、狗、豬。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]

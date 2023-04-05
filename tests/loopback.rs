@@ -1,8 +1,8 @@
 use std::ops::Add;
 
-use chinese_lunisolar_calendar::chrono::Duration;
 use chinese_lunisolar_calendar::{
-    LunisolarDate, SolarDate, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR, MIN_LUNAR_DATE_IN_SOLAR_CALENDAR,
+    chrono::Duration, LunisolarDate, SolarDate, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR,
+    MIN_LUNAR_DATE_IN_SOLAR_CALENDAR,
 };
 
 #[test]

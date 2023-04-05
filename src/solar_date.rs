@@ -1,21 +1,21 @@
+use std::{
+    fmt::{self, Display, Formatter},
+    str::FromStr,
+};
+
+use chrono::{prelude::*, NaiveDate};
+
 use super::{
     LunisolarDate, LunisolarError, SolarDay, SolarMonth, SolarYear, MIN_YEAR_IN_SOLAR_CALENDAR,
     NEW_YEAR_DIFFERENCE,
 };
 
-use std::fmt::{self, Display, Formatter};
-
-use chrono::prelude::*;
-
-use chrono::NaiveDate;
-use std::str::FromStr;
-
 /// 西曆年月日。
 #[derive(Debug, PartialEq, Clone, Eq, Hash, Copy)]
 pub struct SolarDate {
-    solar_year: SolarYear,
+    solar_year:  SolarYear,
     solar_month: SolarMonth,
-    solar_day: SolarDay,
+    solar_day:   SolarDay,
 }
 
 impl SolarDate {
@@ -170,12 +170,10 @@ impl SolarDate {
         let year_index = {
             match s.find('年') {
                 Some(index) => index,
-                None => {
-                    match s.find('　') {
-                        Some(index) => index,
-                        None => return Err(LunisolarError::IncorrectSolarYear),
-                    }
-                }
+                None => match s.find('　') {
+                    Some(index) => index,
+                    None => return Err(LunisolarError::IncorrectSolarYear),
+                },
             }
         };
 
@@ -191,12 +189,10 @@ impl SolarDate {
         let month_index = {
             match s.find('月') {
                 Some(index) => index,
-                None => {
-                    match s.find('　') {
-                        Some(index) => index,
-                        None => return Err(LunisolarError::IncorrectSolarMonth),
-                    }
-                }
+                None => match s.find('　') {
+                    Some(index) => index,
+                    None => return Err(LunisolarError::IncorrectSolarMonth),
+                },
             }
         };
 

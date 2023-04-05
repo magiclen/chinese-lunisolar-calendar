@@ -1,18 +1,19 @@
-use super::{EarthlyBranch, HeavenlyStems, Zodiac, THE_LUNAR_YEARS};
+use std::{
+    cmp::Ordering,
+    fmt::{self, Display, Formatter},
+    str::FromStr,
+};
 
 #[cfg(feature = "ba-zi-weight")]
 use super::BA_ZI_WEIGHT_YEARS;
-
-use std::cmp::Ordering;
-use std::fmt::{self, Display, Formatter};
-use std::str::FromStr;
+use super::{EarthlyBranch, HeavenlyStems, Zodiac, THE_LUNAR_YEARS};
 
 /// 農曆年份，由天干加地支組成，六十年一輪。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
 pub struct LunarYear {
     heavenly_stems: HeavenlyStems,
     earthly_branch: EarthlyBranch,
-    year_index: usize,
+    year_index:     usize,
 }
 
 impl LunarYear {
@@ -28,7 +29,7 @@ impl LunarYear {
                     LunarYear {
                         heavenly_stems: HeavenlyStems::from_ordinal_unsafe(i as i8 % 10),
                         earthly_branch: EarthlyBranch::from_ordinal_unsafe(i as i8 % 12),
-                        year_index: i,
+                        year_index:     i,
                     }
                 });
             }
@@ -55,12 +56,12 @@ impl LunarYear {
                 let diff = e - h;
 
                 h + (12 - diff) * 5
-            }
+            },
             Ordering::Greater => {
                 let diff = h - e;
 
                 e + diff * 6
-            }
+            },
         };
 
         LunarYear {

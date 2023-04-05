@@ -49,10 +49,8 @@ assert_eq!(4.3, lunisolar_date.get_ba_zi_weight_by_time(NaiveTime::from_hms(15, 
 pub extern crate chrono;
 
 pub use chinese_variant::ChineseVariant;
-
-use once_cell::sync::Lazy;
-
 use chrono::prelude::*;
+use once_cell::sync::Lazy;
 
 mod constants;
 

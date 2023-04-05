@@ -1,5 +1,7 @@
-use std::error::Error;
-use std::fmt::{Display, Error as FmtError, Formatter};
+use std::{
+    error::Error,
+    fmt::{Display, Error as FmtError, Formatter},
+};
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum LunisolarError {

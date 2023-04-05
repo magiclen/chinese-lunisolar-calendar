@@ -1,7 +1,8 @@
 #![allow(deprecated)] // wait for chrono 0.5
 
-use chinese_lunisolar_calendar::chrono::prelude::*;
-use chinese_lunisolar_calendar::{LunisolarDate, SolarDate, SolarDay, SolarMonth, SolarYear};
+use chinese_lunisolar_calendar::{
+    chrono::prelude::*, LunisolarDate, SolarDate, SolarDay, SolarMonth, SolarYear,
+};
 
 #[test]
 fn from_naive_date() {

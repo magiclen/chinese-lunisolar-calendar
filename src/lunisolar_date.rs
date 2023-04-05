@@ -1,3 +1,12 @@
+use std::{
+    fmt::{self, Display, Formatter},
+    str::FromStr,
+};
+
+use chrono::{prelude::*, NaiveDate};
+
+#[cfg(feature = "ba-zi-weight")]
+use super::EarthlyBranch;
 use super::{
     ChineseVariant, LunarDay, LunarMonth, LunarYear, LunisolarError, LunisolarYear, SolarDate,
     SolarYear, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR,
@@ -5,22 +14,13 @@ use super::{
     MIN_LUNAR_DATE_IN_SOLAR_CALENDAR, MIN_YEAR_IN_SOLAR_CALENDAR, NEW_YEAR_DIFFERENCE,
 };
 
-#[cfg(feature = "ba-zi-weight")]
-use super::EarthlyBranch;
-
-use std::fmt::{self, Display, Formatter};
-use std::str::FromStr;
-
-use chrono::prelude::*;
-use chrono::NaiveDate;
-
 /// 農曆年月日，必須包含西曆年。
 #[derive(Debug, PartialEq, Clone, Eq, Hash, Copy)]
 pub struct LunisolarDate {
-    solar_year: SolarYear,
+    solar_year:     SolarYear,
     lunisolar_year: LunisolarYear,
-    lunar_month: LunarMonth,
-    lunar_day: LunarDay,
+    lunar_month:    LunarMonth,
+    lunar_day:      LunarDay,
 }
 
 impl LunisolarDate {
@@ -51,13 +51,11 @@ impl LunisolarDate {
                 let leap_lunar_month = lunisolar_year.get_leap_lunar_month();
 
                 match leap_lunar_month {
-                    Some(leap_lunar_month) => {
-                        (
-                            leap_lunar_month.to_u8(),
-                            lunisolar_year.get_total_days_in_leap_month_inner(leap_lunar_month),
-                            new_year_diff,
-                        )
-                    }
+                    Some(leap_lunar_month) => (
+                        leap_lunar_month.to_u8(),
+                        lunisolar_year.get_total_days_in_leap_month_inner(leap_lunar_month),
+                        new_year_diff,
+                    ),
                     None => (0, 0, new_year_diff),
                 }
             };
@@ -69,12 +67,10 @@ impl LunisolarDate {
                 let leap_lunar_month = lunisolar_year.get_leap_lunar_month();
 
                 let (leap_month, leap_days) = match leap_lunar_month {
-                    Some(leap_lunar_month) => {
-                        (
-                            leap_lunar_month.to_u8(),
-                            lunisolar_year.get_total_days_in_leap_month_inner(leap_lunar_month),
-                        )
-                    }
+                    Some(leap_lunar_month) => (
+                        leap_lunar_month.to_u8(),
+                        lunisolar_year.get_total_days_in_leap_month_inner(leap_lunar_month),
+                    ),
                     None => (0, 0),
                 };
 
@@ -259,7 +255,7 @@ impl LunisolarDate {
                     if lunar_month != leap_lunar_month {
                         return Err(LunisolarError::IncorrectLunarMonth);
                     }
-                }
+                },
                 None => return Err(LunisolarError::IncorrectLunarMonth),
             }
         }
@@ -319,24 +315,20 @@ impl LunisolarDate {
         let year_index = {
             match s.find('　') {
                 Some(index) => index,
-                None => {
-                    match s.find('年') {
-                        Some(index) => index,
-                        None => return Err(LunisolarError::IncorrectLunisolarYear),
-                    }
-                }
+                None => match s.find('年') {
+                    Some(index) => index,
+                    None => return Err(LunisolarError::IncorrectLunisolarYear),
+                },
             }
         };
 
         let year_str = s[..year_index].trim();
 
         let lunisolar_year = match SolarYear::from_str(year_str) {
-            Some(solar_year) => {
-                match LunisolarYear::from_solar_year(solar_year) {
-                    Some(lunisolar_year) => lunisolar_year,
-                    None => return Err(LunisolarError::IncorrectLunisolarYear),
-                }
-            }
+            Some(solar_year) => match LunisolarYear::from_solar_year(solar_year) {
+                Some(lunisolar_year) => lunisolar_year,
+                None => return Err(LunisolarError::IncorrectLunisolarYear),
+            },
             None => return Err(LunisolarError::IncorrectLunisolarYear),
         };
 
@@ -345,12 +337,10 @@ impl LunisolarDate {
         let month_index = {
             match s.find('月') {
                 Some(index) => index,
-                None => {
-                    match s.find('　') {
-                        Some(index) => index,
-                        None => return Err(LunisolarError::IncorrectLunarMonth),
-                    }
-                }
+                None => match s.find('　') {
+                    Some(index) => index,
+                    None => return Err(LunisolarError::IncorrectLunarMonth),
+                },
             }
         };
 
@@ -359,12 +349,10 @@ impl LunisolarDate {
         let month_str = {
             match month_str.find('年') {
                 Some(index) => month_str[index + 3..].trim(),
-                None => {
-                    match month_str.find('　') {
-                        Some(index) => month_str[index + 3..].trim(),
-                        None => month_str,
-                    }
-                }
+                None => match month_str.find('　') {
+                    Some(index) => month_str[index + 3..].trim(),
+                    None => month_str,
+                },
             }
         };
 

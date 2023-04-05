@@ -1,9 +1,10 @@
+use std::{
+    fmt::{self, Display, Formatter},
+    mem::transmute,
+    str::FromStr,
+};
+
 use super::{THE_HEAVENLY_STEMS, THE_HEAVENLY_STEMS_CHARS};
-
-use std::mem::transmute;
-
-use std::fmt::{self, Display, Formatter};
-use std::str::FromStr;
 
 /// 列舉中國十天干：甲、乙、丙、丁、戊、己、更、辛、壬、葵。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]

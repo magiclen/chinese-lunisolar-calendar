@@ -18,7 +18,7 @@ once_cell = "1"
 chinese-variant = "1.0.1"
 
 [dev-dependencies]
-assert_approx_eq = "1.1"
+assert-eq-float = "0.1"
 
 [features]
 default = ["ba-zi-weight"]

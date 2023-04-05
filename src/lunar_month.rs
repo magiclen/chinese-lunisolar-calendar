@@ -1,14 +1,14 @@
-use super::{
-    ChineseVariant, LunisolarYear, BIG_MONTHS, MIN_YEAR_IN_SOLAR_CALENDAR, THE_LUNAR_MONTHS,
+use std::{
+    fmt::{self, Display, Formatter},
+    mem::transmute,
+    str::FromStr,
 };
 
 #[cfg(feature = "ba-zi-weight")]
 use super::BA_ZI_WEIGHT_MONTHS;
-
-use std::mem::transmute;
-
-use std::fmt::{self, Display, Formatter};
-use std::str::FromStr;
+use super::{
+    ChineseVariant, LunisolarYear, BIG_MONTHS, MIN_YEAR_IN_SOLAR_CALENDAR, THE_LUNAR_MONTHS,
+};
 
 /// 列舉農曆十二個月份名稱：正月、二月、三月、四月、五月、六月、七月、八月、九月、十月、冬月、臘月。包含閏月。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]

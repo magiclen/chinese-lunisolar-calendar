@@ -1,8 +1,6 @@
 #![allow(deprecated)] // wait for chrono 0.5
 
-use chinese_lunisolar_calendar::{EarthlyBranch, Zodiac};
-
-use chinese_lunisolar_calendar::chrono::prelude::*;
+use chinese_lunisolar_calendar::{chrono::prelude::*, EarthlyBranch, Zodiac};
 
 #[test]
 fn from_str() {

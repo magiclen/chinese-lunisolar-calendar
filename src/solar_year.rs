@@ -1,9 +1,11 @@
+use std::{
+    fmt::{self, Display, Formatter},
+    str::FromStr,
+};
+
 use super::{
     SolarMonth, THE_SOLAR_YEAR_NUMBERS, THE_SOLAR_YEAR_NUMBERS_2, THE_SOLAR_YEAR_NUMBERS_CHARS,
 };
-
-use std::fmt::{self, Display, Formatter};
-use std::str::FromStr;
 
 /// 西曆年份。
 #[derive(Debug, PartialOrd, Ord, PartialEq, Clone, Eq, Hash, Copy)]
@@ -49,7 +51,7 @@ impl SolarYear {
         }
 
         Some(SolarYear {
-            year: year as u16,
+            year: year as u16
         })
     }
 
