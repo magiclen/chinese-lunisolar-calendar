@@ -472,8 +472,6 @@ impl LunisolarDate {
     ) -> u16 {
         let mut n = u16::from(lunar_day.to_u8());
 
-        let lunisolar_year = lunisolar_year;
-
         let month = lunar_month.to_u8();
 
         if lunar_month.is_leap_month() {

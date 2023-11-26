@@ -1,6 +1,6 @@
 [package]
 name = "chinese-lunisolar-calendar"
-version = "0.1.26"
+version = "0.1.27"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2021"
 rust-version = "1.60"
@@ -24,3 +24,7 @@ assert-eq-float = "0.1"
 default = ["ba-zi-weight"]
 
 ba-zi-weight = []
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
