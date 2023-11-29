@@ -22,7 +22,9 @@ jobs:
           - nightly
         features:
           -
+          - --features ba-zi-weight
           - --no-default-features
+          - --no-default-features --features ba-zi-weight
     name: Test ${{ matrix.toolchain }} on ${{ matrix.os }} (${{ matrix.features }})
     runs-on: ${{ matrix.os }}
     steps:
@@ -42,10 +44,12 @@ jobs:
           - macos-latest
           - windows-latest
         toolchain:
-          - "1.60"
+          - 1.67
         features:
           -
+          - --features ba-zi-weight
           - --no-default-features
+          - --no-default-features --features ba-zi-weight
     name: Test ${{ matrix.toolchain }} on ${{ matrix.os }} (${{ matrix.features }})
     runs-on: ${{ matrix.os }}
     steps:

@@ -1,21 +1,20 @@
 use std::ops::Add;
 
 use chinese_lunisolar_calendar::{
-    chrono::Duration, LunisolarDate, SolarDate, MAX_LUNAR_DATE_IN_SOLAR_CALENDAR,
-    MIN_LUNAR_DATE_IN_SOLAR_CALENDAR,
+    chrono::Duration, LunisolarDate, MAX_LUNISOLAR_DATE_IN_SOLAR_DATE,
+    MIN_LUNISOLAR_DATE_IN_SOLAR_DATE,
 };
 
 #[test]
 fn loopback() {
-    let mut current = *MIN_LUNAR_DATE_IN_SOLAR_CALENDAR;
+    let mut current = MIN_LUNISOLAR_DATE_IN_SOLAR_DATE;
 
-    while current <= *MAX_LUNAR_DATE_IN_SOLAR_CALENDAR {
-        let lunar_date = LunisolarDate::from_naive_date(current).unwrap();
-        let solar_date = SolarDate::from_naive_date(current).unwrap();
+    while current <= MAX_LUNISOLAR_DATE_IN_SOLAR_DATE {
+        let lunar_date = LunisolarDate::from_solar_date(current).unwrap();
 
-        assert_eq!(lunar_date, solar_date.to_lunisolar_date().unwrap());
-        assert_eq!(solar_date, lunar_date.to_solar_date());
+        assert_eq!(lunar_date, current.to_lunisolar_date().unwrap());
+        assert_eq!(current, lunar_date.to_solar_date());
 
-        current = current.add(Duration::days(1));
+        current = current.to_naive_date().add(Duration::days(1)).try_into().unwrap();
     }
 }

@@ -1,131 +1,56 @@
 /*!
 # Chinese Lunisolar Calendar
 
-The traditional Chinese Calendar, called **農曆** or **陰曆** in Chinese, is based on the moon, so it's also known as Lunar Calendar.
+The traditional Chinese Calendar, known as 農曆 or 陰曆 in Chinese, is based on the moon, and is commonly referred to as the Lunar Calendar.
 
-Because the cycle of Lunar Calendar is 60 years and there are no regular rules for the days in each lunar month and even the number of months in a lunar year, it's hard to use Lunar Calendar without referencing any other calendars. The Lunisolar Calendar is a way to combine both of the Solar Calendar (Gregorian Calendar) and the Lunar Calendar in order to make it accurate, predictable and useful.
+Due to the Lunar Calendar's 60-year cycle and the absence of regular rules for the days in each lunar month, as well as the variable number of months in a lunar year, using the Lunar Calendar without referencing other calendars can be challenging. The Lunisolar Calendar is designed to address this issue by combining both the Solar Calendar (Gregorian Calendar) and the Lunar Calendar, ensuring accuracy, predictability, and practicality.
 
-The Lunisolar Calendar relies on three datasets, `BIG_MONTHS`, `LEAP_MONTHS`, and `NEW_YEAR_DIFFERENCE` which are written in the **constants.rs** file. Currently, the data range is from 1901 to 2100 (lunisolar year), so this Lunisolar Calendar supports from 1901-02-19 to 2101-01-28 (in Solar Calendar).
-
-This library allows you to convert a date between the Lunisolar Calendar and the Solar Calendar, and to compute the weight of Ba Zi(八字). Moreover, it can convert a date to a Chinese text string and parse a Chinese text string to a date in Simple Chinese or Traditional Chinese.
+This library allows you to seamlessly convert dates between the Lunisolar Calendar and the Solar Calendar, compute the Ba Zi (八字) weight, and also convert dates to Chinese text strings. Furthermore, it enables parsing of Chinese text strings into dates in both Simplified Chinese and Traditional Chinese.
 
 ## Examples
 
 ```rust
-# #![allow(deprecated)] // wait for chrono 0.5
-
-use chinese_lunisolar_calendar::chrono::prelude::*;
-
 use chinese_lunisolar_calendar::SolarDate;
 
-let solar_date = SolarDate::from_naive_date(NaiveDate::from_ymd(2019, 1, 15)).unwrap();
+let solar_date = SolarDate::from_ymd(2019, 1, 15).unwrap();
 
-assert_eq!("二零一九年一月十五日", solar_date.to_chinese_string());
-assert_eq!("二〇一九年一月十五日", solar_date.to_chinese_string_2());
+assert_eq!("二〇一九年一月十五日", solar_date.to_string());
 ```
 
 ```rust
-# #![allow(deprecated)] // wait for chrono 0.5
+use chinese_lunisolar_calendar::{LunisolarDate, SolarDate};
 
-use chinese_lunisolar_calendar::chrono::prelude::*;
+let lunisolar_date = LunisolarDate::from_solar_date(SolarDate::from_ymd(2019, 1, 15).unwrap()).unwrap();
 
-use chinese_lunisolar_calendar::{ChineseVariant, LunisolarDate};
+assert_eq!("二〇一八　戊戌、狗年　臘月　初十", lunisolar_date.to_string());
 
-let lunisolar_date = LunisolarDate::from_naive_date(NaiveDate::from_ymd(2019, 1, 15)).unwrap();
-
-assert_eq!(2019, lunisolar_date.get_solar_year().to_u16());
-assert_eq!("二零一八　戊戌、狗年　臘月　初十", lunisolar_date.to_chinese_string(ChineseVariant::Traditional));
-assert_eq!("二零一八　戊戌、狗年　腊月　初十", lunisolar_date.to_chinese_string(ChineseVariant::Simple));
-assert_eq!("二〇一八　戊戌、狗年　臘月　初十", lunisolar_date.to_chinese_string_2(ChineseVariant::Traditional));
-assert_eq!("二〇一八　戊戌、狗年　腊月　初十", lunisolar_date.to_chinese_string_2(ChineseVariant::Simple));
+assert_eq!("二〇一八　戊戌、狗年　臘月　初十", format!("{lunisolar_date}"));
+assert_eq!("二〇一八　戊戌、狗年　腊月　初十", format!("{lunisolar_date:#}"));
 
 # #[cfg(feature = "ba-zi-weight")]
-assert_eq!(4.3, lunisolar_date.get_ba_zi_weight_by_time(NaiveTime::from_hms(15, 30, 0)));
+# {
+use chinese_lunisolar_calendar::EarthlyBranch;
+assert_eq!(43, lunisolar_date.get_ba_zi_weight(EarthlyBranch::Ninth));
+# }
 ```
 */
 
-#![allow(deprecated)] // wait for chrono 0.5
+#![cfg_attr(not(feature = "std"), no_std)]
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
 
 pub extern crate chrono;
 
-pub use chinese_variant::ChineseVariant;
-use chrono::prelude::*;
-use once_cell::sync::Lazy;
-
-mod constants;
-
-pub(crate) use constants::*;
-
-/// 最大支援的農曆西曆年。*(u16)*
-pub const MAX_YEAR_IN_SOLAR_CALENDAR: u16 = 2101;
-
-/// 最小支援的農曆西曆年。*(u16)*
-pub const MIN_YEAR_IN_SOLAR_CALENDAR: u16 = 1901;
-
-/// 最大支援的農曆日期(以西曆日期表示)：2101-01-28。*(`once_cell::sync::Lazy` 的實體)*
-pub static MAX_LUNAR_DATE_IN_SOLAR_CALENDAR: Lazy<NaiveDate> =
-    Lazy::new(|| Utc.ymd(i32::from(MAX_YEAR_IN_SOLAR_CALENDAR), 1, 28).naive_utc());
-
-pub(crate) static MAX_LUNAR_DATE_IN_SOLAR_CALENDAR_NEW_YEAR_DIFFERENCE: Lazy<u16> =
-    Lazy::new(|| {
-        SolarDate::from_naive_date(*MAX_LUNAR_DATE_IN_SOLAR_CALENDAR)
-            .unwrap()
-            .the_n_day_in_this_year()
-    });
-
-/// 最小支援的農曆日期(以西曆日期表示)：1901-02-19。*(`once_cell::sync::Lazy` 的實體)*
-pub static MIN_LUNAR_DATE_IN_SOLAR_CALENDAR: Lazy<NaiveDate> =
-    Lazy::new(|| Utc.ymd(i32::from(MIN_YEAR_IN_SOLAR_CALENDAR), 2, 19).naive_utc());
-
-mod lunisolar_error;
-
-pub use self::lunisolar_error::LunisolarError;
-
+mod earthly_branch;
+mod heavenly_stems;
+mod lunar;
+mod lunisolar;
+mod solar;
 mod zodiac;
 
-pub use self::zodiac::Zodiac;
-
-mod earthly_branch;
-
-pub use self::earthly_branch::EarthlyBranch;
-
-mod heavenly_stems;
-
-pub use self::heavenly_stems::HeavenlyStems;
-
-mod solar_year;
-
-pub use self::solar_year::SolarYear;
-
-mod solar_month;
-
-pub use self::solar_month::SolarMonth;
-
-mod solar_day;
-
-pub use self::solar_day::SolarDay;
-
-mod solar_date;
-
-pub use self::solar_date::SolarDate;
-
-mod lunar_year;
-
-pub use self::lunar_year::LunarYear;
-
-mod lunar_month;
-
-pub use self::lunar_month::LunarMonth;
-
-mod lunar_day;
-
-pub use self::lunar_day::LunarDay;
-
-mod lunisolar_date;
-
-pub use self::lunisolar_date::LunisolarDate;
-
-mod lunisolar_year;
-
-pub use self::lunisolar_year::LunisolarYear;
+pub use chinese_variant::ChineseVariant;
+pub use earthly_branch::*;
+pub use heavenly_stems::*;
+pub use lunar::*;
+pub use lunisolar::*;
+pub use solar::*;
+pub use zodiac::*;

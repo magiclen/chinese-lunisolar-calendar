@@ -1,23 +1,23 @@
 use chinese_lunisolar_calendar::{ChineseVariant, EarthlyBranch, Zodiac};
 
 #[test]
-fn from_str() {
-    assert_eq!(Zodiac::Rat, Zodiac::from_str("鼠").unwrap());
-    assert_eq!(Zodiac::Ox, Zodiac::from_str("牛").unwrap());
-    assert_eq!(Zodiac::Dragon, Zodiac::from_str("龍").unwrap());
-    assert_eq!(Zodiac::Dragon, Zodiac::from_str("龙").unwrap());
-    assert_eq!(Zodiac::Pig, Zodiac::from_str("豬").unwrap());
-    assert_eq!(Zodiac::Pig, Zodiac::from_str("猪").unwrap());
+fn parse_str() {
+    assert_eq!(Zodiac::Rat, Zodiac::parse_str("鼠").unwrap());
+    assert_eq!(Zodiac::Ox, Zodiac::parse_str("牛").unwrap());
+    assert_eq!(Zodiac::Dragon, Zodiac::parse_str("龍").unwrap());
+    assert_eq!(Zodiac::Dragon, Zodiac::parse_str("龙").unwrap());
+    assert_eq!(Zodiac::Pig, Zodiac::parse_str("豬").unwrap());
+    assert_eq!(Zodiac::Pig, Zodiac::parse_str("猪").unwrap());
 }
 
 #[test]
 fn to_str() {
-    assert_eq!(Zodiac::Rat.to_str(ChineseVariant::Traditional), "鼠");
-    assert_eq!(Zodiac::Ox.to_str(ChineseVariant::Traditional), "牛");
-    assert_eq!(Zodiac::Dragon.to_str(ChineseVariant::Traditional), "龍");
-    assert_eq!(Zodiac::Dragon.to_str(ChineseVariant::Simple), "龙");
-    assert_eq!(Zodiac::Pig.to_str(ChineseVariant::Traditional), "豬");
-    assert_eq!(Zodiac::Pig.to_str(ChineseVariant::Simple), "猪");
+    assert_eq!("鼠", Zodiac::Rat.to_str(ChineseVariant::Traditional));
+    assert_eq!("牛", Zodiac::Ox.to_str(ChineseVariant::Traditional));
+    assert_eq!("龍", Zodiac::Dragon.to_str(ChineseVariant::Traditional));
+    assert_eq!("龙", Zodiac::Dragon.to_str(ChineseVariant::Simple));
+    assert_eq!("豬", Zodiac::Pig.to_str(ChineseVariant::Traditional));
+    assert_eq!("猪", Zodiac::Pig.to_str(ChineseVariant::Simple));
 }
 
 #[test]
@@ -32,20 +32,20 @@ fn from_char() {
 
 #[test]
 fn to_char() {
-    assert_eq!(Zodiac::Rat.to_char(ChineseVariant::Traditional), '鼠');
-    assert_eq!(Zodiac::Ox.to_char(ChineseVariant::Traditional), '牛');
-    assert_eq!(Zodiac::Dragon.to_char(ChineseVariant::Traditional), '龍');
-    assert_eq!(Zodiac::Dragon.to_char(ChineseVariant::Simple), '龙');
-    assert_eq!(Zodiac::Pig.to_char(ChineseVariant::Traditional), '豬');
-    assert_eq!(Zodiac::Pig.to_char(ChineseVariant::Simple), '猪');
+    assert_eq!('鼠', Zodiac::Rat.to_char(ChineseVariant::Traditional),);
+    assert_eq!('牛', Zodiac::Ox.to_char(ChineseVariant::Traditional));
+    assert_eq!('龍', Zodiac::Dragon.to_char(ChineseVariant::Traditional));
+    assert_eq!('龙', Zodiac::Dragon.to_char(ChineseVariant::Simple));
+    assert_eq!('豬', Zodiac::Pig.to_char(ChineseVariant::Traditional));
+    assert_eq!('猪', Zodiac::Pig.to_char(ChineseVariant::Simple));
 }
 
 #[test]
 fn from_earthly_branch() {
-    assert_eq!(Zodiac::from_earthly_branch(EarthlyBranch::First), Zodiac::Rat);
-    assert_eq!(Zodiac::from_earthly_branch(EarthlyBranch::Second), Zodiac::Ox);
-    assert_eq!(Zodiac::from_earthly_branch(EarthlyBranch::Fifth), Zodiac::Dragon);
-    assert_eq!(Zodiac::from_earthly_branch(EarthlyBranch::Twelfth), Zodiac::Pig);
+    assert_eq!(Zodiac::Rat, Zodiac::from_earthly_branch(EarthlyBranch::First));
+    assert_eq!(Zodiac::Ox, Zodiac::from_earthly_branch(EarthlyBranch::Second),);
+    assert_eq!(Zodiac::Dragon, Zodiac::from_earthly_branch(EarthlyBranch::Fifth));
+    assert_eq!(Zodiac::Pig, Zodiac::from_earthly_branch(EarthlyBranch::Twelfth));
 }
 
 #[test]

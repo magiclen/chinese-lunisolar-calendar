@@ -1,27 +1,29 @@
 [package]
 name = "chinese-lunisolar-calendar"
-version = "0.1.27"
+version = "0.2.0"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2021"
-rust-version = "1.60"
+rust-version = "1.67"
 repository = "https://github.com/magiclen/chinese-lunisolar-calendar"
 homepage = "https://magiclen.org/chinese-lunisolar-calendar"
 keywords = ["chinese", "calendar", "lunar", "leap", "solar"]
-categories = ["localization", "date-and-time"]
-description = "The traditional Chinese Calendar, called 農曆 or 陰曆 in Chinese, is based on the moon, so it's also known as Lunar Calendar."
+categories = ["no-std", "localization", "date-and-time"]
+description = "The traditional Chinese Calendar, known as 農曆 or 陰曆 in Chinese, is based on the moon, and is commonly referred to as the Lunar Calendar."
 license = "MIT"
 include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]
 
 [dependencies]
-chrono = "0.4.6"
-once_cell = "1"
-chinese-variant = "1.0.1"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+year-helper = "0.2"
 
-[dev-dependencies]
-assert-eq-float = "0.1"
+chinese-variant = "1"
+
+enum-ordinalize = { version = "4.2", default-features = false, features = ["derive", "traits"] }
 
 [features]
-default = ["ba-zi-weight"]
+default = ["std"]
+
+std = ["chrono/std"]
 
 ba-zi-weight = []
 
