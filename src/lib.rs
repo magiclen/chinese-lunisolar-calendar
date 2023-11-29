@@ -33,6 +33,18 @@ use chinese_lunisolar_calendar::EarthlyBranch;
 assert_eq!(43, lunisolar_date.get_ba_zi_weight(EarthlyBranch::Ninth));
 # }
 ```
+
+To calculate the Ba Zi weight, the `ba-zi-weight` feature must be enabled.
+
+## No Std
+
+Disable the default features to compile this crate without std.
+
+```toml
+[dependencies.chinese-lunisolar-calendar]
+version = "*"
+default-features = false
+```
 */
 
 #![cfg_attr(not(feature = "std"), no_std)]
