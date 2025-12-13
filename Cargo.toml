@@ -1,9 +1,9 @@
 [package]
 name = "chinese-lunisolar-calendar"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2021"
-rust-version = "1.67"
+rust-version = "1.68"
 repository = "https://github.com/magiclen/chinese-lunisolar-calendar"
 homepage = "https://magiclen.org/chinese-lunisolar-calendar"
 keywords = ["chinese", "calendar", "lunar", "leap", "solar"]
@@ -29,4 +29,4 @@ ba-zi-weight = []
 
 [package.metadata.docs.rs]
 all-features = true
-rustdoc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs_1_92"]
