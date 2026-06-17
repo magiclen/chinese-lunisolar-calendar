@@ -7,7 +7,7 @@ use crate::{EarthlyBranch, HeavenlyStems, LunarMonth, LunarYear, SolarYear, Zodi
 /// 最小支援的農曆西曆年。
 pub const MIN_YEAR_IN_SOLAR_CALENDAR: u16 = 1901;
 /// 最大支援的農曆西曆年。
-pub const MAX_YEAR_IN_SOLAR_CALENDAR: u16 = 2101;
+pub const MAX_YEAR_IN_SOLAR_CALENDAR: u16 = 2100;
 
 /// 農曆西曆年，農曆新年所在的西曆年份。
 #[derive(Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash)]

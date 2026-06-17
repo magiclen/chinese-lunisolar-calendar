@@ -4,7 +4,10 @@ mod built_in_traits;
 mod chinese;
 mod parse;
 
-use core::fmt::{self, Display, Formatter};
+use core::{
+    cmp::Ordering,
+    fmt::{self, Display, Formatter},
+};
 
 use chinese::THE_LUNAR_MONTHS;
 use chinese_variant::ChineseVariant;
@@ -13,7 +16,7 @@ use enum_ordinalize::Ordinalize;
 use super::LunarMonthError;
 
 /// 列舉農曆十二個月份名稱：正月、二月、三月、四月、五月、六月、七月、八月、九月、十月、冬月、臘月。包含閏月。
-#[derive(Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash, Ordinalize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Ordinalize)]
 #[ordinalize(impl_trait = false)]
 #[ordinalize(from_ordinal_unsafe(
     pub fn from_u8_raw_unsafe,
@@ -74,6 +77,20 @@ pub enum LunarMonth {
     LeapTwelfth,
 }
 
+impl PartialOrd for LunarMonth {
+    #[inline]
+    fn partial_cmp(&self, other: &LunarMonth) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for LunarMonth {
+    #[inline]
+    fn cmp(&self, other: &LunarMonth) -> Ordering {
+        self.cmp_ordinal().cmp(&other.cmp_ordinal())
+    }
+}
+
 impl Display for LunarMonth {
     /// Formats the value using the given formatter.
     ///
@@ -90,6 +107,19 @@ impl Display for LunarMonth {
             f.write_str(self.to_str(ChineseVariant::Simple))
         } else {
             f.write_str(self.to_str(ChineseVariant::Traditional))
+        }
+    }
+}
+
+impl LunarMonth {
+    #[inline]
+    const fn cmp_ordinal(self) -> u8 {
+        let base = (self.to_u8() - 1) * 2;
+
+        if self.is_leap_month() {
+            base + 1
+        } else {
+            base
         }
     }
 }
@@ -148,7 +178,7 @@ impl LunarMonth {
 
 /// 將 `LunarMonth` 列舉實體轉成其它型別的方法。
 impl LunarMonth {
-    /// 取得 `Zodiac` 列舉實體所代表的生肖字串。
+    /// 取得 `LunarMonth` 列舉實體所代表的農曆月份字串。
     ///
     /// # Examples
     ///

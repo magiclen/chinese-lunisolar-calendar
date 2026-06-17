@@ -2,7 +2,7 @@ use super::{HeavenlyStems, THE_HEAVENLY_STEMS};
 
 /// 用以解析字串的關聯函數。
 impl HeavenlyStems {
-    /// 透過甲、乙、丙、丁、戊、己、更、辛、壬、葵等字串來取得 `HeavenlyStems` 列舉實體。
+    /// 透過甲、乙、丙、丁、戊、己、庚、辛、壬、癸等字串來取得 `HeavenlyStems` 列舉實體。
     ///
     /// # Examples
     ///

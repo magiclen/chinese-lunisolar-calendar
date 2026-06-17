@@ -14,7 +14,7 @@ use chrono::prelude::*;
 use super::{LunisolarDateError, LunisolarOutOfRangeError, LunisolarYear, NEW_YEAR_DIFFERENCE};
 use crate::{
     LunarDay, LunarMonth, LunarYear, SolarDate, SolarDay, SolarMonth, SolarYear,
-    MAX_YEAR_IN_SOLAR_CALENDAR, MIN_YEAR_IN_SOLAR_CALENDAR,
+    MIN_YEAR_IN_SOLAR_CALENDAR,
 };
 
 /// 最小支援的農曆日期(以西曆日期表示)：1901-02-19。
@@ -37,6 +37,8 @@ pub const MAX_LUNISOLAR_DATE_IN_SOLAR_DATE: SolarDate = unsafe {
 
 const MAX_LUNISOLAR_DATE_IN_SOLAR_CALENDAR_NEW_YEAR_DIFFERENCE: u16 =
     MAX_LUNISOLAR_DATE_IN_SOLAR_DATE.the_n_day_in_this_year();
+const MAX_LUNISOLAR_DATE_IN_SOLAR_DATE_YEAR: u16 =
+    MAX_LUNISOLAR_DATE_IN_SOLAR_DATE.to_solar_year().to_u16();
 
 /// 農曆年月日，必須包含西曆年。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -116,13 +118,15 @@ impl LunisolarDate {
 
             let year = solar_year.to_u16();
 
-            let lunisolar_year = unsafe { LunisolarYear::from_solar_year_unsafe(solar_year) };
-
             let mut day_diff = solar_date.the_n_day_in_this_year() - 1;
 
-            let (leap_month, leap_days, new_year_diff) = if year == MAX_YEAR_IN_SOLAR_CALENDAR {
+            let (leap_month, leap_days, new_year_diff) = if year
+                == MAX_LUNISOLAR_DATE_IN_SOLAR_DATE_YEAR
+            {
                 (0, 0, MAX_LUNISOLAR_DATE_IN_SOLAR_CALENDAR_NEW_YEAR_DIFFERENCE)
             } else {
+                let lunisolar_year = unsafe { LunisolarYear::from_solar_year_unsafe(solar_year) };
+
                 let new_year_diff =
                     NEW_YEAR_DIFFERENCE[(year - MIN_YEAR_IN_SOLAR_CALENDAR) as usize] as u16;
 
@@ -215,6 +219,8 @@ impl LunisolarDate {
             } else {
                 // 若天數差距沒比「西曆新年與對應農曆年新年」之天數差距小，表示此西曆日期已經進入下一個農曆年(已到達正月，從在農曆年頭開始)。
                 day_diff -= new_year_diff; // 此時天數差距為西曆日期與對應農曆年第一天之距離(若西曆日期為2/23(此時天數差距為53)，而對應農曆年第一天是西曆的2/10(新年偏差為40)，則這兩個日期的天數差距為53-40=13)。
+
+                let lunisolar_year = unsafe { LunisolarYear::from_solar_year_unsafe(solar_year) };
 
                 let mut is_leap = false;
 
@@ -421,6 +427,8 @@ impl LunisolarDate {
     /// # use chinese_lunisolar_calendar::LunisolarDate;
     /// let lunisolar_date = LunisolarDate::now().unwrap();
     /// ```
+    #[cfg(feature = "std")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "std")))]
     #[inline]
     pub fn now() -> Result<LunisolarDate, LunisolarOutOfRangeError> {
         Self::from_date(Utc::now().date_naive())

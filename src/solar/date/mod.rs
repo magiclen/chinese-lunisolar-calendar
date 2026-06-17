@@ -185,6 +185,8 @@ impl SolarDate {
     /// # use chinese_lunisolar_calendar::SolarDate;
     /// let solar_date = SolarDate::now().unwrap();
     /// ```
+    #[cfg(feature = "std")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "std")))]
     #[inline]
     pub fn now() -> Result<Self, SolarOutOfRangeError> {
         Self::from_date(Utc::now().date_naive())

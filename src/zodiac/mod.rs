@@ -94,11 +94,11 @@ impl Zodiac {
                 return Some(unsafe { Self::from_ordinal_unsafe(i as u8 + 1) });
             }
 
+            i += 1;
+
             if i == len {
                 break;
             }
-
-            i += 1;
         }
 
         None
@@ -149,10 +149,11 @@ impl Zodiac {
     /// # Examples
     ///
     /// ```
-    /// use chinese_lunisolar_calendar::{Zodiac, ChineseVariant};
+    /// use chinese_lunisolar_calendar::{ChineseVariant, Zodiac};
     ///
     /// assert_eq!('龍', Zodiac::Dragon.to_char(ChineseVariant::Traditional));
     /// assert_eq!('龙', Zodiac::Dragon.to_char(ChineseVariant::Simple));
+    /// ```
     #[inline]
     pub const fn to_char(self, chinese_variant: ChineseVariant) -> char {
         let i = (self.ordinal() - 1) as usize;

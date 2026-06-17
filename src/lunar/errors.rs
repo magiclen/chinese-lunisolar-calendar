@@ -1,6 +1,7 @@
-use core::fmt::{self, Display, Formatter};
-#[cfg(feature = "std")]
-use std::error::Error;
+use core::{
+    error::Error,
+    fmt::{self, Display, Formatter},
+};
 
 /// 錯誤的農曆年。
 #[derive(Debug, Eq, PartialEq)]
@@ -13,7 +14,6 @@ impl Display for LunarYearError {
     }
 }
 
-#[cfg(feature = "std")]
 impl Error for LunarYearError {}
 
 /// 錯誤的農曆月。
@@ -27,7 +27,6 @@ impl Display for LunarMonthError {
     }
 }
 
-#[cfg(feature = "std")]
 impl Error for LunarMonthError {}
 
 /// 錯誤的農曆日。
@@ -41,5 +40,4 @@ impl Display for LunarDayError {
     }
 }
 
-#[cfg(feature = "std")]
 impl Error for LunarDayError {}

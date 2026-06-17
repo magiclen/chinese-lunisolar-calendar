@@ -49,7 +49,7 @@ default-features = false
 
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(unexpected_cfgs)]
-#![cfg_attr(docsrs_1_92, feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 pub extern crate chrono;
 

@@ -3,6 +3,12 @@ use chinese_lunisolar_calendar::{
 };
 
 #[test]
+fn from_solar_year() {
+    assert!(LunisolarYear::from_solar_year(2100.into()).is_ok());
+    assert!(LunisolarYear::from_solar_year(2101.into()).is_err());
+}
+
+#[test]
 fn to_heavenly_stems() {
     assert_eq!(
         HeavenlyStems::Tenth,

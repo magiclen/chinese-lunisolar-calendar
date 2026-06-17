@@ -20,7 +20,7 @@ use super::LunarDayError;
     doc = "# Safety",
     doc = "必須先確認傳入的整數是合法的。",
 ))]
-#[ordinalize(ordinal(pub fn to_u8, doc = "取得 `LunarDay` 列舉實體所代表的農曆日期字串。"))]
+#[ordinalize(ordinal(pub fn to_u8, doc = "取得 `LunarDay` 列舉實體所代表的農曆日期數值。"))]
 #[repr(u8)]
 pub enum LunarDay {
     /// 初一

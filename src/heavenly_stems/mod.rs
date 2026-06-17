@@ -7,7 +7,7 @@ use core::fmt::{self, Display, Formatter};
 use chinese::{THE_HEAVENLY_STEMS, THE_HEAVENLY_STEMS_CHAR};
 use enum_ordinalize::Ordinalize;
 
-/// 列舉中國十天干：甲、乙、丙、丁、戊、己、更、辛、壬、葵。
+/// 列舉中國十天干：甲、乙、丙、丁、戊、己、庚、辛、壬、癸。
 #[derive(Debug, Clone, Copy, PartialOrd, Ord, PartialEq, Eq, Hash, Ordinalize)]
 #[ordinalize(impl_trait = false)]
 #[ordinalize(from_ordinal_unsafe(
@@ -31,13 +31,13 @@ pub enum HeavenlyStems {
     Fifth,
     /// 己
     Sixth,
-    /// 更
+    /// 庚
     Seventh,
     /// 辛
     Eighth,
     /// 壬
     Ninth,
-    /// 葵
+    /// 癸
     Tenth,
 }
 
@@ -58,7 +58,7 @@ impl Display for HeavenlyStems {
 
 /// 用以建立 `HeavenlyStems` 列舉實體的關聯函數。
 impl HeavenlyStems {
-    /// 透過甲、乙、丙、丁、戊、己、更、辛、壬、葵等字元來取得 `HeavenlyStems` 列舉實體。
+    /// 透過甲、乙、丙、丁、戊、己、庚、辛、壬、癸等字元來取得 `HeavenlyStems` 列舉實體。
     ///
     /// # Examples
     ///
@@ -77,11 +77,11 @@ impl HeavenlyStems {
                 return Some(unsafe { Self::from_ordinal_unsafe(i as u8 + 1) });
             }
 
+            i += 1;
+
             if i == len {
                 break;
             }
-
-            i += 1;
         }
 
         None
@@ -90,7 +90,7 @@ impl HeavenlyStems {
 
 /// 將 `HeavenlyStems` 列舉實體轉成其它型別的方法。
 impl HeavenlyStems {
-    /// 取得 `HeavenlyStems` 列舉實體所代表的地支字串。
+    /// 取得 `HeavenlyStems` 列舉實體所代表的天干字串。
     ///
     /// # Examples
     ///
@@ -105,7 +105,7 @@ impl HeavenlyStems {
         THE_HEAVENLY_STEMS[i]
     }
 
-    /// 取得 `HeavenlyStems` 列舉實體所代表的地支字元。
+    /// 取得 `HeavenlyStems` 列舉實體所代表的天干字元。
     ///
     /// # Examples
     ///

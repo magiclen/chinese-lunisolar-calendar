@@ -1,4 +1,4 @@
-use std::ops::Add;
+use core::ops::Add;
 
 use chinese_lunisolar_calendar::{
     chrono::Duration, LunisolarDate, MAX_LUNISOLAR_DATE_IN_SOLAR_DATE,

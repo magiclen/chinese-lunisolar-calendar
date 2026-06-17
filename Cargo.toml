@@ -3,7 +3,7 @@ name = "chinese-lunisolar-calendar"
 version = "0.2.1"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2021"
-rust-version = "1.71"
+rust-version = "1.81"
 repository = "https://github.com/magiclen/chinese-lunisolar-calendar"
 homepage = "https://magiclen.org/chinese-lunisolar-calendar"
 keywords = ["chinese", "calendar", "lunar", "leap", "solar"]
@@ -13,7 +13,7 @@ license = "MIT"
 include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]
 
 [dependencies]
-chrono = { version = "0.4", default-features = false, features = ["clock"] }
+chrono = { version = "0.4", default-features = false }
 year-helper = "0.2"
 
 chinese-variant = "1"
@@ -23,10 +23,10 @@ enum-ordinalize = { version = "4.2", default-features = false, features = ["deri
 [features]
 default = ["std"]
 
-std = ["chrono/std"]
+std = ["chrono/std", "chrono/now"]
 
 ba-zi-weight = []
 
 [package.metadata.docs.rs]
 all-features = true
-rustdoc-args = ["--cfg", "docsrs_1_92"]
+rustdoc-args = ["--cfg", "docsrs"]

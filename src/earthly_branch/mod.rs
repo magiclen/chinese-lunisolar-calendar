@@ -89,11 +89,11 @@ impl EarthlyBranch {
                 return Some(unsafe { Self::from_ordinal_unsafe(i as u8 + 1) });
             }
 
+            i += 1;
+
             if i == len {
                 break;
             }
-
-            i += 1;
         }
 
         None
@@ -121,12 +121,12 @@ impl EarthlyBranch {
     /// # Examples
     ///
     /// ```
-    /// use chinese_lunisolar_calendar::{EarthlyBranch, Zodiac};
+    /// use chinese_lunisolar_calendar::EarthlyBranch;
     /// use chrono::prelude::*;
     ///
-    /// let date_time = Local.with_ymd_and_hms(2024, 1, 1, 12, 30, 45).unwrap();
+    /// let time = NaiveTime::from_hms_opt(12, 30, 45).unwrap();
     ///
-    /// assert_eq!(EarthlyBranch::Seventh, EarthlyBranch::from_time(date_time));
+    /// assert_eq!(EarthlyBranch::Seventh, EarthlyBranch::from_time(time));
     /// ```
     #[inline]
     pub fn from_time<T: Timelike>(time: T) -> EarthlyBranch {

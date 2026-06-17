@@ -61,6 +61,15 @@ fn to_u8() {
 }
 
 #[test]
+fn cmp() {
+    assert!(LunarMonth::First < LunarMonth::LeapFirst);
+    assert!(LunarMonth::LeapFirst < LunarMonth::Second);
+    assert!(LunarMonth::Fourth < LunarMonth::LeapFourth);
+    assert!(LunarMonth::LeapFourth < LunarMonth::Fifth);
+    assert!(LunarMonth::Twelfth < LunarMonth::LeapTwelfth);
+}
+
+#[test]
 fn get_total_days() {
     assert_eq!(
         Some(30),

@@ -1,6 +1,7 @@
-use core::fmt::{self, Display, Formatter};
-#[cfg(feature = "std")]
-use std::error::Error;
+use core::{
+    error::Error,
+    fmt::{self, Display, Formatter},
+};
 
 /// 超出西曆支援的日期範圍。
 #[derive(Debug, Eq, PartialEq)]
@@ -13,7 +14,6 @@ impl Display for SolarOutOfRangeError {
     }
 }
 
-#[cfg(feature = "std")]
 impl Error for SolarOutOfRangeError {}
 
 /// 錯誤的西曆年。
@@ -27,7 +27,6 @@ impl Display for SolarYearError {
     }
 }
 
-#[cfg(feature = "std")]
 impl Error for SolarYearError {}
 
 /// 錯誤的西曆月。
@@ -41,7 +40,6 @@ impl Display for SolarMonthError {
     }
 }
 
-#[cfg(feature = "std")]
 impl Error for SolarMonthError {}
 
 /// 錯誤的西曆日。
@@ -55,7 +53,6 @@ impl Display for SolarDayError {
     }
 }
 
-#[cfg(feature = "std")]
 impl Error for SolarDayError {}
 
 /// 錯誤的西曆年月日。
@@ -107,5 +104,4 @@ impl From<SolarDayError> for SolarDateError {
     }
 }
 
-#[cfg(feature = "std")]
 impl Error for SolarDateError {}

@@ -1,6 +1,7 @@
-use core::fmt::{self, Display, Formatter};
-#[cfg(feature = "std")]
-use std::error::Error;
+use core::{
+    error::Error,
+    fmt::{self, Display, Formatter},
+};
 
 use crate::{LunarDayError, LunarMonthError, LunarYearError};
 
@@ -15,7 +16,6 @@ impl Display for LunisolarOutOfRangeError {
     }
 }
 
-#[cfg(feature = "std")]
 impl Error for LunisolarOutOfRangeError {}
 
 /// 錯誤的農曆年月日。
@@ -67,5 +67,4 @@ impl From<LunarDayError> for LunisolarDateError {
     }
 }
 
-#[cfg(feature = "std")]
 impl Error for LunisolarDateError {}

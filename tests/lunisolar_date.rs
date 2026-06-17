@@ -71,6 +71,19 @@ fn from_solar_date() {
 }
 
 #[test]
+fn from_max_solar_date() {
+    let solar_date = SolarDate::from_ymd(2101, 1, 28).unwrap();
+    let lunisolar_date = LunisolarDate::from_solar_date(solar_date).unwrap();
+
+    assert_eq!(SolarYear::from_u16(2101), lunisolar_date.to_solar_year());
+    assert_eq!(
+        LunisolarYear::from_solar_year(2100.into()).unwrap(),
+        lunisolar_date.to_lunisolar_year()
+    );
+    assert!(SolarDate::from_ymd(2101, 1, 29).unwrap().to_lunisolar_date().is_err());
+}
+
+#[test]
 fn from_ymd() {
     let lunisolar_date = LunisolarDate::from_ymd(1992, 12, false, 20).unwrap();
 
