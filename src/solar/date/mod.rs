@@ -296,7 +296,7 @@ impl SolarDate {
         let mut i = 1;
 
         while i < month {
-            match year_helper::get_days_in_month_2(leap_year, i) {
+            match year_helper::get_days_in_month_with_leap_year(leap_year, i) {
                 Some(days) => n += days as u16,
                 None => unreachable!(),
             }

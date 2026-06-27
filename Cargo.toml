@@ -1,6 +1,6 @@
 [package]
 name = "chinese-lunisolar-calendar"
-version = "0.2.4"
+version = "0.2.5"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2024"
 rust-version = "1.89"
@@ -14,7 +14,7 @@ include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]
 
 [dependencies]
 chrono = { version = "0.4.32", default-features = false }
-year-helper = "0.2"
+year-helper = "0.2.2"
 
 chinese-variant = "1"
 
