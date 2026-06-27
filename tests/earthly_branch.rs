@@ -1,4 +1,4 @@
-use chinese_lunisolar_calendar::{chrono::prelude::*, EarthlyBranch, Zodiac};
+use chinese_lunisolar_calendar::{EarthlyBranch, Zodiac, chrono::prelude::*};
 
 #[test]
 fn parse_str() {

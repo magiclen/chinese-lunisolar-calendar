@@ -116,11 +116,7 @@ impl LunarMonth {
     const fn cmp_ordinal(self) -> u8 {
         let base = (self.to_u8() - 1) * 2;
 
-        if self.is_leap_month() {
-            base + 1
-        } else {
-            base
-        }
+        if self.is_leap_month() { base + 1 } else { base }
     }
 }
 
@@ -148,7 +144,7 @@ impl LunarMonth {
             month += 100;
         }
 
-        Self::from_u8_raw_unsafe(month)
+        unsafe { Self::from_u8_raw_unsafe(month) }
     }
 
     /// 透過農曆月份數值和是否閏月來取得 `LunarMonth` 列舉實體。

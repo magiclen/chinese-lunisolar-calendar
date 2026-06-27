@@ -1,4 +1,4 @@
-use super::{Zodiac, THE_ZODIAC_SIGNS};
+use super::{THE_ZODIAC_SIGNS, Zodiac};
 
 /// 用以解析字串的關聯函數。
 impl Zodiac {

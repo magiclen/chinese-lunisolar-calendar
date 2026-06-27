@@ -1,4 +1,4 @@
-use super::{SolarYear, SolarYearError, ALTERNATIVE_ZERO, THE_SOLAR_YEAR_NUMBERS_CHAR};
+use super::{ALTERNATIVE_ZERO, SolarYear, SolarYearError, THE_SOLAR_YEAR_NUMBERS_CHAR};
 
 /// 用以解析字串的關聯函數。
 impl SolarYear {

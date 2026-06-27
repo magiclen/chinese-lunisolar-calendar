@@ -60,7 +60,7 @@ jobs:
           - macos-latest
           - windows-latest
         toolchain:
-          - 1.81
+          - 1.89
         features:
           -
           - --features ba-zi-weight

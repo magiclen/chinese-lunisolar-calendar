@@ -1,5 +1,5 @@
 use chinese_lunisolar_calendar::{
-    chrono::prelude::*, LunisolarDate, SolarDate, SolarDay, SolarMonth, SolarYear,
+    LunisolarDate, SolarDate, SolarDay, SolarMonth, SolarYear, chrono::prelude::*,
 };
 
 #[test]

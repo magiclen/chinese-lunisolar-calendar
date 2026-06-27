@@ -13,8 +13,8 @@ use chrono::prelude::*;
 
 use super::{LunisolarDateError, LunisolarOutOfRangeError, LunisolarYear, NEW_YEAR_DIFFERENCE};
 use crate::{
-    LunarDay, LunarMonth, LunarYear, SolarDate, SolarDay, SolarMonth, SolarYear,
-    MIN_YEAR_IN_SOLAR_CALENDAR,
+    LunarDay, LunarMonth, LunarYear, MIN_YEAR_IN_SOLAR_CALENDAR, SolarDate, SolarDay, SolarMonth,
+    SolarYear,
 };
 
 /// 最小支援的農曆日期(以西曆日期表示)：1901-02-19。
@@ -650,10 +650,10 @@ impl LunisolarDate {
                 i += 1;
             }
 
-            if let Some(leap_lunar_month) = lunisolar_year.get_leap_lunar_month() {
-                if month > leap_lunar_month.to_u8() {
-                    n += lunisolar_year.get_total_days_in_leap_month_inner(leap_lunar_month);
-                }
+            if let Some(leap_lunar_month) = lunisolar_year.get_leap_lunar_month()
+                && month > leap_lunar_month.to_u8()
+            {
+                n += lunisolar_year.get_total_days_in_leap_month_inner(leap_lunar_month);
             }
         }
 
